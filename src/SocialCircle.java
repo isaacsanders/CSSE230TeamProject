@@ -24,4 +24,8 @@ public class SocialCircle {
 	private void delete(User deleted) {
 		this.members.remove(deleted.getID());
 	}
+	
+	private User find(String name) {
+		return this.members.get(name);
+	}
 }
