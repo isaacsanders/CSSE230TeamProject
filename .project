@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>public/Social Circle - CSSE 230</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/Documents/My%20CSSE/Website%20Pro%20gramming/Website%20Workspaces/Social%20Circle%20-%20CSSE%20230</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
