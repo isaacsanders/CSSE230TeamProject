@@ -15,18 +15,19 @@ body {
 	text-align: center;
 	padding-top: 15px;
 	/*Adds shadow to the bottom of the bar*/
-	-webkit-box-shadow: 0px 0px 8px 0px #000000;
-	-moz-box-shadow: 0px 0px 8px 0px #000000;
-	box-shadow: 0px 0px 8px 0px #000000;
+	-webkit-box-shadow: 0px 0px 8px 5px #000000;
+	-moz-box-shadow: 0px 0px 8px 5px #000000;
+	box-shadow: 0px 0px 2px 4px #000000;
 	/*Adds the transparent background*/
 	background-color: rgba(1, 1, 1, 0.8);
 	color: rgba(1, 1, 1, 0.8);
+	z-index: 1;
 }
 
 #navigation a {
-	font-size: 16px;
-	padding-left: 20px;
-	padding-right: 20px;
+	font-size: 18px;
+	padding-left: 30px;
+	padding-right: 30px;
 	color: white;
 	font-weight: bold;
 	text-decoration: none;
@@ -37,34 +38,120 @@ body {
 }
 
 #content, #login {
-
+	overflow: auto;
 	/*Adds shadow to the bottom of the bar*/
-	-webkit-box-shadow: 0px 0px 8px 0px #000000;
-	-moz-box-shadow: 0px 0px 8px 0px #000000;
-	box-shadow: 0px 0px 8px 0px #000000;
+	-webkit-box-shadow: 0px 0px 6px 8px #000000;
+	-moz-box-shadow: 0px 0px 6px 8px #000000;
+	box-shadow: 0px 0px 6px 8px #000000;
 	/*Adds the transparent background*/
 	background-color: rgba(1, 1, 1, 0.75);
 	color: rgba(1, 1, 1, 0.75);
 }
 
 #login {
-	min-height: 300px;
-	width: 40%;
-	margin: 30%;
-	margin-top: 15%;
-	margin-bottom: 15%;
+	width: 50%;
+	height: 50%;
+	margin: 25%;
+	margin-top: 0;
+	padding-top: 0;
+	position: fixed;
+	top: 8.5em;
+	z-index: 0;
 	/*rounded border*/
-	border: 2px solid;
+	border: 1px solid;
 	border-radius: 50px;
 	-moz-border-radius: 50px; /* Old Firefox */
 }
 
 #content {
-	width: 80%;
-	min-height: 500px;
-	margin: 10%;
+	width: 90%;
+	height: 80%;
+	margin: 5%;
+	margin-top: 0;
+	margin-bottom: 10%;
+	padding-top: 0;
+	position: fixed;
+	top: 7em;
+	z-index: 0;
 	/*rounded border*/
 	border: 2px solid;
 	border-radius: 15px;
 	-moz-border-radius: 15px; /* Old Firefox */
+}
+
+.socialCircleTitle {
+	padding: 1em;
+	position: fixed;
+	top: 3em;
+	left: 3em;
+	z-index: 2;
+}
+
+#socialCircleTitleLogin {
+	padding: 0.5em;
+	position: fixed;
+	top: 5em;
+	margin-left: 27%;
+	margin-right: 27%;
+	z-index: 2;
+}
+
+.center {
+	width: 100%;
+}
+
+form.loginForm {
+	margin: 0;
+	padding: 0;
+	padding-right: 3em;
+	margin-top: 5em;
+	margin-left: 8em;
+	z-index: 10;
+	border-right: 1px solid white;
+}
+
+form div {
+	padding: 0 0 0.8em 0;
+}
+
+form label {
+	font-weight: bold;
+	font-size: 25px;
+	display: block;
+}
+
+.button {
+	padding: 0.5em 1em 0.5em 1em;
+	font-weight: bold;
+}
+
+#signupSection, #loginSection {
+	display: inline-block;
+}
+
+#signupSection {
+	margin: 0 0 0 4em;
+	position: relative;
+	top: -5em;
+}
+
+.signupButton {
+	color: white;
+	font-size: 18px;
+	padding: 1em 2em 1em 2em;
+	font-weight: bold;
+	background-color: green;
+}
+
+button.signupButton:hover {
+	color: black;
+	border-color: black;
+}
+
+.signupForm {
+	margin: 0;
+	padding: 0;
+	position: relative;
+	top: 10em;
+	left: 4em;
 }
