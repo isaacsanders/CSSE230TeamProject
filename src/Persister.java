@@ -1,5 +1,4 @@
 import java.beans.XMLEncoder;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -47,8 +46,7 @@ public class Persister {
 	 */
 	public void persist() {
 		try {
-			XMLEncoder xmle = new XMLEncoder(new BufferedOutputStream(
-					new FileOutputStream(this.getFileName())));
+			XMLEncoder xmle = new XMLEncoder(new FileOutputStream(this.getFileName()));
 			xmle.writeObject(this.object);
 			xmle.close();
 		} catch (IOException e) {
