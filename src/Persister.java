@@ -22,6 +22,10 @@ public class Persister {
 		isaac = (User) userPersistance.find("User", "sanderib");
 		isaac.setName("Isaac Foo Bar");
 		userPersistance.save();
+
+		Group cs = new Group("CS");
+		Persister group = new Persister(cs);
+		group.save();
 	}
 
 	public Persister(Persistable object) {

@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * 
  * @author campbeeg. Created Feb 6, 2013.
  */
-public class Group {
+public class Group implements Persistable {
 
 	private String name;
 	private ArrayList<User> members;
@@ -17,8 +17,24 @@ public class Group {
 	 * 
 	 */
 	public Group(String name) {
-		this.members = new ArrayList<User>();
+		this.setMembers(new ArrayList<User>());
+		this.setName(name);
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
 		this.name = name;
+	}
+
+	public ArrayList<User> getMembers() {
+		return this.members;
+	}
+
+	public void setMembers(ArrayList<User> members) {
+		this.members = members;
 	}
 
 	/**
@@ -30,11 +46,21 @@ public class Group {
 	 * @param members
 	 */
 	public Group(String name, ArrayList<User> members) {
-		this.name = name;
-		this.members = members;
+		this.setName(name);
+		this.setMembers(members);
 	}
 
 	private boolean add(User newMember) {
 		return this.members.add(newMember);
+	}
+
+	@Override
+	public String getID() {
+		return this.name;
+	}
+
+	public Group() {
+		this.setMembers(new ArrayList<User>());
+		this.setName(null);
 	}
 }
