@@ -133,4 +133,17 @@ public class User implements Persistable {
 		this.setClubs(new ArrayList<Club>());
 		this.setFriends(new ArrayList<User>());
 	}
+
+	public boolean exists() {
+		return User.find(this.getID()) != null;
+	}
+
+	public boolean hasFriends() {
+		return !this.getFriends().isEmpty();
+	}
+
+	public void addFriend(User friend) {
+		this.getFriends().add(friend);
+		friend.getFriends().add(this);
+	}
 }
