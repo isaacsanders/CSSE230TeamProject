@@ -7,6 +7,12 @@ import java.util.ArrayList;
  */
 public class Group implements Persistable {
 
+	public static Group find(String name) {
+		Group group = new Group();
+		group.setName(name);
+		return (Group) new Persister(group).find();
+	}
+
 	private String name;
 	private ArrayList<User> members;
 

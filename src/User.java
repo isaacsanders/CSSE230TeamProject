@@ -8,6 +8,13 @@ import java.util.ArrayList;
  *         Created Feb 6, 2013.
  */
 public class User implements Persistable {
+
+	public static User find(String id) {
+		User user = new User();
+		user.setID(id);
+		return (User) new Persister(user).find();
+	}
+
 	public ArrayList<User> getFriends() {
 		return this.friends;
 	}
@@ -33,11 +40,11 @@ public class User implements Persistable {
 		this.name = name;
 	}
 
-	public Group getMajor() {
+	public Major getMajor() {
 		return this.major;
 	}
 
-	public void setMajor(Group major) {
+	public void setMajor(Major major) {
 		this.major = major;
 	}
 
@@ -49,65 +56,65 @@ public class User implements Persistable {
 		this.meeting = meeting;
 	}
 
-	public Group getYear() {
-		return this.year;
+	public GraduatingClass getGraduatingClass() {
+		return this.graduatingClass;
 	}
 
-	public void setYear(Group year) {
-		this.year = year;
+	public void setGraduatingClass(GraduatingClass graduatingClass) {
+		this.graduatingClass = graduatingClass;
 	}
 
-	public ArrayList<Group> getClubs() {
+	public ArrayList<Club> getClubs() {
 		return this.clubs;
 	}
 
-	public void setClubs(ArrayList<Group> clubs) {
+	public void setClubs(ArrayList<Club> clubs) {
 		this.clubs = clubs;
 	}
 
-	public ArrayList<Group> getSport() {
+	public ArrayList<Sport> getSport() {
 		return this.sport;
 	}
 
-	public void setSport(ArrayList<Group> sport) {
+	public void setSport(ArrayList<Sport> sport) {
 		this.sport = sport;
 	}
 
-	public Group getResidence() {
+	public Residence getResidence() {
 		return this.residence;
 	}
 
-	public void setResidence(Group residence) {
+	public void setResidence(Residence residence) {
 		this.residence = residence;
 	}
 
-	public ArrayList<Group> getInterests() {
+	public ArrayList<Interest> getInterests() {
 		return this.interests;
 	}
 
-	public void setInterests(ArrayList<Group> interests) {
+	public void setInterests(ArrayList<Interest> interests) {
 		this.interests = interests;
 	}
 
-	public Group getJob() {
+	public Job getJob() {
 		return this.job;
 	}
 
-	public void setJob(Group job) {
+	public void setJob(Job job) {
 		this.job = job;
 	}
 
 	private ArrayList<User> friends;
 	private String id;
 	private String name;
-	private Group major;
+	private Major major;
 	private ArrayList<Group> meeting;
-	private Group year;
-	private ArrayList<Group> clubs;
-	private ArrayList<Group> sport;
-	private Group residence;
-	private ArrayList<Group> interests;
-	private Group job;
+	private GraduatingClass graduatingClass;
+	private ArrayList<Club> clubs;
+	private ArrayList<Sport> sport;
+	private Residence residence;
+	private ArrayList<Interest> interests;
+	private Job job;
 
 	public User(String id){
 		this.setID(id);
@@ -115,13 +122,15 @@ public class User implements Persistable {
 		this.setFriends(new ArrayList<User>());
 		this.setMajor(null);
 		this.setMeeting(new ArrayList<Group>());
-		this.setYear(null);
-		this.setClubs(new ArrayList<Group>());
-		this.setSport(new ArrayList<Group>());
+		this.setGraduatingClass(null);
+		this.setClubs(new ArrayList<Club>());
+		this.setSport(new ArrayList<Sport>());
 		this.setResidence(null);
 		this.setJob(null);
 	}
 
 	public User() {
+		this.setClubs(new ArrayList<Club>());
+		this.setFriends(new ArrayList<User>());
 	}
 }

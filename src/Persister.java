@@ -19,9 +19,12 @@ public class Persister {
 		isaac.setName("Foo Bar");
 		Persister userPersistance = new Persister(isaac);
 		userPersistance.save();
-		isaac = (User) userPersistance.find("User", "sanderib");
+		userPersistance.find();
 		isaac.setName("Isaac Foo Bar");
 		userPersistance.save();
+
+		User foundUser = User.find("sanderib");
+		System.out.println(foundUser.getName());
 
 		Group cs = new Group("CS");
 		Persister group = new Persister(cs);
@@ -41,11 +44,6 @@ public class Persister {
 		return this.directory;
 	}
 
-	private File getDirectory(String klass) {
-		this.directory = new File(Persister.DATABASE, klass);
-		return this.directory;
-	}
-
 	private File getFile() {
 		if (this.file == null) {
 			this.file = new File(this.getDirectory(), this.object.getID() + ".xml");
@@ -54,40 +52,31 @@ public class Persister {
 		return this.file;
 	}
 
-	private File getFile(String klass, String id) {
-		this.file = new File(this.getDirectory(klass), id + ".xml");
-		return this.file;
-	}
-
 	private String getFilename() {
 		return this.getFile().getAbsolutePath();
 	}
 
-	private String getFilename(String klass, String id) {
-		return this.getFile(klass, id).getAbsolutePath();
-	}
-
 	/**
-	 * When the persister persists an object, it XML encodes it to a file /db/:classname/:id.xml
+	 * When Persister persists an object, it XML encodes it to a file /db/:classname/:id.xml
 	 */
-	public void save() {
+	public boolean save() {
 		try {
 			XMLEncoder xmle = new XMLEncoder(new FileOutputStream(this.getFilename()));
 			xmle.writeObject(this.object);
 			xmle.close();
+			return true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			return false;
 		}
 	}
 
-	public Persistable find(String klass, String id) {
+	public Persistable find() {
 		try {
-			XMLDecoder xmld = new XMLDecoder(new FileInputStream(this.getFilename(klass, id)));
+			XMLDecoder xmld = new XMLDecoder(new FileInputStream(this.getFilename()));
 			this.object = (Persistable) xmld.readObject();
 			xmld.close();
 			return this.object;
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 			return null;
 		}
 	}
