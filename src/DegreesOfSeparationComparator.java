@@ -2,7 +2,7 @@ import java.util.Collection;
 import java.util.Comparator;
 
 
-public class DegressOfSeparationComparator implements Comparator<Collection<User>> {
+public class DegreesOfSeparationComparator implements Comparator<Collection<User>> {
 
 	@Override
 	public int compare(Collection<User> first, Collection<User> second) {

@@ -33,23 +33,16 @@ public class SocialCircle {
 
 	public static int degreesOfSeparationBetweenTwoUsers(User first, User second) {
 		if (first.hasFriends() && second.hasFriends()) {
-			PriorityQueue<Stack<User>> queue = new PriorityQueue<Stack<User>>(first.getFriends().size(), new DegressOfSeparationComparator());
-			Stack<User> stack;
-			for (User friend : first.getFriends()) {
-				if (friend.equals(second)) {
-					return 1;
-				} else {
-					stack = new Stack<User>();
-					stack.push(friend);
-					queue.add(stack);
-				}
-			}
+			PriorityQueue<Stack<User>> queue = new PriorityQueue<Stack<User>>(first.getFriends().size(), new DegreesOfSeparationComparator());
+			Stack<User> stack = new Stack<User>();
+			stack.push(first);
+			queue.add(stack);
 			while (!queue.isEmpty()) {
 				stack = queue.poll();
 				Stack<User> temp;
 				for (User friend : stack.peek().getFriends()) {
 					if (friend.equals(second)) {
-						return stack.size() + 1;
+						return stack.size();
 					} else {
 						temp = (Stack<User>) stack.clone();
 						temp.push(friend);

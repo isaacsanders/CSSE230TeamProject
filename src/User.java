@@ -15,6 +15,11 @@ public class User implements Persistable {
 		return (User) new Persister(user).find();
 	}
 
+	@Override
+	public boolean save() {
+		return new Persister(this).save();
+	}
+
 	public ArrayList<User> getFriends() {
 		return this.friends;
 	}

@@ -12,5 +12,5 @@ public interface Persistable extends Serializable {
 	 * @return This returns a unique identifier for the object.
 	 */
 	String getID();
-
+	boolean save();
 }

@@ -24,12 +24,71 @@ public class SocialCircleTest {
 
 	@Test
 	public void testDegreesOfSeparationBetweenTwoUsers() {
-		assertEquals(-1, SocialCircle.degreesOfSeparationBetweenTwoUsers(this.isaac, new User()));
-		assertEquals(1, SocialCircle.degreesOfSeparationBetweenTwoUsers(this.isaac, this.john));
-		assertEquals(2, SocialCircle.degreesOfSeparationBetweenTwoUsers(this.isaac, this.ethan));
-		assertEquals(3, SocialCircle.degreesOfSeparationBetweenTwoUsers(this.isaac, this.chris));
-		assertEquals(3, SocialCircle.degreesOfSeparationBetweenTwoUsers(this.chris, this.isaac));
-		assertEquals(2, SocialCircle.degreesOfSeparationBetweenTwoUsers(this.john, this.chris));
+		this.assertDegreesOfSeparation(-1, this.isaac, new User());
+		this.assertDegreesOfSeparation(1, this.isaac, this.john);
+		this.assertDegreesOfSeparation(2, this.isaac, this.ethan);
+		this.assertDegreesOfSeparation(3, this.isaac, this.chris);
+		this.assertDegreesOfSeparation(3, this.chris, this.isaac);
+		this.assertDegreesOfSeparation(2, this.john, this.chris);
 	}
 
+	@Test
+	public void testSeparatedWithTwoDifferentSizedPaths() {
+		User a, b, c;
+		a = new User();
+		b = new User();
+		c = new User();
+		a.addFriend(b);
+		a.addFriend(c);
+		b.addFriend(c);
+		this.assertDegreesOfSeparation(1, a, c);
+		this.assertDegreesOfSeparation(1, a, b);
+		this.assertDegreesOfSeparation(1, b, c);
+
+	}
+
+	public void assertDegreesOfSeparation(int degrees, User first, User second) {
+		assertEquals(degrees, SocialCircle.degreesOfSeparationBetweenTwoUsers(first, second));
+	}
+
+	@Test
+	public void testBiggerNetwork() {
+		User a, b, c, d;
+		a = new User();
+		b = new User();
+		c = new User();
+		d = new User();
+		a.addFriend(b);
+		a.addFriend(c);
+		a.addFriend(d);
+		b.addFriend(c);
+		this.assertDegreesOfSeparation(2, d, b);
+	}
+
+	@Test
+	public void testLudicrousNetwork() {
+		User a, b, c, d, e, f;
+		a = new User();
+		b = new User();
+		c = new User();
+		d = new User();
+		e = new User();
+		f = new User();
+		a.addFriend(b);
+		a.addFriend(c);
+		b.addFriend(d);
+		b.addFriend(e);
+		c.addFriend(d);
+		c.addFriend(e);
+		d.addFriend(f);
+		d.addFriend(e);
+		e.addFriend(f);
+		this.assertDegreesOfSeparation(3, a, f);
+	}
+
+	@Test
+	public void testOptimalMeetingTimes() {
+		Date newYears = new Date();
+		assertEqual();
+	}
 }
