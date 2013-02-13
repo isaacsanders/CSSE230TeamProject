@@ -15,13 +15,9 @@ public class Persister {
 
 	public static void main(String[] args) {
 		User isaac = new User();
-		isaac.setID("barf");
-		isaac.setName("Foo Bar");
-		Persister userPersistance = new Persister(isaac);
-		userPersistance.save();
-		userPersistance.find();
-		isaac.setName("Isaac Foo Bar");
-		userPersistance.save();
+		isaac.setID("sanderib");
+		isaac.setName("Isaac Sanders");
+		isaac.save();
 
 		User foundUser = User.find("sanderib");
 		System.out.println(foundUser.getName());
