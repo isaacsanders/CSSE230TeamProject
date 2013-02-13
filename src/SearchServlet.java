@@ -10,6 +10,8 @@ import javax.servlet.http.*;
  * @author mccormjt. Created Feb 10, 2013.
  */
 public class SearchServlet extends HttpServlet {
+	
+	private final String EMPTY = "";
 
 	/**
 	 * takes in the user inputs from a "sign up"
@@ -56,7 +58,7 @@ public class SearchServlet extends HttpServlet {
 
 		} else {
 			// redirect to login screen if not logged in
-			String redirect = response.encodeRedirectURL("/login.html");
+			String redirect = response.encodeRedirectURL("/");
 			response.sendRedirect(redirect);
 		}
 

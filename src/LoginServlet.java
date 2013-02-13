@@ -9,6 +9,8 @@ import javax.servlet.http.*;
  * @author mccormjt. Created Feb 10, 2013.
  */
 public class LoginServlet extends HttpServlet {
+	
+	private final String EMPTY = "";
 
 	/**
 	 * takes in the user inputs from a "sign up"
@@ -25,16 +27,23 @@ public class LoginServlet extends HttpServlet {
 		User user = new User();
 
 		// set user parameters
-		String ID = request.getParameter("ID");
+		String ID = request.getParameter("username");
 		user.setID(ID);
 
-			
-		//add session to users browser
-		HttpSession session = request.getSession(true);
+		// check validation
+		if (ID != this.EMPTY) {
+			// add session to users browser
+			HttpSession session = request.getSession(true);
 
-		// finish by redirecting to main search screen
-		String redirect = response.encodeRedirectURL("/search.html");
-		response.sendRedirect(redirect);
+			// finish by redirecting to main search screen
+			String redirect = response.encodeRedirectURL("/SearchServlet");
+			response.sendRedirect(redirect);
+		} else {
+			// redirect back to blank login
+			String redirect = response.encodeRedirectURL("/");
+			response.sendRedirect(redirect);
+		}
+
 	}
 
 }
