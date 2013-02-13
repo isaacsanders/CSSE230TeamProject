@@ -13,6 +13,28 @@
 	<body>
 		<div id="navigation"></div>
 
-		<div id="login"></div>
+		<div class="center"><img id="socialCircleTitleLogin" src="socialCircle.png" width="" height="" alt="Social Circle"/>
+		</div>
+
+		<div id="login">
+			<div id="loginSection">
+				<form class="loginForm" method="post" action="LoginServlet">
+					<div class="formItem">
+						<label for="username" >Rose-Hulman Username</label>
+						<input name="username" id="username" type="text" size="25"  />
+					</div>
+					<div>
+						<input class="button" type="submit" value="Login" />
+					</div>
+				</form>
+			</div>
+
+			<div id="signupSection">
+				<a href="/SignUpServlet">
+				<button class="signupButton" type="button">
+					Sign Up!
+				</button></a>
+			</div>
+		</div>
 	</body>
 </html>

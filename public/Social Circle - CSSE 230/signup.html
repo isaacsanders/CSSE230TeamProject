@@ -18,7 +18,7 @@
 
 		<div id="content">
 			<div id=signupSection>
-				<form class="signupForm" method="post" action="">
+				<form class="signupForm" method="post" action="SignUpServlet">
 					<div class="formItem">
 						<label for="firstName" >First Name</label>
 						<input name="firstName" id="firstName" type="text" size="25"  />
@@ -27,21 +27,9 @@
 						<label for="lastName" >Last Name</label>
 						<input name="lastName" id="lastName" type="text" size="25"  />
 					</div>
-					<div>
-						<label for="username">Username</label>
-						<input type="text" name="username" id="username" size="25" />
-					</div>
-					<div>
-						<label for="sID">Student ID</label>
-						<input type="text" name="sID" id="sID" size="25" />
-					</div>
-					<div>
-						<label for="password">Password</label>
-						<input type="text" name="password" id="password" size="25" />
-					</div>
-					<div>
-						<label for="conPassword">Confirm Password</label>
-						<input type="text" name="conPassword" id="conPassword" size="25" />
+					<div class="formItem">
+						<label for="ID">Rose-Hulman Username</label>
+						<input type="text" name="ID" id="ID" size="25" />
 					</div>
 					<div>
 						<input class="button" type="submit" value="Sign Up!" />
