@@ -17,9 +17,7 @@ public class User implements Persistable {
 
 	@Override
 	public boolean save() {
-		Persister persister = new Persister(this);
-		persister.delete();
-		return persister.save();
+		return new Persister(this).save();
 	}
 
 	@Override
