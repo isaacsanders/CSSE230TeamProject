@@ -149,6 +149,13 @@ public class User implements Persistable {
 
 	public void addFriend(User friend) {
 		this.getFriends().add(friend);
+		this.save();
 		friend.getFriends().add(this);
+		friend.save();
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return this.getID().equals(((User) other).getID());
 	}
 }

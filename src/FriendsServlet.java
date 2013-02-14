@@ -1,8 +1,11 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet for managing a user's Friends
@@ -12,6 +15,25 @@ import javax.servlet.http.*;
 public class FriendsServlet extends HttpServlet {
 
 	private final String EMPTY = "";
+
+	@Override
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		response.setContentType("text/html");
+
+		// check session
+		HttpSession session = request.getSession(false);
+
+		// check if user is already logged in, if so go to main search page, if
+		// not allow sign up
+		if (session != null) {
+			User currentUser = User.find((String) session.getValue("ID"));
+			User friend = User.find(request.getParameter("ID"));
+
+			currentUser.addFriend(friend);
+		}
+		this.doGet(request, response);
+	}
 
 	/**
 	 * takes in the user inputs from a "sign up"
@@ -31,6 +53,7 @@ public class FriendsServlet extends HttpServlet {
 		// check if user is already logged in, if so go to main search page, if
 		// not allow sign up
 		if (session != null) {
+			User currentUser = User.find((String) session.getValue("ID"));
 
 			// PRODUCE HTML PAGE
 			PrintWriter out = response.getWriter();
@@ -52,7 +75,13 @@ public class FriendsServlet extends HttpServlet {
 					+ "<a href=\"AccountServlet\">Account</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
 					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
-					+ "</div>" + "<div id=\"content\">" + "</div>" + "</body>"
+					+ "</div>" + "<div id=\"content\"><ul>");
+
+			for (User friend : currentUser.getFriends()) {
+				out.println("<li>" + friend.getName() + "</li>");
+			}
+
+			out.println("</ul></div>" + "</body>"
 					+ "</html>");
 
 		} else {
