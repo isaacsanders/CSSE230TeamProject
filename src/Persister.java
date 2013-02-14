@@ -52,6 +52,10 @@ public class Persister {
 		return this.getFile().getAbsolutePath();
 	}
 
+	public boolean delete() {
+		return this.getFile().delete();
+	}
+
 	/**
 	 * When Persister persists an object, it XML encodes it to a file /db/:classname/:id.xml
 	 */

@@ -13,4 +13,5 @@ public interface Persistable extends Serializable {
 	 */
 	String getID();
 	boolean save();
+	boolean delete();
 }

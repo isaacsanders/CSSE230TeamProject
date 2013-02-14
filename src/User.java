@@ -17,7 +17,14 @@ public class User implements Persistable {
 
 	@Override
 	public boolean save() {
-		return new Persister(this).save();
+		Persister persister = new Persister(this);
+		persister.delete();
+		return persister.save();
+	}
+
+	@Override
+	public boolean delete() {
+		return new Persister(this).delete();
 	}
 
 	public ArrayList<User> getFriends() {

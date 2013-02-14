@@ -13,6 +13,18 @@ public class Group implements Persistable {
 		return (Group) new Persister(group).find();
 	}
 
+	@Override
+	public boolean save() {
+		Persister persister = new Persister(this);
+		persister.delete();
+		return persister.save();
+	}
+
+	@Override
+	public boolean delete() {
+		return new Persister(this).delete();
+	}
+
 	private String name;
 	private ArrayList<User> members;
 
