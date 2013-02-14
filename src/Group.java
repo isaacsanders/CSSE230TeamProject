@@ -68,10 +68,6 @@ public class Group implements Persistable {
 		this.setMembers(members);
 	}
 
-	private boolean add(User newMember) {
-		return this.members.add(newMember);
-	}
-
 	@Override
 	public String getID() {
 		return this.name;
