@@ -53,12 +53,12 @@ public class User implements Persistable {
 		this.major = major;
 	}
 
-	public ArrayList<Group> getMeeting() {
-		return this.meeting;
+	public ArrayList<Meeting> getMeetings() {
+		return this.meetings;
 	}
 
-	public void setMeeting(ArrayList<Group> meeting) {
-		this.meeting = meeting;
+	public void setMeetings(ArrayList<Meeting> meetings) {
+		this.meetings = meetings;
 	}
 
 	public GraduatingClass getGraduatingClass() {
@@ -113,7 +113,7 @@ public class User implements Persistable {
 	private String id;
 	private String name;
 	private Major major;
-	private ArrayList<Group> meeting;
+	private ArrayList<Meeting> meetings;
 	private GraduatingClass graduatingClass;
 	private ArrayList<Club> clubs;
 	private ArrayList<Sport> sport;
@@ -126,7 +126,7 @@ public class User implements Persistable {
 		this.setName(null);
 		this.setFriends(new ArrayList<User>());
 		this.setMajor(null);
-		this.setMeeting(new ArrayList<Group>());
+		this.setMeetings(new ArrayList<Meeting>());
 		this.setGraduatingClass(null);
 		this.setClubs(new ArrayList<Club>());
 		this.setSport(new ArrayList<Sport>());

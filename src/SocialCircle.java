@@ -1,6 +1,8 @@
+import java.util.Date;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Stack;
+import java.util.TimeZone;
 
 /**
  * SocialCircle is a class that holds and manipulates all Users, Groups, and
@@ -9,7 +11,13 @@ import java.util.Stack;
  * @author campbeeg. Created Feb 3, 2013.
  */
 public class SocialCircle {
+	private static final int FIRST_HAPPENS_BEFORE_SECOND = -1;
+	private static final int SECOND_HAPPENS_BEFORE_FIRST = 1;
 	private HashMap<String, User> members;
+
+	public static void main(String[] args) {
+		TimeZone timezone = TimeZone.getTimeZone("America/Indianapolis");
+	}
 
 	/**
 	 * Constructs a new SocialCircle with an empty members HashMap
@@ -52,5 +60,31 @@ public class SocialCircle {
 			}
 		}
 		return -1;
+	}
+
+	public static Meeting optimalMeetingTime(Meeting first, Meeting second) {
+		Date startTime;
+		switch (first.getStartTime().compareTo(second.getStartTime())) {
+		case FIRST_HAPPENS_BEFORE_SECOND:
+			startTime = second.getStartTime();
+			break;
+		case SECOND_HAPPENS_BEFORE_FIRST:
+			startTime = first.getStartTime();
+			break;
+		default:
+			startTime = first.getStartTime();
+		}
+		Date endTime;
+		switch (first.getEndTime().compareTo(second.getEndTime())) {
+		case FIRST_HAPPENS_BEFORE_SECOND:
+			endTime = first.getEndTime();
+			break;
+		case SECOND_HAPPENS_BEFORE_FIRST:
+			endTime = second.getEndTime();
+			break;
+		default:
+			endTime = first.getEndTime();
+		}
+		return new Meeting(startTime, endTime);
 	}
 }
