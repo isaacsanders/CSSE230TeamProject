@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -54,41 +55,80 @@ public class SearchServlet extends HttpServlet {
 					+ "</html>";
 
 			String username = request.getParameter("query");
-			String groupName = request.getParameter("groupName");
-			User result;
+			ArrayList<User> result = new ArrayList<User>();
 
-			if (groupName == "") {
-				result = User.find(username);
+			if (username == "") {
+				String major = request.getParameter("major");
+
+				if (major != "") {
+					result.addAll(Major.find(major).getMembers());
+				}
+
+				String club = request.getParameter("club");
+
+				if (club != "") {
+					result.retainAll(Club.find(club).getMembers());
+				}
+
+				String sport = request.getParameter("sport");
+
+				if (sport != "") {
+					result.retainAll(Sport.find(sport).getMembers());
+				}
+
+				String residence = request.getParameter("residence");
+
+				if (residence != "") {
+					result.retainAll(Residence.find(residence).getMembers());
+				}
+
+				String job = request.getParameter("job");
+
+				if (job != "") {
+					result.retainAll(Job.find(job).getMembers());
+				}
+
+				String graduatingClass = request.getParameter("graduatingClass");
+
+				if (graduatingClass != "") {
+					result.retainAll(GraduatingClass.find(graduatingClass).getMembers());
+				}
 			} else {
-				result = Group.find(groupName).findUser(username);
+				result.add(User.find(username));
 			}
+
 			String resultHtml = "<section>";
 
 			// If user with the username doesn't exist
-			if (result == null) {
-				resultHtml += "<p>There are no users with the Rose-Hulman username " + username;
-			} else {
-
-				resultHtml += "<h2>" + result.getName() + "</h2><p>" + result.getName();
-
-				if (currentUser.equals(result)) {
-					resultHtml += " is you!";
+			if (result.isEmpty()) {
+				if (username == "") {
+					resultHtml += "<p>There are no users that match your criteria";
 				} else {
-					// If the user isn't connected
-					int degreesOfSeparationBetweenCurrentAndResult = SocialCircle.degreesOfSeparationBetweenTwoUsers(currentUser, result);
-					if (degreesOfSeparationBetweenCurrentAndResult == -1) {
-						resultHtml += " is not connected to you.";
-						resultHtml += "<br>"
-								+ "<form action='/FriendsServlet' method='post'>"
-								+ "<input type='hidden' name='ID' value='" + result.getID() + "'>"
-								+ "<button type='submit'>Add " + result.getName() + " as a friend</button>"
-								+ "</form>";
-					} else {
-						resultHtml += " is " + degreesOfSeparationBetweenCurrentAndResult
-								+ " degrees of separation from you.";
-					}
+					resultHtml += "<p>There are no users with the Rose-Hulman username " + username;
 				}
-				resultHtml += "</p>";
+			} else {
+				for (User user : result) {
+					resultHtml += "<h2>" + user.getName() + "</h2><p>" + user.getName();
+
+					if (currentUser.equals(user)) {
+						resultHtml += " is you!";
+					} else {
+						// If the user isn't connected
+						int degreesOfSeparationBetweenCurrentAndResult = SocialCircle.degreesOfSeparationBetweenTwoUsers(currentUser, user);
+						if (degreesOfSeparationBetweenCurrentAndResult == -1) {
+							resultHtml += " is not connected to you.";
+							resultHtml += "<br>"
+									+ "<form action='/FriendsServlet' method='post'>"
+									+ "<input type='hidden' name='ID' value='" + user.getID() + "'>"
+									+ "<button type='submit'>Add " + user.getName() + " as a friend</button>"
+									+ "</form>";
+						} else {
+							resultHtml += " is " + degreesOfSeparationBetweenCurrentAndResult
+									+ " degrees of separation from you.";
+						}
+					}
+					resultHtml += "</p>";
+				}
 			}
 			resultHtml +=  "</section>";
 			out.println(bodyHtml + resultHtml + closingHtml);
@@ -117,7 +157,6 @@ public class SearchServlet extends HttpServlet {
 		// check if user is already logged in, if so go to main search page, if
 		// not allow sign up
 		if (session != null) {
-			User currentUser = User.find((String) session.getValue("ID"));
 
 			// PRODUCE HTML PAGE
 			PrintWriter out = response.getWriter();
@@ -143,18 +182,68 @@ public class SearchServlet extends HttpServlet {
 					+"</div>"
 					+ "<div id=\"content\">"
 					+ "<form action='/SearchServlet' method='post'>"
-					+ "<select name='groupName'>"
-					+ "<option value='' selected>Choose a Group</option>";
+					+ "<select name='major'>"
+					+ "<option value='' selected>Choose a Major</option>";
 
-			for (Group group : currentUser.getGroups()) {
-				if (group != null) {
-					bodyHtml += "<option value='" + group.getID() + "'>"
-							+ group.getName() + "</option>";
+			for (Major major : Major.all()) {
+				if (major != null) {
+					bodyHtml += "<option value='" + major.getID() + "'>"
+							+ major.getName() + "</option>";
 				}
 			}
 
 			bodyHtml += "</select>"
-					+ "<input type=text name='query' placeholder='Type your query here'>"
+					+ "<select name='club'>"
+					+ "<option value='' selected>Choose a Club</option>";
+
+			for (Club club : Club.all()) {
+				if (club != null) {
+					bodyHtml += "<option value='" + club.getID() + "'>"
+							+ club.getName() + "</option>";
+				}
+			}
+
+			bodyHtml += "</select>"
+					+ "<select name='sport'>"
+					+ "<option value='' selected>Choose a Sport</option>";
+
+			for (Sport sport : Sport.all()) {
+				if (sport != null) {
+					bodyHtml += "<option value='" + sport.getID() + "'>"
+							+ sport.getName() + "</option>";
+				}
+			}
+
+			bodyHtml += "</select>"
+					+ "<select name='residence'>"
+					+ "<option value='' selected>Choose a Residence</option>";
+
+			for (Residence residence : Residence.all()) {
+				if (residence != null) {
+					bodyHtml += "<option value='" + residence.getID() + "'>"
+							+ residence.getName() + "</option>";
+				}
+			}
+
+			bodyHtml += "</select>"
+					+ "<select name='job'>"
+					+ "<option value='' selected>Choose a Job</option>";
+
+			for (Job job : Job.all()) {
+				if (job != null) {
+					bodyHtml += "<option value='" + job.getID() + "'>"
+							+ job.getName() + "</option>";
+				}
+			}
+
+			bodyHtml += "</select>";
+
+			bodyHtml += "<select name='graduatingClass'>"
+					+ "<option value='2013'>2013</option>"
+					+ "</select>";
+
+			bodyHtml += "<input type=text name='query' placeholder='Type your query here'>"
+					+ "<button type=submit>Search</button>"
 					+ "</form>"
 					+ "</div>"
 					+ "</body>"
