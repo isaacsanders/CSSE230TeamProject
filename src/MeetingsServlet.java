@@ -5,11 +5,11 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 /**
- * Servlet for talking to the web page to take in a user's signup information
+ * Servlet for managing a user's meetings
  * 
  * @author mccormjt. Created Feb 10, 2013.
  */
-public class MeetingServlet extends HttpServlet {
+public class MeetingsServlet extends HttpServlet {
 
 	private final String EMPTY = "";
 
