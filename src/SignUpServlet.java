@@ -110,7 +110,7 @@ public class SignUpServlet extends HttpServlet {
 			// body
 			out.println("<body>"
 					+ "<div id=\"navigation\"></div>"
-					+ "<div class=\"center\"><img id=\"socialCircleTitleLogin\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></div>"
+					+ "<div class=\"center\"><a href=\"/Home\"><img id=\"socialCircleTitleLogin\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></div></a>"
 					+ "<div id=\"content\">" + "<div id=signupSection>"
 					+ "<div id=\"signupMessage\">"
 					// add in checked parameters message

@@ -50,7 +50,7 @@ public class MeetingServlet extends HttpServlet {
 					+ "<a href=\"friends.html\">Friends</a>"
 					+ "<a href=\"meetings.html\">Meetings</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
-					+ "<img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/>"
+					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
 					+ "</div>" + "<div id=\"content\">" + "</div>" + "</body>"
 					+ "</html>");
 

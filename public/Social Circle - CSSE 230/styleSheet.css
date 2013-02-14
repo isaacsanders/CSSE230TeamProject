@@ -119,6 +119,13 @@ form label {
 	display: block;
 }
 
+#loginValidation {
+	font-weight: bold;
+	color: #950000;
+	font-size: 0.9em;
+	display: block;
+}
+
 .button {
 	padding: 0.5em 1em 0.5em 1em;
 	font-weight: bold;
@@ -166,8 +173,8 @@ button.signupButton:hover {
 	background-color: #950000;
 	color: black;
 	font-weight: bold;
-	position: relative;
-	left: 30em;
+	position: fixed;
+	left: 90%;
 	top: -0.6;
 	border-color: black;
 }
@@ -180,5 +187,9 @@ button.logoutButton:hover {
 #signupMessage {
 	font-size: 1.2em;
 	color: #A00000;
-	font-weight: bold;
+	font-weight: normal;
+	position: relative;
+	top: 6.5em;
+	left: 2em;
+}
 }
