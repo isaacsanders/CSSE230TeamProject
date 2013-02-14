@@ -43,7 +43,7 @@ public class SignUpServlet extends HttpServlet {
 			user.save();
 
 			// redirect to login screen once account is created
-			String redirect = response.encodeRedirectURL("/");
+			String redirect = response.encodeRedirectURL("/Home");
 			response.sendRedirect(redirect);
 
 		} else if (session != null) {
