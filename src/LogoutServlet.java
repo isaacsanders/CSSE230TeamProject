@@ -26,7 +26,7 @@ public class LogoutServlet  extends HttpServlet{
 		session.invalidate();
 		
 		//redirect user to login screen
-		String redirect = response.encodeRedirectURL("/");
+		String redirect = response.encodeRedirectURL("/Home");
 		response.sendRedirect(redirect);
 	}
 }
