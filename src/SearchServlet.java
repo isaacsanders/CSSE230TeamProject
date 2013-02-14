@@ -1,8 +1,11 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet for talking to the web page to take in a user's signup information
@@ -38,21 +41,29 @@ public class SearchServlet extends HttpServlet {
 			out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\"http:"
 					+ "//www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"><html lang=\"en\">");
 			// head
-			out.println("<head><meta http-equiv=\"Content-Type\" content=\"text/html; "
+			String headHtml = "<head><meta http-equiv=\"Content-Type\" content=\"text/html; "
 					+ "charset=utf-8\"/><meta name=\"created\" content=\"Tue, 05 Feb 2013 21:47:31 "
 					+ "GMT\"><meta name=\"description\" content=\"\"><meta name=\"keywords\" content=\"\">"
 					+ "<link href=\"styleSheet.css\" type=\"text/css\" rel=\"stylesheet\" />"
-					+ "<title>Social Circle - Sign Up!</title></head>");
+					+ "<title>Social Circle - Search</title></head>";
+			out.println(headHtml);
 			// body
-			out.println("<body>"
+			String bodyHtml = "<body>"
 					+ "<div id=\"navigation\">"
 					+ "<a href=\"/SearchServlet\">Search</a>"
 					+ "<a href=\"friends.html\">Friends</a>"
 					+ "<a href=\"meetings.html\">Meetings</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
 					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
-					+ "</div>" + "<div id=\"content\">" + "</div>" + "</body>"
-					+ "</html>");
+					+"</div>"
+					+ "<div id=\"content\">"
+					+ "<form action='/SearchServlet' method='post'>"
+					+ "<input>"
+					+ "</form>"
+					+ "</div>"
+					+ "</body>"
+					+ "</html>";
+			out.println(bodyHtml);
 
 		} else {
 			// redirect to login screen if not logged in
