@@ -49,7 +49,7 @@ public class MeetingsServlet extends HttpServlet {
 					+ "<a href=\"/SearchServlet\">Search</a>"
 					+ "<a href=\"FriendsServlet\">Friends</a>"
 					+ "<a href=\"MeetingsServlet\">Meetings</a>"
-					+ "<a href=\"AccountServlet\">Meetings</a>"
+					+ "<a href=\"AccountServlet\">Account</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
 					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
 					+ "</div>" + "<div id=\"content\">" + "</div>" + "</body>"
