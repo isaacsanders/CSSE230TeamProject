@@ -13,9 +13,6 @@ public class Residence extends Group {
 	public boolean save() {
 		Persister persister = new Persister(this);
 		persister.delete();
-		persister.save();
-		persister = new Persister(this);
-		persister.delete();
 		return persister.save();
 	}
 
