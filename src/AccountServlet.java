@@ -12,8 +12,6 @@ import javax.servlet.http.*;
 public class AccountServlet extends HttpServlet {
 
 	private static final String EMPTY = "";
-	private static final String CHANGENAME = "changeName";
-	private static final String ADDFRIEND = "addFriend";
 
 	/**
 	 * takes in the user inputs for changing user information
@@ -27,23 +25,43 @@ public class AccountServlet extends HttpServlet {
 			throws IOException, ServletException {
 		// check session
 		HttpSession session = request.getSession(false);
-		
-		//get necessary parameters
-		String type = request.getParameter("type");
-		if (type == CHANGENAME){
-			//get exact parameters
+		String sessionID = session.getValue("ID").toString();
+
+		// check for delete account
+		String delete = request.getParameter("delete");
+		if (true) {
+			//delete the user
+			User u = User.find(sessionID);
+			u.delete();
+			
+			//terminate session
+			session.invalidate();
+			
+			//redirect to login screen
+			String url = response.encodeRedirectURL("/Home");
+			response.sendRedirect(url);
+			
+		} else {
+
+			// get the rest of the parameters to reCreate user
 			String first = request.getParameter("first");
 			String last = request.getParameter("last");
-			//get and update user
-			 User user = User.find(session.getValue("ID").toString());
-			 user.setName(first + " " + last);
-			 user.save();
+
+			// delete old user
+			User user = User.find(sessionID);
+			user.delete();
+
+			// create new user
+			User newUser = new User();
+			newUser.setName(first + " " + last);
+			newUser.setID(sessionID);
+			newUser.save();
+
+			// end with redirect to account page
+			doGet(request, response);
 		}
-		
-		//end with redirect to account page
-		doGet(request, response);
 	}
-	
+
 	/**
 	 * takes in the user inputs for changing user information
 	 * 
@@ -58,14 +76,13 @@ public class AccountServlet extends HttpServlet {
 
 		// check session
 		HttpSession session = request.getSession(false);
-		
-		//get user
+
+		// get user
 		User user = User.find(session.getValue("ID").toString());
 		String fullName = user.getName();
 		int indexSplitter = fullName.indexOf(" ");
 		String first = fullName.substring(0, indexSplitter);
-		String last =  fullName.substring(indexSplitter + 1, fullName.length());
-		
+		String last = fullName.substring(indexSplitter + 1, fullName.length());
 
 		// check if user is already logged in, if so go to main search page, if
 		// not allow sign up
@@ -91,27 +108,27 @@ public class AccountServlet extends HttpServlet {
 					+ "<a href=\"AccountServlet\">Account</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
 					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
-					+ "</div>" 
+					+ "</div>"
 					+ "<div id=\"content\">"
 					+ "<fieldset><legend>Change Your Name</legend>"
 					+ "<form id=\"accountFormChangeName\" method=\"post\" action=\"AccountServlet\">"
 					+ "<label for=\"first\">Change First Name</label>"
 					+ "<input name=\"first\" id=\"first\" type=\"text\" value=\""
-					//add users first name
+					// add users first name
 					+ first
 					+ "\" />"
 					+ "<label for=\"last\">Change Last Name</label>"
-					+ "<input name=\"last\" id=\"last\" type=\"text\" value=\" " 
-					//add users last name
+					+ "<input name=\"last\" id=\"last\" type=\"text\" value=\" "
+					// add users last name
 					+ last
 					+ "\"/>"
-					+ "</legend>"
-					+ "<input type=\"hidden\" name=\"type\" value=\"changeName\" />"
-					+ "<input value=\"Change Name\" type=\"submit\" />"
+					+ "<input class=\"button\" value=\"Change Name\" type=\"submit\" />"
 					+ "</form>"
-					+ "</div>" 
-					+ "</body>"
-					+ "</html>");
+					+ "</fieldset>"
+					+ "<form method=\"post\" method=\"/AccountServlet\">"
+					+ "<input type=\"hidden\" name=\"delete\" value=\"delete\" />"
+					+ "<input id=\"deleteAccountButton\" type=\"submit\" value=\"Delete Account\" /></form>"	
+					+ "</div>" + "</body>" + "</html>");
 
 		} else {
 			// redirect to login screen if not logged in
