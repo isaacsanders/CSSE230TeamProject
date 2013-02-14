@@ -41,16 +41,19 @@ public class SignUpServlet extends HttpServlet {
 		User user = new User();
 		user.setName(firstName + " " + lastName);
 		user.setID(ID);
-		Major cs = (Major) Major.find("CS");
-		if (cs == null) {
-			cs = new Major();
-			cs.setName("CS");
-			cs.save();
-		}
-		cs.addStudent(user);
+		
 
 		if (!(firstName == this.EMPTY || lastName == this.EMPTY || ID == this.EMPTY || user.exists()) && session == null) {
 
+			//add default CS major
+			Major cs = Major.find("Computer Science");
+			if (cs == null) {
+				cs = new Major();
+				cs.setName("Computer Science");
+				cs.save();
+			}
+			cs.addStudent(user);
+			
 			user.save();
 
 			// redirect to login screen once account is created

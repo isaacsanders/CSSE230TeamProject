@@ -102,8 +102,7 @@ public class AccountServlet extends HttpServlet {
 			String fullName = user.getName();
 			int indexSplitter = fullName.indexOf(" ");
 			String first = fullName.substring(0, indexSplitter);
-			String last = fullName.substring(indexSplitter + 1,
-					fullName.length());
+			String last = fullName.substring(indexSplitter + 1, fullName.length());
 
 			// get year
 			String year = user.getGraduatingClass().getID();
