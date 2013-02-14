@@ -52,12 +52,12 @@ public class User implements Persistable {
 		this.name = name;
 	}
 
-	public Major getMajor() {
-		return this.major;
+	public ArrayList<Major> getMajors() {
+		return this.majors;
 	}
 
-	public void setMajor(Major major) {
-		this.major = major;
+	public void setMajors(ArrayList<Major> majors) {
+		this.majors = majors;
 	}
 
 	public ArrayList<Meeting> getMeetings() {
@@ -84,12 +84,12 @@ public class User implements Persistable {
 		this.clubs = clubs;
 	}
 
-	public ArrayList<Sport> getSport() {
-		return this.sport;
+	public ArrayList<Sport> getSports() {
+		return this.sports;
 	}
 
-	public void setSport(ArrayList<Sport> sport) {
-		this.sport = sport;
+	public void setSports(ArrayList<Sport> sports) {
+		this.sports = sports;
 	}
 
 	public Residence getResidence() {
@@ -116,34 +116,50 @@ public class User implements Persistable {
 		this.job = job;
 	}
 
-	private ArrayList<User> friends;
+	public ArrayList<Group> getGroups() {
+		ArrayList<Group> list = new ArrayList<Group>(this.getClubs());
+		list.addAll(this.getInterests());
+		list.addAll(this.getSports());
+		list.addAll(this.getMajors());
+		list.add(this.getGraduatingClass());
+		list.add(this.getResidence());
+		list.add(this.getJob());
+		return list;
+	}
+
+	private ArrayList<User> friends = new ArrayList<User>();
 	private String id;
 	private String name;
-	private Major major;
+	private ArrayList<Major> majors = new ArrayList<Major>();
 	private ArrayList<Meeting> meetings;
 	private GraduatingClass graduatingClass;
-	private ArrayList<Club> clubs;
-	private ArrayList<Sport> sport;
+	private ArrayList<Club> clubs = new ArrayList<Club>();
+	private ArrayList<Sport> sports = new ArrayList<Sport>();
 	private Residence residence;
-	private ArrayList<Interest> interests;
+	private ArrayList<Interest> interests = new ArrayList<Interest>();
 	private Job job;
 
 	public User(String id){
 		this.setID(id);
-		this.setName(null);
 		this.setFriends(new ArrayList<User>());
-		this.setMajor(null);
+		this.setMajors(new ArrayList<Major>());
 		this.setMeetings(new ArrayList<Meeting>());
-		this.setGraduatingClass(null);
 		this.setClubs(new ArrayList<Club>());
-		this.setSport(new ArrayList<Sport>());
-		this.setResidence(null);
-		this.setJob(null);
+		this.setSports(new ArrayList<Sport>());
+		this.setInterests(new ArrayList<Interest>());
 	}
 
 	public User() {
-		this.setClubs(new ArrayList<Club>());
+		this.setName(null);
 		this.setFriends(new ArrayList<User>());
+		this.setMajors(new ArrayList<Major>());
+		this.setMeetings(new ArrayList<Meeting>());
+		this.setGraduatingClass(null);
+		this.setClubs(new ArrayList<Club>());
+		this.setSports(new ArrayList<Sport>());
+		this.setResidence(null);
+		this.setJob(null);
+		this.setInterests(new ArrayList<Interest>());
 	}
 
 	public boolean exists() {

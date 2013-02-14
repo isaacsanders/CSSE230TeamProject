@@ -81,4 +81,9 @@ public class Group implements Persistable {
 		this.setMembers(new ArrayList<User>());
 		this.setName(null);
 	}
+
+	public User findUser(String username) {
+		int index = this.getMembers().indexOf(User.find(username));
+		return this.getMembers().get(index);
+	}
 }
