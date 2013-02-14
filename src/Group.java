@@ -84,6 +84,20 @@ public class Group implements Persistable {
 
 	public User findUser(String username) {
 		int index = this.getMembers().indexOf(User.find(username));
-		return this.getMembers().get(index);
+		if (index > -1) {
+			return this.getMembers().get(index);
+		} else {
+			return null;
+		}
+	}
+
+	public ArrayList<User> membersThatAreFriendsOf(User user) {
+		ArrayList<User> list = new ArrayList<User>();
+		for (User member : this.getMembers()) {
+			if (user.isFriendsWith(member)) {
+				list.add(member);
+			}
+		}
+		return list;
 	}
 }

@@ -177,6 +177,11 @@ public class User implements Persistable {
 		friend.save();
 	}
 
+	public boolean isFriendsWith(User other) {
+		int index = this.getFriends().indexOf(other);
+		return index > -1;
+	}
+
 	@Override
 	public boolean equals(Object other) {
 		return this.getID().equals(((User) other).getID());

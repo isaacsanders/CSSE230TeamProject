@@ -19,12 +19,15 @@ public class Persister {
 		isaac.setName("Isaac Sanders");
 		isaac.save();
 
-		User foundUser = User.find("sanderib");
-		System.out.println(foundUser.getName());
+		User john = new User();
+		john.setID("mccormjt");
+		john.setName("John McCormack");
+		john.save();
 
-		Group cs = new Group("CS");
-		Persister group = new Persister(cs);
-		group.save();
+		Major cs = new Major("CS");
+		cs.addStudent(isaac);
+		cs.addStudent(john);
+		cs.save();
 	}
 
 	public Persister(Persistable object) {

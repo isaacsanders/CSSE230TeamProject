@@ -1,7 +1,11 @@
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet for talking to the web page to take in a user's signup information
@@ -37,6 +41,13 @@ public class SignUpServlet extends HttpServlet {
 		User user = new User();
 		user.setName(firstName + " " + lastName);
 		user.setID(ID);
+		Major cs = (Major) Major.find("CS");
+		if (cs == null) {
+			cs = new Major();
+			cs.setName("CS");
+			cs.save();
+		}
+		cs.addStudent(user);
 
 		if (!(firstName == this.EMPTY || lastName == this.EMPTY || ID == this.EMPTY || user.exists()) && session == null) {
 
@@ -53,7 +64,7 @@ public class SignUpServlet extends HttpServlet {
 		}
 
 		else {
-			doGet(request, response);
+			this.doGet(request, response);
 		}
 
 	}
