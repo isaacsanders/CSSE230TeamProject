@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -75,9 +76,34 @@ public class FriendsServlet extends HttpServlet {
 					+ "<a href=\"AccountServlet\">Account</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
 					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
-					+ "</div>" + "<div id=\"content\"><ul>");
+					+ "</div>" + "<div id=\"content\">"
+					+ "<form action='/FriendsServlet' method='get'>"
+					+ "<select name='major'>"
+					+ "<option value='' selected>Choose a Major</option>");
 
-			for (User friend : currentUser.getFriends()) {
+			for (Major major : currentUser.getMajors()) {
+				if (major != null) {
+					out.println("<option value='" + major.getID() + "'>"
+							+ major.getName() + "</option>");
+				}
+			}
+
+			out.println("</select>"
+					+ "<button type='submit'>Filter</button>"
+					+ "</form>");
+
+			out.println("<ul>");
+
+			String major = request.getParameter("major");
+			ArrayList<User> friends;
+			if (major == null || major.isEmpty()) {
+				friends = currentUser.getFriends();
+			} else {
+				friends = Major.find(major)
+						.membersThatAreFriendsOf(currentUser);
+			}
+
+			for (User friend : friends) {
 				out.println("<li>" + friend.getName() + "</li>");
 			}
 

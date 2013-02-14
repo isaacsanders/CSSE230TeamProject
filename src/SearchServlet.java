@@ -54,7 +54,14 @@ public class SearchServlet extends HttpServlet {
 					+ "</html>";
 
 			String username = request.getParameter("query");
-			User result = User.find(username);
+			String groupName = request.getParameter("groupName");
+			User result;
+
+			if (groupName == "") {
+				result = User.find(username);
+			} else {
+				result = Group.find(groupName).findUser(username);
+			}
 			String resultHtml = "<section>";
 
 			// If user with the username doesn't exist
@@ -110,6 +117,7 @@ public class SearchServlet extends HttpServlet {
 		// check if user is already logged in, if so go to main search page, if
 		// not allow sign up
 		if (session != null) {
+			User currentUser = User.find((String) session.getValue("ID"));
 
 			// PRODUCE HTML PAGE
 			PrintWriter out = response.getWriter();
@@ -135,6 +143,17 @@ public class SearchServlet extends HttpServlet {
 					+"</div>"
 					+ "<div id=\"content\">"
 					+ "<form action='/SearchServlet' method='post'>"
+					+ "<select name='groupName'>"
+					+ "<option value='' selected>Choose a Group</option>";
+
+			for (Group group : currentUser.getGroups()) {
+				if (group != null) {
+					bodyHtml += "<option value='" + group.getID() + "'>"
+							+ group.getName() + "</option>";
+				}
+			}
+
+			bodyHtml += "</select>"
 					+ "<input type=text name='query' placeholder='Type your query here'>"
 					+ "</form>"
 					+ "</div>"
