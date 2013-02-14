@@ -46,6 +46,7 @@ public class AccountServlet extends HttpServlet {
 			// get the rest of the parameters to reCreate user
 			String first = request.getParameter("first");
 			String last = request.getParameter("last");
+			String year = request.getParameter("year");
 
 			// delete old user
 			User user = User.find(sessionID);
@@ -55,6 +56,7 @@ public class AccountServlet extends HttpServlet {
 			User newUser = new User();
 			newUser.setName(first + " " + last);
 			newUser.setID(sessionID);
+			newUser.setGraduatingClass(new GraduatingClass(year));
 			newUser.save();
 
 			// end with redirect to account page
@@ -77,12 +79,13 @@ public class AccountServlet extends HttpServlet {
 		// check session
 		HttpSession session = request.getSession(false);
 
-		// get user
+		// get user and user values
 		User user = User.find(session.getValue("ID").toString());
 		String fullName = user.getName();
 		int indexSplitter = fullName.indexOf(" ");
 		String first = fullName.substring(0, indexSplitter);
 		String last = fullName.substring(indexSplitter + 1, fullName.length());
+		String year = user.getGraduatingClass().getID;
 
 		// check if user is already logged in, if so go to main search page, if
 		// not allow sign up
@@ -113,22 +116,38 @@ public class AccountServlet extends HttpServlet {
 					+ "<fieldset><legend>Change Your Name</legend>"
 					+ "<form id=\"accountFormChangeName\" method=\"post\" action=\"AccountServlet\">"
 					+ "<label for=\"first\">Change First Name</label>"
-					+ "<input name=\"first\" id=\"first\" type=\"text\" value=\""
+					+ "<input name=\"first\" id=\"first\" type=\"text\" placeholder=\""
 					// add users first name
 					+ first
 					+ "\" />"
 					+ "<label for=\"last\">Change Last Name</label>"
-					+ "<input name=\"last\" id=\"last\" type=\"text\" value=\" "
+					+ "<input name=\"last\" id=\"last\" type=\"text\" placeholder=\" "
 					// add users last name
 					+ last
 					+ "\"/>"
 					+ "<input class=\"button\" value=\"Change Name\" type=\"submit\" />"
 					+ "</form>"
 					+ "</fieldset>"
+					//year form
+					+ "<fieldset><legend>Graduation Year</legend>"
+					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
+					+ "<select id=\"yearSelector\" name=\"year\">"
+					+ "<option " + this.getProperSelector(year, "2013")
+					+ "value=\"2013\">2013</option>"
+					+ "<option " + this.getProperSelector(year, "2014")
+					+ "value=\"2014\">2014</option>"
+					+ "<option " + this.getProperSelector(year, "2015")
+					+ "value=\"2015\">2015</option>"
+					+ "<option " + this.getProperSelector(year, "2016")
+					+ "value=\"2016\">2016</option>"
+					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset>"
+					// delete account button form
 					+ "<form method=\"post\" method=\"/AccountServlet\">"
 					+ "<input type=\"hidden\" name=\"delete\" value=\"delete\" />"
-					+ "<input id=\"deleteAccountButton\" type=\"submit\" value=\"Delete Account\" /></form>"	
-					+ "</div>" + "</body>" + "</html>");
+					+ "<input id=\"deleteAccountButton\" type=\"submit\" value=\"Delete Account\" /></form>"
+					+ "</div>" 
+					+ "</body>" 
+					+ "</html>");
 
 		} else {
 			// redirect to login screen if not logged in
@@ -136,5 +155,19 @@ public class AccountServlet extends HttpServlet {
 			response.sendRedirect(redirect);
 		}
 
+	}
+	
+	/**
+	 * returns the proper selected attribute for grad year
+	 *
+	 * @param actualYear
+	 * @param currentValue
+	 * @return
+	 */
+	private String getProperSelector(String actualYear, String currentValue){
+		if (actualYear == currentValue){
+			return "selected = \"selected\"";
+		}
+		return "";
 	}
 }
