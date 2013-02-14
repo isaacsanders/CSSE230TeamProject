@@ -11,6 +11,7 @@ import javax.servlet.http.*;
 public class SignUpServlet extends HttpServlet {
 
 	private final String FULL = "FULL";
+	private final String EMPTY = "";
 
 	/**
 	 * takes in the user inputs from a "sign up"
@@ -32,24 +33,26 @@ public class SignUpServlet extends HttpServlet {
 		String lastName = request.getParameter("lastName");
 		String ID = request.getParameter("ID");
 
-		if (firstName != null && lastName!= null && ID != null && session == null) {
-			// create new user
-			User user = new User();
-			user.setName(firstName + " " + lastName);
-			user.setID(ID);
+		// create new user
+		User user = new User();
+		user.setName(firstName + " " + lastName);
+		user.setID(ID);
+
+		if (!(firstName == this.EMPTY || lastName == this.EMPTY || ID == this.EMPTY || user.exists()) && session == null) {
+
 			user.save();
 
 			// redirect to login screen once account is created
-			String redirect = response.encodeRedirectURL("/");
+			String redirect = response.encodeRedirectURL("/Home");
 			response.sendRedirect(redirect);
 
-		} else if (session != null){
+		} else if (session != null) {
 			// redirect to search screen if already logged in
-			String redirect = response.encodeRedirectURL("SearchServlet.html");
+			String redirect = response.encodeRedirectURL("/SearchServlet");
 			response.sendRedirect(redirect);
 		}
-		
-		else{
+
+		else {
 			doGet(request, response);
 		}
 
@@ -68,26 +71,30 @@ public class SignUpServlet extends HttpServlet {
 		String lastName = request.getParameter("lastName");
 		String ID = request.getParameter("ID");
 		String answer = "*Please Enter Your: ";
-		int answerLength = answer.length();
+		String answerOriginal = answer;
 
 		// check parameters
-		if (firstName == null) {
-			answer += "---First Name";
+		if (firstName == this.EMPTY || firstName == null) {
+			firstName = "";
+			answer += " - - - First Name ";
 		}
-		if (lastName == null) {
-			answer += "---Last Name";
+		if (lastName == this.EMPTY || lastName == null) {
+			lastName = "";
+			answer += " - - - Last Name ";
 		}
-		if (ID == null) {
-			answer += "---Rose-Hulman Username";
+		if (ID == this.EMPTY || ID == null) {
+			ID = "";
+			answer += " - - - Rose-Hulman Username ";
 		}
 
-		if (answer.length() == answerLength) {
-			answer = this.FULL;
+		// check if user already exists
+		if (answer.equals(answerOriginal)) {
+			answer = "User Info Already Registered - Try Logging In";
 		}
 
 		// check if user is already logged in, if so go to main search page, if
 		// not allow sign up
-		if (session == null && answer != this.FULL) {
+		if (session == null) {
 
 			// PRODUCE HTML PAGE
 			PrintWriter out = response.getWriter();
@@ -101,10 +108,10 @@ public class SignUpServlet extends HttpServlet {
 					+ "<link href=\"styleSheet.css\" type=\"text/css\" rel=\"stylesheet\" />"
 					+ "<title>Social Circle - Sign Up!</title></head>");
 			// body
-			out.println("<body>" + "<div id=\"navigation\"></div>"
+			out.println("<body>"
+					+ "<div id=\"navigation\"></div>"
 					+ "<div class=\"center\"><img id=\"socialCircleTitleLogin\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></div>"
-					+ "<div id=\"content\">"
-					+ "<div id=signupSection>"
+					+ "<div id=\"content\">" + "<div id=signupSection>"
 					+ "<div id=\"signupMessage\">"
 					// add in checked parameters message
 					+ answer
@@ -112,15 +119,24 @@ public class SignUpServlet extends HttpServlet {
 					+ "<form class=\"signupForm\" method=\"post\" action=\"SignUpServlet\">"
 					+ "<div class=\"formItem\">"
 					+ "<label for=\"firstName\" >First Name</label>"
-					+ "<input name=\"firstName\" id=\"firstName\" type=\"text\" size=\"25\" />"
+					+ "<input value= \""
+					// add any previously entered first name
+					+ firstName
+					+ "\" name=\"firstName\" id=\"firstName\" type=\"text\" size=\"25\" />"
 					+ "</div>"
 					+ "<div class=\"formItem\">"
 					+ "<label for=\"lastName\" >Last Name</label>"
-					+ "<input name=\"lastName\" id=\"lastName\" type=\"text\" size=\"25\" />"
+					+ "<input value= \""
+					// add any previously entered last name
+					+ lastName
+					+ "\" name=\"lastName\" id=\"lastName\" type=\"text\" size=\"25\" />"
 					+ "</div>"
 					+ "<div class=\"formItem\">"
 					+ "<label for=\"ID\">Rose-Hulman Username</label>"
-					+ "<input type=\"text\" name=\"ID\" id=\"ID\" size=\"25\" />"
+					+ "<input value= \""
+					// add any previously entered ID
+					+ ID
+					+ "\" type=\"text\" name=\"ID\" id=\"ID\" size=\"25\" />"
 					+ "</div>"
 					+ "<div>"
 					+ "<input class=\"button\" type=\"submit\" value=\"Sign Up!\" />"

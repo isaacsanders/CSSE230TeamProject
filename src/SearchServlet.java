@@ -11,6 +11,8 @@ import javax.servlet.http.*;
  */
 public class SearchServlet extends HttpServlet {
 
+	private final String EMPTY = "";
+
 	/**
 	 * takes in the user inputs from a "sign up"
 	 * 
@@ -43,20 +45,18 @@ public class SearchServlet extends HttpServlet {
 					+ "<title>Social Circle - Sign Up!</title></head>");
 			// body
 			out.println("<body>"
-					+ "<div id=\"navigation\">" 
+					+ "<div id=\"navigation\">"
 					+ "<a href=\"/SearchServlet\">Search</a>"
 					+ "<a href=\"friends.html\">Friends</a>"
 					+ "<a href=\"meetings.html\">Meetings</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
-					+"</div>"
-					+ "<div id=\"content\">"
-					+ "</div>"
-					+ "</body>"
+					+ "<img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/>"
+					+ "</div>" + "<div id=\"content\">" + "</div>" + "</body>"
 					+ "</html>");
 
 		} else {
 			// redirect to login screen if not logged in
-			String redirect = response.encodeRedirectURL("/login.html");
+			String redirect = response.encodeRedirectURL("/Home");
 			response.sendRedirect(redirect);
 		}
 
