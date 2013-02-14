@@ -43,8 +43,7 @@ body {
 	-webkit-box-shadow: 0px 0px 2px 4px #000000;
 	-moz-box-shadow: 0px 0px 2px 4px #000000;
 	box-shadow: 0px 0px 2px 4px #000000;
-	/*Adds the transparent background*/
-	background-color: grey;
+	background: grey url(greyTile.png) repeat;
 }
 
 #login {
@@ -136,12 +135,13 @@ fieldset {
 	width: 15em;
 	margin: 3em;
 	padding: 2em;
+	margin-top: 0;
 	display: block;
 }
 
 legend {
 	font-weight: bold;
-	color: #900000;
+	color: #AA0000;
 }
 
 input {
@@ -205,6 +205,7 @@ button.signupButton:hover {
 	border-color: black;
 	position: relative;
 	bottom: 0;
+	top: -12em;
 	left: 2em;
 }
 
@@ -230,4 +231,26 @@ button.logoutButton:hover {
 #yearSelector {
 	padding: 0.2em;
 	margin: 0.1em;
+}
+
+.inline {
+	display: inline-block;
+}
+
+#majors{
+	width: 25em;
+	margin: 3em;
+	padding: 2em;
+	margin-top: 0;
+	display: inline-block;
+}
+
+#changeName{
+	position: relative;
+	top: -10em;
+}
+
+#changeYear {
+	position: relative;
+	top: -15em;
 }

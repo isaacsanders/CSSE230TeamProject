@@ -124,7 +124,7 @@ public class AccountServlet extends HttpServlet {
 					+ "<title>Social Circle - Sign Up!</title></head>");
 			// body
 			out.println("<body>"
-					+ "<div id=\"navigation\">"
+					+ "<div class=\"inline\" id=\"navigation\">"
 					+ "<a href=\"/SearchServlet\">Search</a>"
 					+ "<a href=\"FriendsServlet\">Friends</a>"
 					+ "<a href=\"MeetingsServlet\">Meetings</a>"
@@ -133,7 +133,8 @@ public class AccountServlet extends HttpServlet {
 					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
 					+ "</div>"
 					+ "<div id=\"content\">"
-					+ "<fieldset><legend>Change Your Name</legend>"
+					// change your name
+					+ "<fieldset id=\"changeName\" class=\"inline\"><legend>Change Your Name</legend>"
 					+ "<form id=\"accountFormChangeName\" method=\"post\" action=\"AccountServlet\">"
 					+ "<label for=\"first\">Change First Name</label>"
 					+ "<input name=\"first\" id=\"first\" type=\"text\" value=\""
@@ -148,28 +149,8 @@ public class AccountServlet extends HttpServlet {
 					+ "<input class=\"button\" value=\"Change Name\" type=\"submit\" />"
 					+ "</form>"
 					+ "</fieldset>"
-					// year form
-					+ "<fieldset><legend>Graduation Year</legend>"
-					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
-					+ "<select id=\"yearSelector\" name=\"year\">"
-					+ "<option "
-					+ this.getProperSelector(year, "2013")
-					+ "value=\"2013\">2013</option>"
-					+ "<option "
-					+ this.getProperSelector(year, "2014")
-					+ "value=\"2014\">2014</option>"
-					+ "<option "
-					+ this.getProperSelector(year, "2015")
-					+ "value=\"2015\">2015</option>"
-					+ "<option "
-					+ this.getProperSelector(year, "2016")
-					+ "value=\"2016\">2016</option>"
-					+ "<option "
-					+ this.getProperSelector(year, "")
-					+ "value=\"\"></option>"
-					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset>"
 					// managing majors
-					+ "<fieldset>"
+					+ "<fieldset id=\"majors\">"
 					+ "<legend>Majors</legend>"
 					+ "<fieldset class=\"inline\">"
 					+ "<legend>Change Majors</legend>"
@@ -211,6 +192,26 @@ public class AccountServlet extends HttpServlet {
 					+ "</ul>"
 					+ "</fieldset>"
 					+ "</fieldset>"
+					// year form
+					+ "<fieldset id=\"changeYear\"><legend>Graduation Year</legend>"
+					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
+					+ "<select id=\"yearSelector\" name=\"year\">"
+					+ "<option "
+					+ this.getProperSelector(year, "2013")
+					+ "value=\"2013\">2013</option>"
+					+ "<option "
+					+ this.getProperSelector(year, "2014")
+					+ "value=\"2014\">2014</option>"
+					+ "<option "
+					+ this.getProperSelector(year, "2015")
+					+ "value=\"2015\">2015</option>"
+					+ "<option "
+					+ this.getProperSelector(year, "2016")
+					+ "value=\"2016\">2016</option>"
+					+ "<option "
+					+ this.getProperSelector(year, "")
+					+ "value=\"\"></option>"
+					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset>"
 					// delete account button form
 					+ "<form method=\"post\" method=\"/AccountServlet\">"
 					+ "<input type=\"hidden\" name=\"delete\" value=\""
@@ -240,12 +241,12 @@ public class AccountServlet extends HttpServlet {
 		}
 		return "";
 	}
-	
-	private String getListMajors(User user){
+
+	private String getListMajors(User user) {
 		ArrayList<Major> majors = user.getMajors();
 		int numMajors = majors.size();
 		String output = "";
-		for (int i=0; i<numMajors; i++){
+		for (int i = 0; i < numMajors; i++) {
 			output += "<li>" + majors.get(i) + "</li>";
 		}
 		return output;
