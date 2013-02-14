@@ -29,7 +29,7 @@ public class AccountServlet extends HttpServlet {
 
 		// check for delete account
 		String delete = request.getParameter("delete");
-		if (true) {
+		if (delete == "delete") {
 			//delete the user
 			User u = User.find(sessionID);
 			u.delete();
@@ -43,20 +43,31 @@ public class AccountServlet extends HttpServlet {
 			
 		} else {
 
-			// get the rest of the parameters to reCreate user
-			String first = request.getParameter("first");
-			String last = request.getParameter("last");
-			String year = request.getParameter("year");
-
+			
 			// delete old user
 			User user = User.find(sessionID);
+			
+			//get any old parameters that are needed
+			String first = request.getParameter("first");
+			String last = request.getParameter("last");
+			String name = first + " " + last;
+			GraduatingClass year = new GraduatingClass(request.getParameter("year"));
+			
+			if (first == null){
+				name = user.getName();
+			}
+			
+			if (year.getID() == null){
+				year = user.getGraduatingClass();
+			}
+			
 			user.delete();
 
 			// create new user
 			User newUser = new User();
-			newUser.setName(first + " " + last);
+			newUser.setName(name);
 			newUser.setID(sessionID);
-			newUser.setGraduatingClass(new GraduatingClass(year));
+			newUser.setGraduatingClass(year);
 			newUser.save();
 
 			// end with redirect to account page
@@ -81,11 +92,20 @@ public class AccountServlet extends HttpServlet {
 
 		// get user and user values
 		User user = User.find(session.getValue("ID").toString());
+		
+		//get full name
 		String fullName = user.getName();
 		int indexSplitter = fullName.indexOf(" ");
 		String first = fullName.substring(0, indexSplitter);
 		String last = fullName.substring(indexSplitter + 1, fullName.length());
-		String year = user.getGraduatingClass().getID;
+		
+		//get year
+		GraduatingClass grad = user.getGraduatingClass();
+		String year = "";
+		if (grad.getID()!= null){
+			year = grad.getID();
+		}
+		
 
 		// check if user is already logged in, if so go to main search page, if
 		// not allow sign up
@@ -116,12 +136,12 @@ public class AccountServlet extends HttpServlet {
 					+ "<fieldset><legend>Change Your Name</legend>"
 					+ "<form id=\"accountFormChangeName\" method=\"post\" action=\"AccountServlet\">"
 					+ "<label for=\"first\">Change First Name</label>"
-					+ "<input name=\"first\" id=\"first\" type=\"text\" placeholder=\""
+					+ "<input name=\"first\" id=\"first\" type=\"text\" value=\""
 					// add users first name
 					+ first
 					+ "\" />"
 					+ "<label for=\"last\">Change Last Name</label>"
-					+ "<input name=\"last\" id=\"last\" type=\"text\" placeholder=\" "
+					+ "<input name=\"last\" id=\"last\" type=\"text\" value=\""
 					// add users last name
 					+ last
 					+ "\"/>"
@@ -140,6 +160,8 @@ public class AccountServlet extends HttpServlet {
 					+ "value=\"2015\">2015</option>"
 					+ "<option " + this.getProperSelector(year, "2016")
 					+ "value=\"2016\">2016</option>"
+					+ "<option " + this.getProperSelector(year, "")
+					+ "value=\"\"></option>"
 					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset>"
 					// delete account button form
 					+ "<form method=\"post\" method=\"/AccountServlet\">"
