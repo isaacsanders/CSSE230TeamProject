@@ -1,3 +1,6 @@
+import java.io.File;
+import java.util.ArrayList;
+
 
 public class Major extends Group {
 
@@ -30,6 +33,16 @@ public class Major extends Group {
 		this.save();
 		student.getMajors().add(this);
 		student.save();
+	}
+
+	public static ArrayList<Major> all() {
+		ArrayList<Major> list = new ArrayList<Major>();
+		File[] files = new Persister(new Major("ignore")).getDirectory().listFiles();
+		for (File major : files) {
+			String basename = major.getName().split(".xml")[0];
+			list.add(Major.find(basename));
+		}
+		return list;
 	}
 
 }

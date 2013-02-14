@@ -34,7 +34,7 @@ public class Persister {
 		this.object = object;
 	}
 
-	private File getDirectory() {
+	public File getDirectory() {
 		if (this.directory == null) {
 			this.directory = new File(Persister.DATABASE, this.object.getClass().getName());
 			this.directory.mkdirs();
