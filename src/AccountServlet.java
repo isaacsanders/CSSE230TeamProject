@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -30,37 +31,37 @@ public class AccountServlet extends HttpServlet {
 		// check for delete account
 		String delete = request.getParameter("delete");
 		if (delete == "delete") {
-			//delete the user
+			// delete the user
 			User u = User.find(sessionID);
 			u.delete();
-			
-			//terminate session
+
+			// terminate session
 			session.invalidate();
-			
-			//redirect to login screen
+
+			// redirect to login screen
 			String url = response.encodeRedirectURL("/Home");
 			response.sendRedirect(url);
-			
+
 		} else {
 
-			
 			// delete old user
 			User user = User.find(sessionID);
-			
-			//get any old parameters that are needed
+
+			// get any old parameters that are needed
 			String first = request.getParameter("first");
 			String last = request.getParameter("last");
 			String name = first + " " + last;
-			GraduatingClass year = new GraduatingClass(request.getParameter("year"));
-			
-			if (first == null){
+			GraduatingClass year = new GraduatingClass(
+					request.getParameter("year"));
+
+			if (first == null) {
 				name = user.getName();
 			}
-			
-			if (year.getID() == null){
+
+			if (year.getID() == null) {
 				year = user.getGraduatingClass();
 			}
-			
+
 			user.delete();
 
 			// create new user
@@ -90,23 +91,23 @@ public class AccountServlet extends HttpServlet {
 		// check session
 		HttpSession session = request.getSession(false);
 
-
 		// check if user is already logged in, if so go to main search page, if
 		// not allow sign up
 		if (session != null) {
-			
+
 			// get user and user values
 			User user = User.find(session.getValue("ID").toString());
-			
-			//get full name
+
+			// get full name
 			String fullName = user.getName();
 			int indexSplitter = fullName.indexOf(" ");
 			String first = fullName.substring(0, indexSplitter);
-			String last = fullName.substring(indexSplitter + 1, fullName.length());
-			
-			//get year
+			String last = fullName.substring(indexSplitter + 1,
+					fullName.length());
+
+			// get year
 			String year = user.getGraduatingClass().getID();
-			if (year== null){
+			if (year == null) {
 				year = "";
 			}
 
@@ -147,29 +148,76 @@ public class AccountServlet extends HttpServlet {
 					+ "<input class=\"button\" value=\"Change Name\" type=\"submit\" />"
 					+ "</form>"
 					+ "</fieldset>"
-					//year form
+					// year form
 					+ "<fieldset><legend>Graduation Year</legend>"
 					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
 					+ "<select id=\"yearSelector\" name=\"year\">"
-					+ "<option " + this.getProperSelector(year, "2013")
+					+ "<option "
+					+ this.getProperSelector(year, "2013")
 					+ "value=\"2013\">2013</option>"
-					+ "<option " + this.getProperSelector(year, "2014")
+					+ "<option "
+					+ this.getProperSelector(year, "2014")
 					+ "value=\"2014\">2014</option>"
-					+ "<option " + this.getProperSelector(year, "2015")
+					+ "<option "
+					+ this.getProperSelector(year, "2015")
 					+ "value=\"2015\">2015</option>"
-					+ "<option " + this.getProperSelector(year, "2016")
+					+ "<option "
+					+ this.getProperSelector(year, "2016")
 					+ "value=\"2016\">2016</option>"
-					+ "<option " + this.getProperSelector(year, "")
+					+ "<option "
+					+ this.getProperSelector(year, "")
 					+ "value=\"\"></option>"
 					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset>"
+					// managing majors
+					+ "<fieldset>"
+					+ "<legend>Majors</legend>"
+					+ "<fieldset class=\"inline\">"
+					+ "<legend>Change Majors</legend>"
+					+ "<form method=\"post\" action=\"/AccountServlet\">"
+					+ "<select name=\"major\">"
+					+ "<option value=\"SE\">Software Engineer</option>"
+					+ "<option value=\"CS\">Computer Science</option>"
+					+ "<option value=\"ME\">Mechanical Engineer</option>"
+					+ "<option value=\"EE\">Electrical Engineer</option>"
+					+ "<option value=\"BME\">Biomedical Engineer</option>"
+					+ "<option value=\"CHEME\">Chemical Engineer</option>"
+					+ "<option value=\"OE\">Optical Engineer</option>"
+					+ "<option value=\"CVE\">Civil Engineer</option>"
+					+ "<option value=\"AB\">Applied Biology</option>"
+					+ "<option value=\"MA\">Math</option>"
+					+ "<option value=\"PH\">Physics</option>"
+					+ "<option value=\"EC\">Economics</option>"
+					+ "<option value=\"CHEM\">Chemistry</option>"
+					+ "<option value=\"BC\">BioChemistry</option>"
+					+ "<option value=\"MS\">Military Science</option>"
+					+ "<option selected=\"selected\" value=\"\"></option>"
+					+ "</select>"
+					+ "<div>"
+					+ "<div>"
+					+ "<input name=\"change\" id=\"add\" type=\"radio\" value=\"add\"/>"
+					+ "<label for=\"add\">Add</label>"
+					+ "</div>"
+					+ "<div>"
+					+ "<input name=\"change\" id=\"drop\" type=\"radio\" value=\"drop\"/>"
+					+ "<label for=\"drop\">Drop</label>"
+					+ "</div>"
+					+ "</div>"
+					+ "</form>"
+					+ "</fieldset>"
+					+ "<fieldset class=\"inline\">"
+					+ "<legend>Current Majors</legend>"
+					+ "<ul id=\"currentMajors\">"
+					+ this.getListMajors(user)
+					+ "</ul>"
+					+ "</fieldset>"
+					+ "</fieldset>"
 					// delete account button form
 					+ "<form method=\"post\" method=\"/AccountServlet\">"
-					+ "<input type=\"hidden\" name=\"delete\" value=\"" + year +
-					"delete\" />"
+					+ "<input type=\"hidden\" name=\"delete\" value=\""
+					+ year
+					+ "delete\" />"
 					+ "<input id=\"deleteAccountButton\" type=\"submit\" value=\"Delete Account\" /></form>"
-					+ "</div>" 
-					+ "</body>" 
-					+ "</html>");
+					+ "</div>" + "</body>" + "</html>");
 
 		} else {
 			// redirect to login screen if not logged in
@@ -178,18 +226,28 @@ public class AccountServlet extends HttpServlet {
 		}
 
 	}
-	
+
 	/**
 	 * returns the proper selected attribute for grad year
-	 *
+	 * 
 	 * @param actualYear
 	 * @param currentValue
 	 * @return
 	 */
-	private String getProperSelector(String actualYear, String currentValue){
-		if (actualYear.equals( currentValue)){
+	private String getProperSelector(String actualYear, String currentValue) {
+		if (actualYear.equals(currentValue)) {
 			return "selected = \"selected\"";
 		}
 		return "";
+	}
+	
+	private String getListMajors(User user){
+		ArrayList<Major> majors = user.getMajors();
+		int numMajors = majors.size();
+		String output = "";
+		for (int i=0; i<numMajors; i++){
+			output += "<li>" + majors.get(i) + "</li>";
+		}
+		return output;
 	}
 }
