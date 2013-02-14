@@ -90,26 +90,25 @@ public class AccountServlet extends HttpServlet {
 		// check session
 		HttpSession session = request.getSession(false);
 
-		// get user and user values
-		User user = User.find(session.getValue("ID").toString());
-		
-		//get full name
-		String fullName = user.getName();
-		int indexSplitter = fullName.indexOf(" ");
-		String first = fullName.substring(0, indexSplitter);
-		String last = fullName.substring(indexSplitter + 1, fullName.length());
-		
-		//get year
-		GraduatingClass grad = user.getGraduatingClass();
-		String year = "";
-		if (grad.getID()!= null){
-			year = grad.getID();
-		}
-		
 
 		// check if user is already logged in, if so go to main search page, if
 		// not allow sign up
 		if (session != null) {
+			
+			// get user and user values
+			User user = User.find(session.getValue("ID").toString());
+			
+			//get full name
+			String fullName = user.getName();
+			int indexSplitter = fullName.indexOf(" ");
+			String first = fullName.substring(0, indexSplitter);
+			String last = fullName.substring(indexSplitter + 1, fullName.length());
+			
+			//get year
+			String year = user.getGraduatingClass().getID();
+			if (year== null){
+				year = "";
+			}
 
 			// PRODUCE HTML PAGE
 			PrintWriter out = response.getWriter();
@@ -165,7 +164,8 @@ public class AccountServlet extends HttpServlet {
 					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset>"
 					// delete account button form
 					+ "<form method=\"post\" method=\"/AccountServlet\">"
-					+ "<input type=\"hidden\" name=\"delete\" value=\"delete\" />"
+					+ "<input type=\"hidden\" name=\"delete\" value=\"" + year +
+					"delete\" />"
 					+ "<input id=\"deleteAccountButton\" type=\"submit\" value=\"Delete Account\" /></form>"
 					+ "</div>" 
 					+ "</body>" 
@@ -187,7 +187,7 @@ public class AccountServlet extends HttpServlet {
 	 * @return
 	 */
 	private String getProperSelector(String actualYear, String currentValue){
-		if (actualYear == currentValue){
+		if (actualYear.equals( currentValue)){
 			return "selected = \"selected\"";
 		}
 		return "";
