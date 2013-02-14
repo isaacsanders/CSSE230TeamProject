@@ -133,9 +133,10 @@ input.button, button.button {
 }
 
 fieldset {
+	width: 15em;
 	margin: 3em;
 	padding: 2em;
-	display: inline-block;
+	display: block;
 }
 
 legend {
@@ -207,6 +208,11 @@ button.signupButton:hover {
 	left: 2em;
 }
 
+#deleteAccountButton:hover {
+	color: white;
+	border-color: white;
+}
+
 button.logoutButton:hover {
 	border-color: white;
 	color: white;
@@ -219,4 +225,9 @@ button.logoutButton:hover {
 	position: relative;
 	top: 6.5em;
 	left: 2em;
+}
+
+#yearSelector {
+	padding: 0.2em;
+	margin: 0.1em;
 }
