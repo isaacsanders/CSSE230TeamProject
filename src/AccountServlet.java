@@ -48,11 +48,20 @@ public class AccountServlet extends HttpServlet {
 			User user = User.find(sessionID);
 
 			// get any old parameters that are needed
+			//get name
 			String first = request.getParameter("first");
 			String last = request.getParameter("last");
 			String name = first + " " + last;
-			GraduatingClass year = new GraduatingClass(
-					request.getParameter("year"));
+			//get grad year
+			GraduatingClass year = new GraduatingClass(request.getParameter("year"));
+			//get major change
+			String change = request.getParameter("change");
+			String major = request.getParameter("major");
+			Major theMajor = new Major(major);
+			ArrayList<Major> majorList = user.getMajors();
+			if (majorList.equals(null)){
+				majorList = new ArrayList<Major>();
+			}
 
 			if (first == null) {
 				name = user.getName();
@@ -61,7 +70,13 @@ public class AccountServlet extends HttpServlet {
 			if (year.getID() == null) {
 				year = user.getGraduatingClass();
 			}
-
+			
+			if (change == "add"){
+				majorList.add(theMajor);
+			}
+			else if (change == "drop"){
+				majorList.remove(theMajor);
+			}
 			user.delete();
 
 			// create new user
@@ -69,6 +84,7 @@ public class AccountServlet extends HttpServlet {
 			newUser.setName(name);
 			newUser.setID(sessionID);
 			newUser.setGraduatingClass(year);
+			newUser.setMajors(majorList);
 			newUser.save();
 
 			// end with redirect to account page
@@ -102,12 +118,17 @@ public class AccountServlet extends HttpServlet {
 			String fullName = user.getName();
 			int indexSplitter = fullName.indexOf(" ");
 			String first = fullName.substring(0, indexSplitter);
-			String last = fullName.substring(indexSplitter + 1, fullName.length());
+			String last = fullName.substring(indexSplitter + 1,
+					fullName.length());
 
 			// get year
-			String year = user.getGraduatingClass().getID();
-			if (year == null) {
-				year = "";
+			String year = "";
+			GraduatingClass grad = user.getGraduatingClass();
+			if (grad != null) {
+				year = grad.getID();
+				if (year == null) {
+					year = "";
+				}
 			}
 
 			// PRODUCE HTML PAGE
@@ -155,31 +176,32 @@ public class AccountServlet extends HttpServlet {
 					+ "<legend>Change Majors</legend>"
 					+ "<form method=\"post\" action=\"/AccountServlet\">"
 					+ "<select name=\"major\">"
-					+ "<option value=\"SE\">Software Engineer</option>"
-					+ "<option value=\"CS\">Computer Science</option>"
-					+ "<option value=\"ME\">Mechanical Engineer</option>"
-					+ "<option value=\"EE\">Electrical Engineer</option>"
-					+ "<option value=\"BME\">Biomedical Engineer</option>"
-					+ "<option value=\"CHEME\">Chemical Engineer</option>"
-					+ "<option value=\"OE\">Optical Engineer</option>"
-					+ "<option value=\"CVE\">Civil Engineer</option>"
-					+ "<option value=\"AB\">Applied Biology</option>"
-					+ "<option value=\"MA\">Math</option>"
-					+ "<option value=\"PH\">Physics</option>"
-					+ "<option value=\"EC\">Economics</option>"
-					+ "<option value=\"CHEM\">Chemistry</option>"
-					+ "<option value=\"BC\">BioChemistry</option>"
-					+ "<option value=\"MS\">Military Science</option>"
+					+ "<option value=\"Software Engineer\">Software Engineer</option>"
+					+ "<option value=\"Computer Science\">Computer Science</option>"
+					+ "<option value=\"Mechanical Engineer\">Mechanical Engineer</option>"
+					+ "<option value=\"Electrical Engineer\">Electrical Engineer</option>"
+					+ "<option value=\"Biomedical Engineer\">Biomedical Engineer</option>"
+					+ "<option value=\"Chemical Engineer\">Chemical Engineer</option>"
+					+ "<option value=\"Optical Engineer\">Optical Engineer</option>"
+					+ "<option value=\"Civil Engineer\">Civil Engineer</option>"
+					+ "<option value=\"Applied Biology\">Applied Biology</option>"
+					+ "<option value=\"Math\">Math</option>"
+					+ "<option value=\"Physics\">Physics</option>"
+					+ "<option value=\"Economics\">Economics</option>"
+					+ "<option value=\"Chemistry\">Chemistry</option>"
+					+ "<option value=\"BioChemistry\">BioChemistry</option>"
+					+ "<option value=\"Military Science\">Military Science</option>"
 					+ "<option selected=\"selected\" value=\"\"></option>"
 					+ "</select>"
 					+ "<div>"
-					+ "<div>"
-					+ "<input name=\"change\" id=\"add\" type=\"radio\" value=\"add\"/>"
-					+ "<label for=\"add\">Add</label>"
+					+ "<div id=\"adjusterAdd\">"
+					+ "<input class=\"inline\" name=\"change\" id=\"add\" type=\"radio\" value=\"add\"/>"
+					+ "<label class=\"inline\" for=\"add\">Add</label>"
+					+ "<input class=\"button\" id=\"majorSubmitButton\" type=\"submit\" value=\"Go\">"
 					+ "</div>"
 					+ "<div>"
-					+ "<input name=\"change\" id=\"drop\" type=\"radio\" value=\"drop\"/>"
-					+ "<label for=\"drop\">Drop</label>"
+					+ "<input class=\"inline\" name=\"change\" id=\"drop\" type=\"radio\" value=\"drop\"/>"
+					+ "<label class=\"inline\" for=\"drop\">Drop</label>"
 					+ "</div>"
 					+ "</div>"
 					+ "</form>"
@@ -246,7 +268,7 @@ public class AccountServlet extends HttpServlet {
 		int numMajors = majors.size();
 		String output = "";
 		for (int i = 0; i < numMajors; i++) {
-			output += "<li>" + majors.get(i) + "</li>";
+			output += "<li>" + majors.get(i).getID() + "</li>";
 		}
 		return output;
 	}

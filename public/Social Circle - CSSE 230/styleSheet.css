@@ -4,6 +4,7 @@ body {
 	padding: 0;
 	margin: 0;
 	font-size: 80%;
+	color: #AAAAAA;
 }
 
 #navigation {
@@ -137,11 +138,13 @@ fieldset {
 	padding: 2em;
 	margin-top: 0;
 	display: block;
+	background-color: rgba(1, 1, 1, 0.5);
 }
 
 legend {
 	font-weight: bold;
 	color: #AA0000;
+	background-color: #191919;
 }
 
 input {
@@ -237,7 +240,12 @@ button.logoutButton:hover {
 	display: inline-block;
 }
 
-#majors{
+#adjusterAdd {
+	position: relative;
+	top: 0.8em;
+}
+
+#majors {
 	width: 25em;
 	margin: 3em;
 	padding: 2em;
@@ -245,12 +253,25 @@ button.logoutButton:hover {
 	display: inline-block;
 }
 
-#changeName{
+#changeName {
 	position: relative;
-	top: -10em;
+	top: -12em;
+	left: 1.5em;
 }
 
 #changeYear {
 	position: relative;
-	top: -15em;
+	top: -15.5em;
+	left: 1.5em;
+}
+
+.regularBlackText {
+	color: black;
+}
+
+#majorSubmitButton {
+	display: inline-block;
+	position: relative;
+	top: 1.5em;
+	left: 3em;
 }

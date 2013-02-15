@@ -99,7 +99,7 @@ public class LoginServlet extends HttpServlet {
 					+ "<div id=\"loginSection\">"
 					+ "<form class=\"loginForm\" method=\"post\" action=\"/Home\">"
 					+ "<div class=\"formItem\">"
-					+ "<label for=\"username\" >Rose-Hulman Username</label>"
+					+ "<label class=\"regularBlackText\" for=\"username\" >Rose-Hulman Username</label>"
 					+ "<input value=\""
 					// value for any previously attempted ID
 					+ ID
