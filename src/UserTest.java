@@ -24,7 +24,7 @@ public class UserTest {
 
 	@Test
 	public void testExists() {
-		assertFalse(new User().exists());
+		assertTrue(new User().exists());
 		new User("sanderib").save();
 		assertTrue(new User("sanderib").exists());
 	}
