@@ -26,11 +26,19 @@ public class User implements Persistable {
 	}
 
 	public ArrayList<User> getFriends() {
-		return this.friends;
+		ArrayList<User> list = new ArrayList<User>();
+		for (String friendId : this.friends) {
+			list.add(User.find(friendId));
+		}
+		return list;
 	}
 
 	public void setFriends(ArrayList<User> friends) {
-		this.friends = friends;
+		ArrayList<String> list = new ArrayList<String>();
+		for (User friend : friends) {
+			list.add(friend.getID());
+		}
+		this.friends = list;
 	}
 
 	@Override
@@ -51,11 +59,19 @@ public class User implements Persistable {
 	}
 
 	public ArrayList<Major> getMajors() {
-		return this.majors;
+		ArrayList<Major> list = new ArrayList<Major>();
+		for (String majorId : this.majors) {
+			list.add(Major.find(majorId));
+		}
+		return list;
 	}
 
 	public void setMajors(ArrayList<Major> majors) {
-		this.majors = majors;
+		ArrayList<String> list = new ArrayList<String>();
+		for (Major major : majors) {
+			list.add(major.getID());
+		}
+		this.majors = list;
 	}
 
 	public ArrayList<Meeting> getMeetings() {
@@ -67,51 +83,75 @@ public class User implements Persistable {
 	}
 
 	public GraduatingClass getGraduatingClass() {
-		return this.graduatingClass;
+		return GraduatingClass.find(this.graduatingClass);
 	}
 
 	public void setGraduatingClass(GraduatingClass graduatingClass) {
-		this.graduatingClass = graduatingClass;
+		this.graduatingClass = graduatingClass.getID();
 	}
 
 	public ArrayList<Club> getClubs() {
-		return this.clubs;
+		ArrayList<Club> list = new ArrayList<Club>();
+		for (String clubId : this.clubs) {
+			list.add(Club.find(clubId));
+		}
+		return list;
 	}
 
 	public void setClubs(ArrayList<Club> clubs) {
-		this.clubs = clubs;
+		ArrayList<String> list = new ArrayList<String>();
+		for (Club club : clubs) {
+			list.add(club.getID());
+		}
+		this.clubs = list;
 	}
 
 	public ArrayList<Sport> getSports() {
-		return this.sports;
+		ArrayList<Sport> list = new ArrayList<Sport>();
+		for (String sportId : this.sports) {
+			list.add(Sport.find(sportId));
+		}
+		return list;
 	}
 
 	public void setSports(ArrayList<Sport> sports) {
-		this.sports = sports;
+		ArrayList<String> list = new ArrayList<String>();
+		for (Sport sport : sports) {
+			list.add(sport.getID());
+		}
+		this.sports = list;
 	}
 
 	public Residence getResidence() {
-		return this.residence;
+		return Residence.find(this.residence);
 	}
 
 	public void setResidence(Residence residence) {
-		this.residence = residence;
+		this.residence = residence.getID();
 	}
 
 	public ArrayList<Interest> getInterests() {
-		return this.interests;
+		ArrayList<Interest> list = new ArrayList<Interest>();
+		for (String interestId : this.interests) {
+			list.add(Interest.find(interestId));
+		}
+		return list;
 	}
 
 	public void setInterests(ArrayList<Interest> interests) {
-		this.interests = interests;
+		ArrayList<String> list = new ArrayList<String>();
+		for (Interest interest : interests) {
+			list.add(interest.getID());
+		}
+		this.interests = list;
 	}
 
 	public Job getJob() {
-		return this.job;
+		return Job.find(this.job);
 	}
 
 	public void setJob(Job job) {
-		this.job = job;
+		this.job = job.getID();
 	}
 
 	public ArrayList<Group> getGroups() {
@@ -125,17 +165,17 @@ public class User implements Persistable {
 		return list;
 	}
 
-	private ArrayList<User> friends = new ArrayList<User>();
+	private ArrayList<String> friends = new ArrayList<String>();
 	private String id;
 	private String name;
-	private ArrayList<Major> majors = new ArrayList<Major>();
+	private ArrayList<String> majors = new ArrayList<String>();
 	private ArrayList<Meeting> meetings;
-	private GraduatingClass graduatingClass;
-	private ArrayList<Club> clubs = new ArrayList<Club>();
-	private ArrayList<Sport> sports = new ArrayList<Sport>();
-	private Residence residence;
-	private ArrayList<Interest> interests = new ArrayList<Interest>();
-	private Job job;
+	private String graduatingClass;
+	private ArrayList<String> clubs = new ArrayList<String>();
+	private ArrayList<String> sports = new ArrayList<String>();
+	private String residence;
+	private ArrayList<String> interests = new ArrayList<String>();
+	private String job;
 
 	public User(String id){
 		this.setID(id);

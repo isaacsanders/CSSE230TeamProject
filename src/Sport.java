@@ -25,9 +25,13 @@ public class Sport extends Group {
 	}
 
 	public void addStudent(User student) {
-		this.getMembers().add(student);
+		ArrayList<User> members = this.getMembers();
+		members.add(student);
+		this.setMembers(members);
 		this.save();
-		student.getSports().add(this);
+		ArrayList<Sport> sports = student.getSports();
+		sports.add(this);
+		student.setSports(sports);
 		student.save();
 	}
 

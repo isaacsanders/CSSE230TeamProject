@@ -26,7 +26,7 @@ public class Group implements Persistable {
 	}
 
 	private String name;
-	private ArrayList<User> members;
+	private ArrayList<String> members;
 
 	/**
 	 * Constructs an empty group with the specified name
@@ -48,11 +48,19 @@ public class Group implements Persistable {
 	}
 
 	public ArrayList<User> getMembers() {
-		return this.members;
+		ArrayList<User> list = new ArrayList<User>();
+		for (String memberId : this.members) {
+			list.add(User.find(memberId));
+		}
+		return list;
 	}
 
 	public void setMembers(ArrayList<User> members) {
-		this.members = members;
+		ArrayList<String> list = new ArrayList<String>();
+		for (User member : members) {
+			list.add(member.getID());
+		}
+		this.members = list;
 	}
 
 	/**

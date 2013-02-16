@@ -26,7 +26,9 @@ public class Major extends Group {
 	}
 
 	public void addStudent(User student) {
-		this.getMembers().add(student);
+		ArrayList<User> list = this.getMembers();
+		list.add(student);
+		this.setMembers(list);
 		this.save();
 		student.getMajors().add(this);
 		student.save();

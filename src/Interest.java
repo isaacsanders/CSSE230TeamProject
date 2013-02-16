@@ -25,9 +25,13 @@ public class Interest extends Group {
 	}
 
 	public void addStudent(User student) {
-		this.getMembers().add(student);
+		ArrayList<User> members = this.getMembers();
+		members.add(student);
+		this.setMembers(members);
 		this.save();
-		student.getInterests().add(this);
+		ArrayList<Interest> interests = student.getInterests();
+		interests.add(this);
+		student.setInterests(interests);
 		student.save();
 	}
 

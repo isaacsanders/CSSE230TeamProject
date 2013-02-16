@@ -25,7 +25,9 @@ public class GraduatingClass extends Group {
 	}
 
 	public void addStudent(User student) {
-		this.getMembers().add(student);
+		ArrayList<User> members = this.getMembers();
+		members.add(student);
+		this.setMembers(members);
 		this.save();
 		student.setGraduatingClass(this);
 		student.save();

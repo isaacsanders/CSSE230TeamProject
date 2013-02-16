@@ -26,17 +26,21 @@ public class Club extends Group {
 	}
 
 	public void addStudent(User student) {
-		this.getMembers().add(student);
+		ArrayList<User> members = this.getMembers();
+		members.add(student);
+		this.setMembers(members);
 		this.save();
-		student.getClubs().add(this);
+		ArrayList<Club> clubs = student.getClubs();
+		clubs.add(this);
+		student.setClubs(clubs);
 		student.save();
 	}
 
 	public static ArrayList<Club> all() {
 		ArrayList<Club> list = new ArrayList<Club>();
 		File[] files = new Persister(new Club("ignore")).getDirectory().listFiles();
-		for (File major : files) {
-			String basename = major.getName().split(".xml")[0];
+		for (File club : files) {
+			String basename = club.getName().split(".xml")[0];
 			list.add(Club.find(basename));
 		}
 		return list;
