@@ -23,20 +23,19 @@ public class LoginServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		// Create new temporary user for a check
-		User user = new User();
-
-		// set user parameters
+		// get user parameters
 		String ID = request.getParameter("username");
-		user.setID(ID);
-
+		
+		//find the user
+		User user = User.find(ID);
+		
 		// check validation
-		if (user.exists()) {
+		if (user != null && user.exists()) {
 			// add session to users browser
 			HttpSession session = request.getSession(true);
 
 			// Add user session parameters
-			session.putValue("ID", ID);
+			session.putValue("user", user);
 
 			// finish by redirecting to main search screen
 			String redirect = response.encodeRedirectURL("/SearchServlet");
@@ -68,7 +67,7 @@ public class LoginServlet extends HttpServlet {
 			answer = "Please Enter A Username";
 		}
 
-		if (!user.exists() && ID != "") {
+		else if (!user.exists()) {
 			answer = "Invalid Username";
 		}
 

@@ -28,7 +28,7 @@ public class FriendsServlet extends HttpServlet {
 		// check if user is already logged in, if so go to main search page, if
 		// not allow sign up
 		if (session != null) {
-			User currentUser = User.find((String) session.getValue("ID"));
+			User currentUser = (User) session.getValue("user");
 			User friend = User.find(request.getParameter("ID"));
 
 			currentUser.addFriend(friend);

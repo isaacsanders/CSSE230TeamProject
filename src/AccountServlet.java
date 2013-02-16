@@ -11,8 +11,45 @@ import javax.servlet.http.*;
  * @author mccormjt. Created Feb 10, 2013.
  */
 public class AccountServlet extends HttpServlet {
-
-	private static final String EMPTY = "";
+	
+	
+//class constants for easy reference
+	private final String EMPTY = "";
+	private final String TYPE = "TYPE";
+	
+	private final String NAMECHANGE = "NAMECHANGE";
+	private final String FIRSTNAME = "FIRSTNAME";
+	private final String LASTNAME = "LASTNAME";
+	
+	private final String MAJORCHANGE = "MAJORCHANGE";
+	private final String MAJOR = "MAJOR";
+	private final String MAJORCHANGETYPE = "MAJORCHANGETYPE";
+	private final String MAJORCHANGEADD = "MAJORCHANGEADD";
+	private final String MAJORCHANGEDROP = "MAJORCHANGEDROP";
+	
+	private final String JOBCHANGE = "JOBCHANGE";
+	private final String JOB = "JOB";
+	private final String JOBCHANGETYPE = "JOBCHANGETYPE";
+	private final String JOBCHANGEADD = "JOBCHANGEADD";
+	private final String JOBCHANGEDROP = "JOBCHANGEDROP";
+	
+	private final String SPORTCHANGE = "SPORTCHANGE";
+	private final String SPORT = "SPORT";
+	private final String SPORTCHANGETYPE = "SPORTCHANGETYPE";
+	private final String SPORTCHANGEADD = "SPORTCHANGEADD";
+	private final String SPORTCHANGEDROP = "SPORTCHANGEDROP";
+	
+	private final String CLUBCHANGE = "CLUBCHANGE";
+	private final String CLUB = "CLUB";
+	private final String CLUBCHANGETYPE = "CLUBCHANGETYPE";
+	private final String CLUBCHANGEADD = "CLUBCHANGEADD";
+	private final String CLUBCHANGEDROP = "CLUBCHANGEDROP";
+	
+	
+	private final String YEARCHANGE = "YEARCHANGE";
+	private final String RESIDENCECHANGE = "RESIDENCECHANGE";
+	private final String ACCOUNTDELETE = "ACCOUNTDELETE";
+	
 
 	/**
 	 * takes in the user inputs for changing user information
@@ -26,14 +63,17 @@ public class AccountServlet extends HttpServlet {
 			throws IOException, ServletException {
 		// check session
 		HttpSession session = request.getSession(false);
-		String sessionID = session.getValue("ID").toString();
 
-		// check for delete account
-		String delete = request.getParameter("delete");
-		if (delete == "delete") {
+		// get user
+		User user = (User) session.getValue("user");
+
+		// check the type of requested change
+		String type = request.getParameter(this.TYPE);
+
+		// check first for deletion of an account
+		if (type == this.ACCOUNTDELETE) {
 			// delete the user
-			User u = User.find(sessionID);
-			u.delete();
+			user.delete();
 
 			// terminate session
 			session.invalidate();
@@ -42,54 +82,58 @@ public class AccountServlet extends HttpServlet {
 			String url = response.encodeRedirectURL("/Home");
 			response.sendRedirect(url);
 
-		} else {
+		}
 
-			// delete old user
-			User user = User.find(sessionID);
+		// get any old parameters that are needed
+		// check each possible type request and make any necessary changes
+		else if (type == this.NAMECHANGE) {
+			String firstName = request.getParameter(this.FIRSTNAME);
+			String lastName = request.getParameter(this.LASTNAME);
+			String fullName = firstName + " " + lastName;
+			user.setName(fullName);
 
-			// get any old parameters that are needed
-			//get name
-			String first = request.getParameter("first");
-			String last = request.getParameter("last");
-			String name = first + " " + last;
-			//get grad year
-			GraduatingClass year = new GraduatingClass(request.getParameter("year"));
-			//get major change
-			String change = request.getParameter("change");
-			String major = request.getParameter("major");
-			Major theMajor = new Major(major);
-			ArrayList<Major> majorList = user.getMajors();
-			if (majorList.equals(null)){
-				majorList = new ArrayList<Major>();
+		} else if (type == this.YEARCHANGE) {
+			String year = request.getParameter(this.YEARCHANGE);
+			GraduatingClass graduatingClass = GraduatingClass.find(year);
+			if (graduatingClass == null) {
+				graduatingClass = new GraduatingClass(year);
 			}
+			user.setGraduatingClass(graduatingClass);
 
-			if (first == null) {
-				name = user.getName();
-			}
-
-			if (year.getID() == null) {
-				year = user.getGraduatingClass();
+		} else if (type == this.MAJORCHANGE) {
+			String majorString = request.getParameter(this.MAJOR);
+			Major major = Major.find(majorString);
+			if (major == null) {
+				major = new Major(majorString);
 			}
 			
-			if (change == "add"){
-				majorList.add(theMajor);
+		} else if (type == this.CLUBCHANGE) {
+			String clubString = request.getParameter(this.CLUB);
+			Club club = Club.find(clubString);
+			if (club == null) {
+				club = new Club(clubString);
 			}
-			else if (change == "drop"){
-				majorList.remove(theMajor);
+			
+		} else if (type == this.SPORTCHANGE) {
+			String sportString = request.getParameter(this.SPORT);
+			Sport sport = Sport.find(sportString);
+			if (sport == null) {
+				sport = new Sport(sportString);
 			}
-			user.delete();
 
-			// create new user
-			User newUser = new User();
-			newUser.setName(name);
-			newUser.setID(sessionID);
-			newUser.setGraduatingClass(year);
-			newUser.setMajors(majorList);
-			newUser.save();
+		
 
-			// end with redirect to account page
-			doGet(request, response);
+		} else if (type == this.JOBCHANGE) {
+
+		} else if (type == this.RESIDENCECHANGE) {
+
 		}
+		// save the user and its changes
+		user.save();
+
+		// end with redirect to account page
+		doGet(request, response);
+
 	}
 
 	/**
@@ -112,7 +156,7 @@ public class AccountServlet extends HttpServlet {
 		if (session != null) {
 
 			// get user and user values
-			User user = User.find(session.getValue("ID").toString());
+			User user = (User) session.getValue("user");
 
 			// get full name
 			String fullName = user.getName();
@@ -153,69 +197,47 @@ public class AccountServlet extends HttpServlet {
 					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
 					+ "</div>"
 					+ "<div id=\"content\">"
+
 					// change your name
-					+ "<fieldset id=\"changeName\" class=\"inline\"><legend>Change Your Name</legend>"
+					+ "<div class=\"inline\"><fieldset id=\"changeName\"><legend>Change Your Name</legend>"
 					+ "<form id=\"accountFormChangeName\" method=\"post\" action=\"AccountServlet\">"
-					+ "<label for=\"first\">Change First Name</label>"
-					+ "<input name=\"first\" id=\"first\" type=\"text\" value=\""
-					// add users first name
-					+ first
+					+ "<input type=\"hidden\" value=\""
+					+ this.NAMECHANGE
+					+ "\" name=\""
+					+ this.TYPE
 					+ "\" />"
-					+ "<label for=\"last\">Change Last Name</label>"
-					+ "<input name=\"last\" id=\"last\" type=\"text\" value=\""
+
+					// add users first name
+					+ "<label for=\""
+					+ this.FIRSTNAME
+					+ "\">Change First Name</label>"
+					+ "<input name=\""
+					+ this.FIRSTNAME
+					+ "\" id=\"first\" type=\"text\" value=\""
+					+ first
+
 					// add users last name
+					+ "\" />"
+					+ "<label for=\""
+					+ this.LASTNAME
+					+ "\">Change Last Name</label>"
+					+ "<input name=\""
+					+ this.LASTNAME
+					+ "\" id=\"last\" type=\"text\" value=\""
 					+ last
 					+ "\"/>"
 					+ "<input class=\"button\" value=\"Change Name\" type=\"submit\" />"
 					+ "</form>"
 					+ "</fieldset>"
-					// managing majors
-					+ "<fieldset id=\"majors\">"
-					+ "<legend>Majors</legend>"
-					+ "<fieldset class=\"inline\">"
-					+ "<legend>Change Majors</legend>"
-					+ "<form method=\"post\" action=\"/AccountServlet\">"
-					+ "<select name=\"major\">"
-					+ "<option value=\"Software Engineer\">Software Engineer</option>"
-					+ "<option value=\"Computer Science\">Computer Science</option>"
-					+ "<option value=\"Mechanical Engineer\">Mechanical Engineer</option>"
-					+ "<option value=\"Electrical Engineer\">Electrical Engineer</option>"
-					+ "<option value=\"Biomedical Engineer\">Biomedical Engineer</option>"
-					+ "<option value=\"Chemical Engineer\">Chemical Engineer</option>"
-					+ "<option value=\"Optical Engineer\">Optical Engineer</option>"
-					+ "<option value=\"Civil Engineer\">Civil Engineer</option>"
-					+ "<option value=\"Applied Biology\">Applied Biology</option>"
-					+ "<option value=\"Math\">Math</option>"
-					+ "<option value=\"Physics\">Physics</option>"
-					+ "<option value=\"Economics\">Economics</option>"
-					+ "<option value=\"Chemistry\">Chemistry</option>"
-					+ "<option value=\"BioChemistry\">BioChemistry</option>"
-					+ "<option value=\"Military Science\">Military Science</option>"
-					+ "<option selected=\"selected\" value=\"\"></option>"
-					+ "</select>"
-					+ "<div>"
-					+ "<div id=\"adjusterAdd\">"
-					+ "<input class=\"inline\" name=\"change\" id=\"add\" type=\"radio\" value=\"add\"/>"
-					+ "<label class=\"inline\" for=\"add\">Add</label>"
-					+ "<input class=\"button\" id=\"majorSubmitButton\" type=\"submit\" value=\"Go\">"
-					+ "</div>"
-					+ "<div>"
-					+ "<input class=\"inline\" name=\"change\" id=\"drop\" type=\"radio\" value=\"drop\"/>"
-					+ "<label class=\"inline\" for=\"drop\">Drop</label>"
-					+ "</div>"
-					+ "</div>"
-					+ "</form>"
-					+ "</fieldset>"
-					+ "<fieldset class=\"inline\">"
-					+ "<legend>Current Majors</legend>"
-					+ "<ul id=\"currentMajors\">"
-					+ this.getListMajors(user)
-					+ "</ul>"
-					+ "</fieldset>"
-					+ "</fieldset>"
+					
 					// year form
 					+ "<fieldset id=\"changeYear\"><legend>Graduation Year</legend>"
 					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
+					+ "<input type=\"hidden\" value=\""
+					+ this.YEARCHANGE
+					+ "\" name=\""
+					+ this.TYPE
+					+ "\" />"
 					+ "<select id=\"yearSelector\" name=\"year\">"
 					+ "<option "
 					+ this.getProperSelector(year, "2013")
@@ -232,12 +254,138 @@ public class AccountServlet extends HttpServlet {
 					+ "<option "
 					+ this.getProperSelector(year, "")
 					+ "value=\"\"></option>"
-					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset>"
+					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset></div>"
+
+					// managing majors
+					+ "<fieldset id=\"majors\">"
+					+ "<legend>Majors</legend>"
+					+ "<fieldset class=\"inline\">"
+					+ "<legend>Change Majors</legend>"
+					+ "<form method=\"post\" action=\"/AccountServlet\">"
+					+ "<input type=\"hidden\" value=\""
+					+ this.MAJORCHANGE
+					+ "\" name=\""
+					+ this.TYPE
+					+ "\" />"
+					+ "<select name=\""
+					+ this.MAJOR
+					+ "\">"
+					+ "<option value=\"" + Major.SOFTWAREENGINEER + "\">" + Major.SOFTWAREENGINEER + "</option>"
+					+ "<option value=\"" + Major.COMPUTERSCIENCE + "\">" + Major.COMPUTERSCIENCE + "</option>"
+					+ "<option value=\"" + Major.MECHANICALENGINEER + "\">" + Major.MECHANICALENGINEER + "</option>"
+					+ "<option value=\"" + Major.ELECTRICALENGINEER + "\">" + Major.ELECTRICALENGINEER + "</option>"
+					+ "<option value=\"" + Major.BIOMEDICALENGINEER + "\">" + Major.BIOMEDICALENGINEER + "</option>"
+					+ "<option value=\"" + Major.CHEMICALENGINEER + "\">" + Major.CHEMICALENGINEER + "</option>"
+					+ "<option value=\"" + Major.OPTICALENGINEER + "\">" + Major.OPTICALENGINEER + "</option>"
+					+ "<option value=\"" + Major.CIVILENGINEER + "\">" + Major.CIVILENGINEER + "</option>"
+					+ "<option value=\"" + Major.APPLIEDBIOLOGY + "\">" + Major.APPLIEDBIOLOGY + "</option>"
+					+ "<option value=\"" + Major.MATH + "\">" + Major.MATH + "</option>"
+					+ "<option value=\"" + Major.PHYSICS + "\">" + Major.PHYSICS + "</option>"
+					+ "<option value=\"" + Major.ECONOMICS + "\">" + Major.ECONOMICS + "</option>"
+					+ "<option value=\"" + Major.CHEMISTRY + "\">" + Major.CHEMISTRY + "</option>"
+					+ "<option value=\"" + Major.BIOCHEMISTRY + "\">" + Major.BIOCHEMISTRY + "</option>"
+					+ "<option value=\"" + Major.COMPUTERENGINEER + "\">" + Major.COMPUTERENGINEER + "</option>"
+					+ "<option value=\"" + Major.MILITARYSCIENCE + "\">" + Major.MILITARYSCIENCE + "</option>"
+					+ "<option selected=\"selected\" value=\"" + Major.VOID + "" + Major.VOID + "\"></option>"
+					+ "</select>"
+					+ "<div>"
+					+ "<div class=\"adjusterAdd\">"
+					+ "<input class=\"inline\" name=\""
+					+ this.MAJORCHANGETYPE
+					+ "\" id=\"add\" type=\"radio\" value=\""
+					+ this.MAJORCHANGEADD
+					+ "\"/>"
+					+ "<label class=\"inline\" for=\"add\">Add</label>"
+					+ "<input class=\"button\" id=\"majorSubmitButton\" type=\"submit\" value=\"Go\">"
+					+ "</div>"
+					+ "<div>"
+					+ "<input class=\"inline\" name=\""
+					+ this.MAJORCHANGETYPE
+					+ "\" id=\"drop\" type=\"radio\" value=\""
+					+ this.MAJORCHANGEDROP
+					+ "\"/>"
+					+ "<label class=\"inline\" for=\"drop\">Drop</label>"
+					+ "</div>"
+					+ "</div>"
+					+ "</form>"
+					+ "</fieldset>"
+					+ "<fieldset class=\"inline\">"
+					+ "<legend>Current Majors</legend>"
+					+ "<ul id=\"currentMajors\">"
+					+ this.getListMajors(user)
+					+ "</ul>"
+					+ "</fieldset>"
+					+ "</fieldset>"
+					
+					//managing clubs
+					+ "<fieldset id=\"clubs\">"
+					+ "<legend>Clubs</legend>"
+					+ "<fieldset class=\"inline\">"
+					+ "<legend>Change Clubs</legend>"
+					+ "<form method=\"post\" action=\"/AccountServlet\">"
+					+ "<input type=\"hidden\" value=\""
+					+ this.CLUBCHANGE
+					+ "\" name=\""
+					+ this.TYPE
+					+ "\" />"
+					+ "<select name=\""
+					+ this.CLUB
+					+ "\">"
+					+ "<option value=\"" + Club.ALPHAOMICRONPI + "\">" + Club.ALPHAOMICRONPI + "</option>"
+					+ "<option value=\"" + Club.ALPHAPHIOMEGA + "\">" + Club.ALPHAPHIOMEGA + "</option>"
+					+ "<option value=\"" + Club.ATO + "\">" + Club.ATO + "</option>"
+					+ "<option value=\"" + Club.BAND + "\">" + Club.BAND + "</option>"
+					+ "<option value=\"" + Club.CHIOMEGA + "\">" + Club.CHIOMEGA + "</option>"
+					+ "<option value=\"" + Club.DELTASIG + "\">" + Club.DELTASIG + "</option>"
+					+ "<option value=\"" + Club.DRAMA + "\">" + Club.DRAMA + "</option>"
+					+ "<option value=\"" + Club.ECOCAR + "\">" + Club.ECOCAR + "</option>"
+					+ "<option value=\"" + Club.FIJI + "\">" + Club.FIJI + "</option>"
+					+ "<option value=\"" + Club.INTERVARSITYCHRISTIANS + "\">" + Club.INTERVARSITYCHRISTIANS + "</option>"
+					+ "<option value=\"" + Club.LAMBDACHIALPHA + "\">" + Club.LAMBDACHIALPHA + "</option>"
+					+ "<option value=\"" + Club.PIKE + "\">" + Club.PIKE + "</option>"
+					+ "<option value=\"" + Club.RISE + "\">" + Club.RISE + "</option>"
+					+ "<option value=\"" + Club.ROBOTICS + "\">" + Club.ROBOTICS + "</option>"
+					+ "<option value=\"" + Club.SIGMANU + "\">" + Club.SIGMANU + "</option>"
+					+ "<option value=\"" + Club.THETAXI + "\">" + Club.THETAXI + "</option>"
+					+ "<option value=\"" + Club.TRIANGLE + "\">" + Club.TRIANGLE + "</option>"
+					+ "<option selected=\"selected\" value=\"" + Club.VOID + "" + Club.VOID + "\"></option>"
+					+ "</select>"
+					+ "<div>"
+					+ "<div class=\"adjusterAdd\">"
+					+ "<input class=\"inline\" name=\""
+					+ this.CLUBCHANGETYPE
+					+ "\" id=\"add\" type=\"radio\" value=\""
+					+ this.MAJORCHANGEADD
+					+ "\"/>"
+					+ "<label class=\"inline\" for=\"add\">Add</label>"
+					+ "<input class=\"button\" id=\"clubSubmitButton\" type=\"submit\" value=\"Go\">"
+					+ "</div>"
+					+ "<div>"
+					+ "<input class=\"inline\" name=\""
+					+ this.CLUBCHANGETYPE
+					+ "\" id=\"drop\" type=\"radio\" value=\""
+					+ this.CLUBCHANGEDROP
+					+ "\"/>"
+					+ "<label class=\"inline\" for=\"drop\">Drop</label>"
+					+ "</div>"
+					+ "</div>"
+					+ "</form>"
+					+ "</fieldset>"
+					+ "<fieldset class=\"inline\">"
+					+ "<legend>Current Clubs</legend>"
+					+ "<ul id=\"currentClubs\">"
+					+ this.getListClubs(user)
+					+ "</ul>"
+					+ "</fieldset>"
+					+ "</fieldset>"
+
 					// delete account button form
 					+ "<form method=\"post\" method=\"/AccountServlet\">"
-					+ "<input type=\"hidden\" name=\"delete\" value=\""
-					+ year
-					+ "delete\" />"
+					+ "<input type=\"hidden\" name=\""
+					+ this.TYPE
+					+ "\" value=\""
+					+ this.ACCOUNTDELETE
+					+ "\" />"
 					+ "<input id=\"deleteAccountButton\" type=\"submit\" value=\"Delete Account\" /></form>"
 					+ "</div>" + "</body>" + "</html>");
 
@@ -263,12 +411,35 @@ public class AccountServlet extends HttpServlet {
 		return "";
 	}
 
+	//method that returns an html list of all of a user's majors
 	private String getListMajors(User user) {
 		ArrayList<Major> majors = user.getMajors();
 		int numMajors = majors.size();
 		String output = "";
 		for (int i = 0; i < numMajors; i++) {
 			output += "<li>" + majors.get(i).getID() + "</li>";
+		}
+		return output;
+	}
+	
+	//method that returns an html list of all of a user's clubs
+	private String getListClubs(User user) {
+		ArrayList<Club> clubs = user.getClubs();
+		int numClubs = clubs.size();
+		String output = "";
+		for (int i = 0; i < numClubs; i++) {
+			output += "<li>" + clubs.get(i).getID() + "</li>";
+		}
+		return output;
+	}
+	
+	//method that returns an html list of all of a user's sports
+	private String getListSports(User user) {
+		ArrayList<Sport> sports = user.getSports();
+		int numSports = sports.size();
+		String output = "";
+		for (int i = 0; i < numSports; i++) {
+			output += "<li>" + sports.get(i).getID() + "</li>";
 		}
 		return output;
 	}

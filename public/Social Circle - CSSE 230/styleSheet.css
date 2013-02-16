@@ -71,6 +71,7 @@ body {
 	padding-top: 5em;
 	position: fixed;
 	top: 7em;
+	display: inline-block;
 	z-index: 0;
 	/*rounded border*/
 	border: 2px solid;
@@ -136,7 +137,7 @@ fieldset {
 	width: 15em;
 	margin: 3em;
 	padding: 2em;
-	margin-top: 0;
+	margin: 1em 4em 4em 4em;
 	display: block;
 	background-color: rgba(1, 1, 1, 0.5);
 }
@@ -151,25 +152,25 @@ input {
 	margin: 0 1em 1em 0;
 }
 
-#signupSection, #loginSection {
+#loginSection {
 	display: inline-block;
-}
-
-#signupSection, #loginSection {
 	position: relative;
 	top: 2em;
 }
 
 #signupSection {
+	display: inline-block;
 	margin: 0 0 0 4em;
 	position: relative;
-	top: 0em;
+	top: -5em;
 }
 
 .signupButton {
 	color: white;
 	font-size: 1.3em;
 	padding: 1em 2em 1em 2em;
+	position: relative;
+	top: 3.5em;
 	font-weight: bold;
 	background-color: green;
 }
@@ -206,10 +207,8 @@ button.signupButton:hover {
 	color: black;
 	font-weight: bold;
 	border-color: black;
-	position: relative;
-	bottom: 0;
-	top: -12em;
-	left: 2em;
+	display: block;
+	margin: 0 2em 2em 5em;
 }
 
 #deleteAccountButton:hover {
@@ -225,10 +224,13 @@ button.logoutButton:hover {
 #signupMessage {
 	font-size: 1.2em;
 	color: #A00000;
-	font-weight: normal;
+	font-weight: bold;
 	position: relative;
 	top: 6.5em;
 	left: 2em;
+	background-color: black;
+	padding: 0.5em;
+	border: 3px solid #A00000;
 }
 
 #yearSelector {
@@ -240,12 +242,12 @@ button.logoutButton:hover {
 	display: inline-block;
 }
 
-#adjusterAdd {
+div.adjusterAdd {
 	position: relative;
 	top: 0.8em;
 }
 
-#majors {
+#majors, #clubs {
 	width: 25em;
 	margin: 3em;
 	padding: 2em;
@@ -253,25 +255,19 @@ button.logoutButton:hover {
 	display: inline-block;
 }
 
-#changeName {
+#clubs {
 	position: relative;
-	top: -12em;
-	left: 1.5em;
-}
-
-#changeYear {
-	position: relative;
-	top: -15.5em;
-	left: 1.5em;
+	top: -4.2em;
 }
 
 .regularBlackText {
 	color: black;
 }
 
-#majorSubmitButton {
+#majorSubmitButton, #clubSubmitButton {
 	display: inline-block;
 	position: relative;
 	top: 1.5em;
 	left: 3em;
 }
+

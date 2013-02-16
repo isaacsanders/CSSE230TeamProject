@@ -3,6 +3,25 @@ import java.util.ArrayList;
 
 
 public class Club extends Group {
+	
+	public final static String DRAMA = "Drama";
+	public final static String LAMBDACHIALPHA = "Lambda Chi Alpha";
+	public final static String TRIANGLE = "Triangle";
+	public final static String DELTASIG = "Delta Sig";
+	public final static String FIJI = "Fiji";
+	public final static String SIGMANU = "Sigma Nu";
+	public final static String ATO = "ATO";
+	public final static String PIKE = "PIKE";
+	public final static String CHIOMEGA = "CHIOMEGA";
+	public final static String ALPHAOMICRONPI = "Alpha Omicron Pi";
+	public final static String ALPHAPHIOMEGA = "ALPHAPHIOMEGA";
+	public final static String THETAXI = "Theta Xi";
+	public final static String RISE = "RISE";
+	public final static String ROBOTICS = "ROBOTICS";
+	public final static String ECOCAR = "Eco Car";
+	public final static String BAND = "Band";
+	public final static String INTERVARSITYCHRISTIANS = "Intervarsity Christians";
+	public final static String VOID = "Void";
 
 	public static Club find(String name) {
 		Club club = new Club();
