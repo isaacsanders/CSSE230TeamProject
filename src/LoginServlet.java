@@ -23,13 +23,12 @@ public class LoginServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		// Create new temporary user for a check
-		User user = new User();
-
-		// set user parameters
+		// get user parameters
 		String ID = request.getParameter("username");
-		user.setID(ID);
-
+		
+		//find the user
+		User user = User.find(ID);
+		
 		// check validation
 		if (user.exists()) {
 			// add session to users browser

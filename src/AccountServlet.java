@@ -48,18 +48,22 @@ public class AccountServlet extends HttpServlet {
 			User user = User.find(sessionID);
 
 			// get any old parameters that are needed
-			//get name
+			// get name
 			String first = request.getParameter("first");
 			String last = request.getParameter("last");
 			String name = first + " " + last;
-			//get grad year
-			GraduatingClass year = new GraduatingClass(request.getParameter("year"));
-			//get major change
+			// get grad year
+			GraduatingClass year = new GraduatingClass(
+					request.getParameter("year"));
+			// get major change
 			String change = request.getParameter("change");
 			String major = request.getParameter("major");
-			Major theMajor = new Major(major);
+			Major theMajor = Major.find(major);
+			if (theMajor == null) {
+				theMajor = new Major(major);
+			}
 			ArrayList<Major> majorList = user.getMajors();
-			if (majorList.equals(null)){
+			if (majorList.equals(null)) {
 				majorList = new ArrayList<Major>();
 			}
 
@@ -70,12 +74,16 @@ public class AccountServlet extends HttpServlet {
 			if (year.getID() == null) {
 				year = user.getGraduatingClass();
 			}
-			
-			if (change == "add"){
-				majorList.add(theMajor);
+			if (change != null) {
+				if (change == "add") {
+					majorList.add(theMajor);
+				}
+				if (change == "drop") {
+					majorList.remove(theMajor);
+				}
 			}
-			else if (change == "drop"){
-				majorList.remove(theMajor);
+			else {
+				majorList = user.getMajors();
 			}
 			user.delete();
 
@@ -85,6 +93,7 @@ public class AccountServlet extends HttpServlet {
 			newUser.setID(sessionID);
 			newUser.setGraduatingClass(year);
 			newUser.setMajors(majorList);
+			theMajor.addStudent(newUser);
 			newUser.save();
 
 			// end with redirect to account page
