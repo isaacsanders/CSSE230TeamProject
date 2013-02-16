@@ -137,7 +137,7 @@ fieldset {
 	width: 15em;
 	margin: 3em;
 	padding: 2em;
-	margin-top: 0;
+	margin: 1em 4em 4em 4em;
 	display: block;
 	background-color: rgba(1, 1, 1, 0.5);
 }
@@ -207,10 +207,8 @@ button.signupButton:hover {
 	color: black;
 	font-weight: bold;
 	border-color: black;
-	position: relative;
-	bottom: 0;
-	top: -12em;
-	left: 2em;
+	display: block;
+	margin: 0 2em 2em 5em;
 }
 
 #deleteAccountButton:hover {
@@ -259,20 +257,7 @@ div.adjusterAdd {
 
 #clubs {
 	position: relative;
-	top: -4.3em;
-	left: -1em;
-}
-
-#changeName {
-	position: relative;
-	top: -12em;
-	left: 1.5em;
-}
-
-#changeYear {
-	position: relative;
-	top: -15.5em;
-	left: 1.5em;
+	top: -4.2em;
 }
 
 .regularBlackText {

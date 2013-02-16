@@ -106,10 +106,22 @@ public class AccountServlet extends HttpServlet {
 			if (major == null) {
 				major = new Major(majorString);
 			}
-
-		} else if (type == this.SPORTCHANGE) {
-
+			
 		} else if (type == this.CLUBCHANGE) {
+			String clubString = request.getParameter(this.CLUB);
+			Club club = Club.find(clubString);
+			if (club == null) {
+				club = new Club(clubString);
+			}
+			
+		} else if (type == this.SPORTCHANGE) {
+			String sportString = request.getParameter(this.SPORT);
+			Sport sport = Sport.find(sportString);
+			if (sport == null) {
+				sport = new Sport(sportString);
+			}
+
+		
 
 		} else if (type == this.JOBCHANGE) {
 
@@ -187,7 +199,7 @@ public class AccountServlet extends HttpServlet {
 					+ "<div id=\"content\">"
 
 					// change your name
-					+ "<fieldset id=\"changeName\" class=\"inline\"><legend>Change Your Name</legend>"
+					+ "<div class=\"inline\"><fieldset id=\"changeName\"><legend>Change Your Name</legend>"
 					+ "<form id=\"accountFormChangeName\" method=\"post\" action=\"AccountServlet\">"
 					+ "<input type=\"hidden\" value=\""
 					+ this.NAMECHANGE
@@ -217,6 +229,32 @@ public class AccountServlet extends HttpServlet {
 					+ "<input class=\"button\" value=\"Change Name\" type=\"submit\" />"
 					+ "</form>"
 					+ "</fieldset>"
+					
+					// year form
+					+ "<fieldset id=\"changeYear\"><legend>Graduation Year</legend>"
+					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
+					+ "<input type=\"hidden\" value=\""
+					+ this.YEARCHANGE
+					+ "\" name=\""
+					+ this.TYPE
+					+ "\" />"
+					+ "<select id=\"yearSelector\" name=\"year\">"
+					+ "<option "
+					+ this.getProperSelector(year, "2013")
+					+ "value=\"2013\">2013</option>"
+					+ "<option "
+					+ this.getProperSelector(year, "2014")
+					+ "value=\"2014\">2014</option>"
+					+ "<option "
+					+ this.getProperSelector(year, "2015")
+					+ "value=\"2015\">2015</option>"
+					+ "<option "
+					+ this.getProperSelector(year, "2016")
+					+ "value=\"2016\">2016</option>"
+					+ "<option "
+					+ this.getProperSelector(year, "")
+					+ "value=\"\"></option>"
+					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset></div>"
 
 					// managing majors
 					+ "<fieldset id=\"majors\">"
@@ -340,32 +378,6 @@ public class AccountServlet extends HttpServlet {
 					+ "</ul>"
 					+ "</fieldset>"
 					+ "</fieldset>"
-
-					// year form
-					+ "<fieldset id=\"changeYear\"><legend>Graduation Year</legend>"
-					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
-					+ "<input type=\"hidden\" value=\""
-					+ this.YEARCHANGE
-					+ "\" name=\""
-					+ this.TYPE
-					+ "\" />"
-					+ "<select id=\"yearSelector\" name=\"year\">"
-					+ "<option "
-					+ this.getProperSelector(year, "2013")
-					+ "value=\"2013\">2013</option>"
-					+ "<option "
-					+ this.getProperSelector(year, "2014")
-					+ "value=\"2014\">2014</option>"
-					+ "<option "
-					+ this.getProperSelector(year, "2015")
-					+ "value=\"2015\">2015</option>"
-					+ "<option "
-					+ this.getProperSelector(year, "2016")
-					+ "value=\"2016\">2016</option>"
-					+ "<option "
-					+ this.getProperSelector(year, "")
-					+ "value=\"\"></option>"
-					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset>"
 
 					// delete account button form
 					+ "<form method=\"post\" method=\"/AccountServlet\">"
