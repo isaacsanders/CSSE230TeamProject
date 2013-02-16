@@ -71,6 +71,7 @@ body {
 	padding-top: 5em;
 	position: fixed;
 	top: 7em;
+	display: inline-block;
 	z-index: 0;
 	/*rounded border*/
 	border: 2px solid;

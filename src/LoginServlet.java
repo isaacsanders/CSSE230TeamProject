@@ -30,12 +30,12 @@ public class LoginServlet extends HttpServlet {
 		User user = User.find(ID);
 		
 		// check validation
-		if (user.exists()) {
+		if (user != null && user.exists()) {
 			// add session to users browser
 			HttpSession session = request.getSession(true);
 
 			// Add user session parameters
-			session.putValue("ID", ID);
+			session.putValue("user", user);
 
 			// finish by redirecting to main search screen
 			String redirect = response.encodeRedirectURL("/SearchServlet");

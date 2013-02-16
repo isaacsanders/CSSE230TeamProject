@@ -12,7 +12,20 @@ import javax.servlet.http.*;
  */
 public class AccountServlet extends HttpServlet {
 
-	private static final String EMPTY = "";
+	private final String EMPTY = "";
+	private final String NAMECHANGE = "NAMECHANGE";
+	private final String FIRSTNAME = "FIRSTNAME";
+	private final String LASTNAME = "LASTNAME";
+	private final String MAJORCHANGE = "MAJORCHANGE";
+	private final String MAJOR = "MAJOR";
+	private final String MAJORCHANGEACTUAL = "MAJORCHANGEACTUAL";
+	private final String MAJORCHANGEADD = "MAJORCHANGEADD";
+	private final String MAJORCHANGEDROP = "MAJORCHANGEDROP";
+	private final String YEARCHANGE = "YEARCHANGE";
+	private final String SPORTCHANGE = "SPORTCHANGE";
+	private final String CLUBCHANGE = "CLUBCHANGE";
+	private final String ACCOUNTDELETE = "ACCOUNTDELETE";
+	private final String TYPE = "TYPE";
 
 	/**
 	 * takes in the user inputs for changing user information
@@ -26,14 +39,17 @@ public class AccountServlet extends HttpServlet {
 			throws IOException, ServletException {
 		// check session
 		HttpSession session = request.getSession(false);
-		String sessionID = session.getValue("ID").toString();
 
-		// check for delete account
-		String delete = request.getParameter("delete");
-		if (delete == "delete") {
+		// get user
+		User user = (User) session.getValue("user");
+
+		// check the type of requested change
+		String type = request.getParameter(this.TYPE);
+
+		// check first for deletion of an account
+		if (type == this.ACCOUNTDELETE) {
 			// delete the user
-			User u = User.find(sessionID);
-			u.delete();
+			user.delete();
 
 			// terminate session
 			session.invalidate();
@@ -42,63 +58,43 @@ public class AccountServlet extends HttpServlet {
 			String url = response.encodeRedirectURL("/Home");
 			response.sendRedirect(url);
 
-		} else {
-
-			// delete old user
-			User user = User.find(sessionID);
-
-			// get any old parameters that are needed
-			// get name
-			String first = request.getParameter("first");
-			String last = request.getParameter("last");
-			String name = first + " " + last;
-			// get grad year
-			GraduatingClass year = new GraduatingClass(
-					request.getParameter("year"));
-			// get major change
-			String change = request.getParameter("change");
-			String major = request.getParameter("major");
-			Major theMajor = Major.find(major);
-			if (theMajor == null) {
-				theMajor = new Major(major);
-			}
-			ArrayList<Major> majorList = user.getMajors();
-			if (majorList.equals(null)) {
-				majorList = new ArrayList<Major>();
-			}
-
-			if (first == null) {
-				name = user.getName();
-			}
-
-			if (year.getID() == null) {
-				year = user.getGraduatingClass();
-			}
-			if (change != null) {
-				if (change == "add") {
-					majorList.add(theMajor);
-				}
-				if (change == "drop") {
-					majorList.remove(theMajor);
-				}
-			}
-			else {
-				majorList = user.getMajors();
-			}
-			user.delete();
-
-			// create new user
-			User newUser = new User();
-			newUser.setName(name);
-			newUser.setID(sessionID);
-			newUser.setGraduatingClass(year);
-			newUser.setMajors(majorList);
-			theMajor.addStudent(newUser);
-			newUser.save();
-
-			// end with redirect to account page
-			doGet(request, response);
 		}
+
+		// get any old parameters that are needed
+		// check each possible type request and make any necessary changes
+		else if (type == this.NAMECHANGE) {
+			String firstName = request.getParameter(this.FIRSTNAME);
+			String lastName = request.getParameter(this.LASTNAME);
+			String fullName = firstName + " " + lastName;
+			user.setName(fullName);
+
+		} else if (type == this.YEARCHANGE) {
+			String year = request.getParameter(this.YEARCHANGE);
+			GraduatingClass graduatingClass = GraduatingClass.find(year);
+			if (graduatingClass == null) {
+				graduatingClass = new GraduatingClass(year);
+			}
+			user.setGraduatingClass(graduatingClass);
+
+		} else if (type == this.MAJORCHANGE) {
+			String majorString = request.getParameter(this.MAJOR);
+			Major major = Major.find(majorString);
+			if (major == null) {
+				major = new Major(majorString);
+			}
+
+		} else if (type == this.SPORTCHANGE) {
+
+		} else if (type == this.CLUBCHANGE) {
+
+		}
+
+		// save the user and its changes
+		user.save();
+
+		// end with redirect to account page
+		doGet(request, response);
+
 	}
 
 	/**
@@ -121,7 +117,7 @@ public class AccountServlet extends HttpServlet {
 		if (session != null) {
 
 			// get user and user values
-			User user = User.find(session.getValue("ID").toString());
+			User user = (User) session.getValue("user");
 
 			// get full name
 			String fullName = user.getName();
@@ -162,29 +158,53 @@ public class AccountServlet extends HttpServlet {
 					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
 					+ "</div>"
 					+ "<div id=\"content\">"
+
 					// change your name
 					+ "<fieldset id=\"changeName\" class=\"inline\"><legend>Change Your Name</legend>"
 					+ "<form id=\"accountFormChangeName\" method=\"post\" action=\"AccountServlet\">"
-					+ "<label for=\"first\">Change First Name</label>"
-					+ "<input name=\"first\" id=\"first\" type=\"text\" value=\""
-					// add users first name
-					+ first
+					+ "<input type=\"hidden\" value=\""
+					+ this.NAMECHANGE
+					+ "\" name=\""
+					+ this.TYPE
 					+ "\" />"
-					+ "<label for=\"last\">Change Last Name</label>"
-					+ "<input name=\"last\" id=\"last\" type=\"text\" value=\""
+
+					// add users first name
+					+ "<label for=\""
+					+ this.FIRSTNAME
+					+ "\">Change First Name</label>"
+					+ "<input name=\""
+					+ this.FIRSTNAME
+					+ "\" id=\"first\" type=\"text\" value=\""
+					+ first
+
 					// add users last name
+					+ "\" />"
+					+ "<label for=\""
+					+ this.LASTNAME
+					+ "\">Change Last Name</label>"
+					+ "<input name=\""
+					+ this.LASTNAME
+					+ "\" id=\"last\" type=\"text\" value=\""
 					+ last
 					+ "\"/>"
 					+ "<input class=\"button\" value=\"Change Name\" type=\"submit\" />"
 					+ "</form>"
 					+ "</fieldset>"
+
 					// managing majors
 					+ "<fieldset id=\"majors\">"
 					+ "<legend>Majors</legend>"
 					+ "<fieldset class=\"inline\">"
 					+ "<legend>Change Majors</legend>"
 					+ "<form method=\"post\" action=\"/AccountServlet\">"
-					+ "<select name=\"major\">"
+					+ "<input type=\"hidden\" value=\""
+					+ this.MAJORCHANGE
+					+ "\" name=\""
+					+ this.TYPE
+					+ "\" />"
+					+ "<select name=\""
+					+ this.MAJOR
+					+ "\">"
 					+ "<option value=\"Software Engineer\">Software Engineer</option>"
 					+ "<option value=\"Computer Science\">Computer Science</option>"
 					+ "<option value=\"Mechanical Engineer\">Mechanical Engineer</option>"
@@ -204,12 +224,20 @@ public class AccountServlet extends HttpServlet {
 					+ "</select>"
 					+ "<div>"
 					+ "<div id=\"adjusterAdd\">"
-					+ "<input class=\"inline\" name=\"change\" id=\"add\" type=\"radio\" value=\"add\"/>"
+					+ "<input class=\"inline\" name=\""
+					+ this.MAJORCHANGEACTUAL
+					+ "\" id=\"add\" type=\"radio\" value=\""
+					+ this.MAJORCHANGEADD
+					+ "\"/>"
 					+ "<label class=\"inline\" for=\"add\">Add</label>"
 					+ "<input class=\"button\" id=\"majorSubmitButton\" type=\"submit\" value=\"Go\">"
 					+ "</div>"
 					+ "<div>"
-					+ "<input class=\"inline\" name=\"change\" id=\"drop\" type=\"radio\" value=\"drop\"/>"
+					+ "<input class=\"inline\" name=\""
+					+ this.MAJORCHANGEACTUAL
+					+ "\" id=\"drop\" type=\"radio\" value=\""
+					+ this.MAJORCHANGEDROP
+					+ "\"/>"
 					+ "<label class=\"inline\" for=\"drop\">Drop</label>"
 					+ "</div>"
 					+ "</div>"
@@ -222,9 +250,15 @@ public class AccountServlet extends HttpServlet {
 					+ "</ul>"
 					+ "</fieldset>"
 					+ "</fieldset>"
+
 					// year form
 					+ "<fieldset id=\"changeYear\"><legend>Graduation Year</legend>"
 					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
+					+ "<input type=\"hidden\" value=\""
+					+ this.YEARCHANGE
+					+ "\" name=\""
+					+ this.TYPE
+					+ "\" />"
 					+ "<select id=\"yearSelector\" name=\"year\">"
 					+ "<option "
 					+ this.getProperSelector(year, "2013")
@@ -242,11 +276,14 @@ public class AccountServlet extends HttpServlet {
 					+ this.getProperSelector(year, "")
 					+ "value=\"\"></option>"
 					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset>"
+
 					// delete account button form
 					+ "<form method=\"post\" method=\"/AccountServlet\">"
-					+ "<input type=\"hidden\" name=\"delete\" value=\""
-					+ year
-					+ "delete\" />"
+					+ "<input type=\"hidden\" name=\""
+					+ this.TYPE
+					+ "\" value=\""
+					+ this.ACCOUNTDELETE
+					+ "\" />"
 					+ "<input id=\"deleteAccountButton\" type=\"submit\" value=\"Delete Account\" /></form>"
 					+ "</div>" + "</body>" + "</html>");
 
