@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
 			answer = "Please Enter A Username";
 		}
 
-		if (!user.exists() && ID != "") {
+		else if (!user.exists()) {
 			answer = "Invalid Username";
 		}
 

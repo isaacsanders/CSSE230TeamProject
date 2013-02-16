@@ -152,25 +152,25 @@ input {
 	margin: 0 1em 1em 0;
 }
 
-#signupSection, #loginSection {
+#loginSection {
 	display: inline-block;
-}
-
-#signupSection, #loginSection {
 	position: relative;
 	top: 2em;
 }
 
 #signupSection {
+	display: inline-block;
 	margin: 0 0 0 4em;
 	position: relative;
-	top: 0em;
+	top: -5em;
 }
 
 .signupButton {
 	color: white;
 	font-size: 1.3em;
 	padding: 1em 2em 1em 2em;
+	position: relative;
+	top: 3.5em;
 	font-weight: bold;
 	background-color: green;
 }
@@ -226,10 +226,13 @@ button.logoutButton:hover {
 #signupMessage {
 	font-size: 1.2em;
 	color: #A00000;
-	font-weight: normal;
+	font-weight: bold;
 	position: relative;
 	top: 6.5em;
 	left: 2em;
+	background-color: black;
+	padding: 0.5em;
+	border: 3px solid #A00000;
 }
 
 #yearSelector {
@@ -241,17 +244,23 @@ button.logoutButton:hover {
 	display: inline-block;
 }
 
-#adjusterAdd {
+div.adjusterAdd {
 	position: relative;
 	top: 0.8em;
 }
 
-#majors {
+#majors, #clubs {
 	width: 25em;
 	margin: 3em;
 	padding: 2em;
 	margin-top: 0;
 	display: inline-block;
+}
+
+#clubs {
+	position: relative;
+	top: -4.3em;
+	left: -1em;
 }
 
 #changeName {
@@ -270,9 +279,10 @@ button.logoutButton:hover {
 	color: black;
 }
 
-#majorSubmitButton {
+#majorSubmitButton, #clubSubmitButton {
 	display: inline-block;
 	position: relative;
 	top: 1.5em;
 	left: 3em;
 }
+
