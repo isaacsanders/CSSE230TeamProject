@@ -41,7 +41,7 @@ public class GraduatingClass extends Group {
 		success = members.remove(student);
 		this.setMembers(members);
 		success = success && this.save();
-		student.setGraduatingClass(this);
+		student.setGraduatingClass(null);
 		success = success && student.save();
 		return success;
 	}

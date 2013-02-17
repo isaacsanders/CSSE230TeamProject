@@ -41,7 +41,7 @@ public class Residence extends Group {
 		success = members.remove(student);
 		this.setMembers(members);
 		success = success && this.save();
-		student.setResidence(this);
+		student.setResidence(null);
 		success = success && student.save();
 		return success;
 	}
