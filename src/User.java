@@ -24,6 +24,30 @@ public class User implements Persistable {
 
 	@Override
 	public boolean delete() {
+		for (String clubId : this.getClubs()) {
+			Club.find(clubId).removeStudent(this);
+		}
+		if (this.getGraduatingClass() != null) {
+			GraduatingClass.find(this.getGraduatingClass()).removeStudent(this);
+		}
+		for (String friendId : this.getFriends()) {
+			User.find(friendId).removeFriend(this);
+		}
+		for (String interestId : this.getInterests()) {
+			Interest.find(interestId).removeStudent(this);
+		}
+		if (this.getJob() != null) {
+			Job.find(this.getJob()).removeStudent(this);
+		}
+		for (String majorId : this.getMajors()) {
+			Major.find(majorId).removeStudent(this);
+		}
+		if (this.getResidence() != null) {
+			Residence.find(this.getResidence()).removeStudent(this);
+		}
+		for (String sportId : this.getSports()) {
+			Sport.find(sportId).removeStudent(this);
+		}
 		return new Persister(this).delete();
 	}
 
@@ -171,6 +195,13 @@ public class User implements Persistable {
 		this.getFriends().add(friend.getID());
 		this.save();
 		friend.getFriends().add(this.getID());
+		friend.save();
+	}
+
+	public void removeFriend(User friend) {
+		this.getFriends().remove(friend.getID());
+		this.save();
+		friend.getFriends().remove(this.getID());
 		friend.save();
 	}
 

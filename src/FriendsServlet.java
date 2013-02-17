@@ -31,6 +31,8 @@ public class FriendsServlet extends HttpServlet {
 
 			currentUser.addFriend(friend);
 		}
-		this.doGet(request, response);
+
+		String redirect = response.encodeRedirectURL("/SearchServlet");
+		response.sendRedirect(redirect);
 	}
 }
