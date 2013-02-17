@@ -18,7 +18,6 @@ public class MeetingsServlet extends HttpServlet {
 
 	private final String EMPTY = "";
 	private final String MEETINGADD = "MEETINGADD";
-	private final String MEETING = "MEETING";
 	private final String MEETINGTIME = "MEETINGTIME";
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -33,7 +32,7 @@ public class MeetingsServlet extends HttpServlet {
 
 			if (this.checkParameter(request, this.MEETINGADD)) {
 
-				String newMeeting = request.getParameter(this.MEETING);
+				String newMeeting = request.getParameter("query");
 				String meetingTime = request.getParameter(this.MEETINGTIME);
 				String[] times = meetingTime.split(",");
 				String month = times[0];
@@ -118,7 +117,7 @@ public class MeetingsServlet extends HttpServlet {
 
 			body += "</select>";
 
-			body += "<input type=text name='query' placeholder='Month, Day, Starting time, Ending time : 4, 21, 15'>"
+			body += "<input type=text input name='query' placeholder='Month, Day, Starting time, Ending time : 4, 21, 15'>"
 					+ "<button type=submit>Search</button>"
 					+ "</form>"
 					+ "</div>" + "</body>" + "</html>";
