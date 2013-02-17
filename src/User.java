@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 
 /**
@@ -38,7 +39,7 @@ public class User implements Persistable {
 		for (User friend : friends) {
 			list.add(friend.getID());
 		}
-		this.friends = list;
+		this.friends = new TreeSet<String>(list);
 	}
 
 	@Override
@@ -71,7 +72,7 @@ public class User implements Persistable {
 		for (Major major : majors) {
 			list.add(major.getID());
 		}
-		this.majors = list;
+		this.majors = new TreeSet<String>(list);
 	}
 
 	public ArrayList<Meeting> getMeetings() {
@@ -87,6 +88,7 @@ public class User implements Persistable {
 	}
 
 	public void setGraduatingClass(GraduatingClass graduatingClass) {
+		this.getGraduatingClass().removeStudent(this);
 		this.graduatingClass = graduatingClass.getID();
 	}
 
@@ -103,7 +105,7 @@ public class User implements Persistable {
 		for (Club club : clubs) {
 			list.add(club.getID());
 		}
-		this.clubs = list;
+		this.clubs = new TreeSet<String>(list);
 	}
 
 	public ArrayList<Sport> getSports() {
@@ -119,7 +121,7 @@ public class User implements Persistable {
 		for (Sport sport : sports) {
 			list.add(sport.getID());
 		}
-		this.sports = list;
+		this.sports = new TreeSet<String>(list);
 	}
 
 	public Residence getResidence() {
@@ -127,6 +129,7 @@ public class User implements Persistable {
 	}
 
 	public void setResidence(Residence residence) {
+		this.getResidence().removeStudent(this);
 		this.residence = residence.getID();
 	}
 
@@ -143,7 +146,7 @@ public class User implements Persistable {
 		for (Interest interest : interests) {
 			list.add(interest.getID());
 		}
-		this.interests = list;
+		this.interests = new TreeSet<String>(list);
 	}
 
 	public Job getJob() {
@@ -151,6 +154,7 @@ public class User implements Persistable {
 	}
 
 	public void setJob(Job job) {
+		this.getJob().removeStudent(this);
 		this.job = job.getID();
 	}
 
@@ -165,16 +169,16 @@ public class User implements Persistable {
 		return list;
 	}
 
-	private ArrayList<String> friends = new ArrayList<String>();
+	private TreeSet<String> friends = new TreeSet<String>();
 	private String id;
 	private String name;
-	private ArrayList<String> majors = new ArrayList<String>();
+	private TreeSet<String> majors = new TreeSet<String>();
 	private ArrayList<Meeting> meetings;
 	private String graduatingClass;
-	private ArrayList<String> clubs = new ArrayList<String>();
-	private ArrayList<String> sports = new ArrayList<String>();
+	private TreeSet<String> clubs = new TreeSet<String>();
+	private TreeSet<String> sports = new TreeSet<String>();
 	private String residence;
-	private ArrayList<String> interests = new ArrayList<String>();
+	private TreeSet<String> interests = new TreeSet<String>();
 	private String job;
 
 	public User(String id){

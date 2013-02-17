@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 
 public class Major extends Group {
-	
+
 	public final static String SOFTWAREENGINEER = "Software Engineer";
 	public final static String MECHANICALENGINEER = "Mechanical Engineer";
 	public final static String COMPUTERENGINEER = "Computer Engineer";
@@ -21,7 +21,7 @@ public class Major extends Group {
 	public final static String BIOCHEMISTRY = "BioChemistry";
 	public final static String MILITARYSCIENCE = "Military Science";
 	public final static String VOID = "Void";
-	
+
 	public static Major find(String name) {
 		Major major = new Major();
 		major.setName(name);
@@ -43,13 +43,30 @@ public class Major extends Group {
 		super();
 	}
 
-	public void addStudent(User student) {
-		ArrayList<User> list = this.getMembers();
-		list.add(student);
-		this.setMembers(list);
+	public boolean addStudent(User student) {
+		boolean success;
+		ArrayList<User> members = this.getMembers();
+		success = members.add(student);
+		this.setMembers(members);
 		this.save();
-		student.getMajors().add(this);
+		ArrayList<Major> majors = student.getMajors();
+		success = success && majors.add(this);
+		student.setMajors(majors);
 		student.save();
+		return success;
+	}
+
+	public boolean removeStudent(User student) {
+		boolean success;
+		ArrayList<User> members = this.getMembers();
+		success = members.remove(student);
+		this.setMembers(members);
+		this.save();
+		ArrayList<Major> majors = student.getMajors();
+		success = success && majors.remove(this);
+		student.setMajors(majors);
+		student.save();
+		return success;
 	}
 
 	public static ArrayList<Major> all() {

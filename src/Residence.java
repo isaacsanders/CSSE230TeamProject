@@ -24,13 +24,26 @@ public class Residence extends Group {
 		super();
 	}
 
-	public void addStudent(User student) {
-		ArrayList<User> list = this.getMembers();
-		list.add(student);
-		this.setMembers(list);
-		this.save();
+	public boolean addStudent(User student) {
+		boolean success;
+		ArrayList<User> members = this.getMembers();
+		success = members.add(student);
+		this.setMembers(members);
+		success = success && this.save();
 		student.setResidence(this);
-		student.save();
+		success = success && student.save();
+		return success;
+	}
+
+	public boolean removeStudent(User student) {
+		boolean success;
+		ArrayList<User> members = this.getMembers();
+		success = members.remove(student);
+		this.setMembers(members);
+		success = success && this.save();
+		student.setResidence(this);
+		success = success && student.save();
+		return success;
 	}
 
 	public static ArrayList<Residence> all() {

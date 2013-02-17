@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 
 public class Club extends Group {
-	
+
 	public final static String DRAMA = "Drama";
 	public final static String LAMBDACHIALPHA = "Lambda Chi Alpha";
 	public final static String TRIANGLE = "Triangle";
@@ -44,15 +44,30 @@ public class Club extends Group {
 		super();
 	}
 
-	public void addStudent(User student) {
+	public boolean addStudent(User student) {
+		boolean success;
 		ArrayList<User> members = this.getMembers();
-		members.add(student);
+		success = members.add(student);
 		this.setMembers(members);
 		this.save();
 		ArrayList<Club> clubs = student.getClubs();
-		clubs.add(this);
+		success = success && clubs.add(this);
 		student.setClubs(clubs);
 		student.save();
+		return success;
+	}
+
+	public boolean removeStudent(User student) {
+		boolean success;
+		ArrayList<User> members = this.getMembers();
+		success = members.remove(student);
+		this.setMembers(members);
+		this.save();
+		ArrayList<Club> clubs = student.getClubs();
+		success = success && clubs.remove(this);
+		student.setClubs(clubs);
+		student.save();
+		return success;
 	}
 
 	public static ArrayList<Club> all() {

@@ -24,15 +24,30 @@ public class Interest extends Group {
 		super();
 	}
 
-	public void addStudent(User student) {
+	public boolean addStudent(User student) {
+		boolean success;
 		ArrayList<User> members = this.getMembers();
-		members.add(student);
+		success = members.add(student);
 		this.setMembers(members);
 		this.save();
 		ArrayList<Interest> interests = student.getInterests();
-		interests.add(this);
+		success = success && interests.add(this);
 		student.setInterests(interests);
 		student.save();
+		return success;
+	}
+
+	public boolean removeStudent(User student) {
+		boolean success;
+		ArrayList<User> members = this.getMembers();
+		success = members.remove(student);
+		this.setMembers(members);
+		this.save();
+		ArrayList<Interest> interests = student.getInterests();
+		success = success && interests.remove(this);
+		student.setInterests(interests);
+		student.save();
+		return success;
 	}
 
 	public static ArrayList<Interest> all() {
