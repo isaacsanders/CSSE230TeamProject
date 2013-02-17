@@ -30,8 +30,8 @@ public class Interest extends Group {
 	}
 
 	public boolean removeStudent(User student) {
-		return this.getMembers().remove(student) && this.save() &&
-				student.getInterests().remove(this) && student.save();
+		return this.getMembers().remove(student.getID()) && this.save() &&
+				student.getInterests().remove(this.getID()) && student.save();
 	}
 
 	public static ArrayList<Interest> all() {

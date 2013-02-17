@@ -40,7 +40,7 @@ public class Job extends Group {
 	}
 
 	public boolean removeStudent(User student) {
-		boolean success = this.getMembers().remove(student) && this.save();
+		boolean success = this.getMembers().remove(student.getID()) && this.save();
 		student.setJob(null);
 		success = success && student.save();
 		return success;

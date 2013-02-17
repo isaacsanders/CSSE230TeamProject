@@ -51,7 +51,7 @@ public class Club extends Group {
 
 	public boolean removeStudent(User student) {
 		return this.getMembers().remove(student.getID()) && this.save()
-				&& student.getClubs().remove(this) && student.save();
+				&& student.getClubs().remove(this.getID()) && student.save();
 	}
 
 	public static ArrayList<Club> all() {

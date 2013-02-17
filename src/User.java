@@ -1,3 +1,5 @@
+import java.io.File;
+import java.util.ArrayList;
 import java.util.TreeSet;
 
 
@@ -179,5 +181,15 @@ public class User implements Persistable {
 	@Override
 	public boolean equals(Object other) {
 		return this.getID().equals(((User) other).getID());
+	}
+
+	public static ArrayList<User> all() {
+		ArrayList<User> list = new ArrayList<User>();
+		File[] files = new Persister(new User("ignore")).getDirectory().listFiles();
+		for (File user : files) {
+			String basename = user.getName().split(".xml")[0];
+			list.add(User.find(basename));
+		}
+		return list;
 	}
 }
