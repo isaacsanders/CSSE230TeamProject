@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 /**
  * The Group class contains an ArrayList that stores all of its members.
@@ -26,7 +27,7 @@ public class Group implements Persistable {
 	}
 
 	private String name;
-	private ArrayList<String> members;
+	private TreeSet<String> members;
 
 	/**
 	 * Constructs an empty group with the specified name
@@ -60,7 +61,7 @@ public class Group implements Persistable {
 		for (User member : members) {
 			list.add(member.getID());
 		}
-		this.members = list;
+		this.members = new TreeSet<String>(list);
 	}
 
 	/**
