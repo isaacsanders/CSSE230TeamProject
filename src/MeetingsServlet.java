@@ -1,8 +1,11 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet for managing a user's meetings
@@ -47,7 +50,6 @@ public class MeetingsServlet extends HttpServlet {
 			out.println("<body>"
 					+ "<div id=\"navigation\">"
 					+ "<a href=\"/SearchServlet\">Search</a>"
-					+ "<a href=\"FriendsServlet\">Friends</a>"
 					+ "<a href=\"MeetingsServlet\">Meetings</a>"
 					+ "<a href=\"AccountServlet\">Account</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
