@@ -55,6 +55,7 @@ public class AccountServlet extends HttpServlet {
 	 * @throws IOException
 	 * @throws ServletException
 	 */
+	@SuppressWarnings("unused")
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -65,42 +66,47 @@ public class AccountServlet extends HttpServlet {
 		// get user
 		User user = (User) session.getValue("user");
 
-		// check first for deletion of an account
-		if (session != null && this.checkParameter(request, this.ACCOUNTDELETE)) {
-			// delete the user
-			user.delete();
+		// check if session is null
+		if (session == null) {
 
-			// terminate session
-			session.invalidate();
+			String redirect = response.encodeRedirectURL("/Home");
+			response.sendRedirect(redirect);
 
-			// redirect to login screen
-			String url = response.encodeRedirectURL("/Home");
-			response.sendRedirect(url);
+			// otherwise get any old parameters that are needed
+			// check each possible type request and make any necessary changes
+		} else {
 
-		}
+			if (this.checkParameter(request, this.ACCOUNTDELETE)) {
+				// delete the user
+				user.delete();
 
-		// get any old parameters that are needed
-		// check each possible type request and make any necessary changes
-		else if (session != null) {
+				// terminate session
+				session.invalidate();
+
+				// redirect to login screen
+				String url = response.encodeRedirectURL("/Home");
+				response.sendRedirect(url);
+			}
 
 			// check users name change
-			if (this.checkParameter(request, this.NAMECHANGE)) {
+			else if (this.checkParameter(request, this.NAMECHANGE)) {
 				String firstName = request.getParameter(this.FIRSTNAME);
 				String lastName = request.getParameter(this.LASTNAME);
 				String fullName = firstName + " " + lastName;
 				user.setName(fullName);
 
-			// check users graduation year change
+				// check users graduation year change
 			} else if (this.checkParameter(request, this.YEARCHANGE)) {
 				String year = request.getParameter(this.YEAR);
-				String currentYear =  "NONE";
-				
+				String currentYear = "NONE";
+
 				GraduatingClass currentGradYear = user.getGraduatingClass();
-				if (currentGradYear != null){
+				if (currentGradYear != null) {
 					currentYear = currentGradYear.getID();
 				}
 				if (!year.equals(currentYear)) {
-					GraduatingClass graduatingClass = GraduatingClass.find(year);
+					GraduatingClass graduatingClass = GraduatingClass
+							.find(year);
 					if (graduatingClass == null) {
 						graduatingClass = new GraduatingClass(year);
 					}
@@ -108,7 +114,7 @@ public class AccountServlet extends HttpServlet {
 					graduatingClass.save();
 				}
 
-			// check changes in majors
+				// check changes in majors
 			} else if (this.checkParameter(request, this.MAJORCHANGE)) {
 				String majorString = request.getParameter(this.MAJOR);
 				Major major = Major.find(majorString);
@@ -155,10 +161,8 @@ public class AccountServlet extends HttpServlet {
 
 			// end with redirect to account page
 			doGet(request, response);
-		} else {
-			String redirect = response.encodeRedirectURL("/Home");
-			response.sendRedirect(redirect);
 		}
+
 	}
 
 	/**
@@ -263,7 +267,9 @@ public class AccountServlet extends HttpServlet {
 					+ "\" name=\""
 					+ this.YEARCHANGE
 					+ "\" />"
-					+ "<select id=\"yearSelector\" name=\"" + this.YEAR + "\">"
+					+ "<select id=\"yearSelector\" name=\""
+					+ this.YEAR
+					+ "\">"
 					+ "<option "
 					+ this.getProperSelector(year, "2013")
 					+ "value=\"2013\">2013</option>"
