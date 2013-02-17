@@ -47,15 +47,33 @@ public class MeetingsServlet extends HttpServlet {
 					+ "<link href=\"styleSheet.css\" type=\"text/css\" rel=\"stylesheet\" />"
 					+ "<title>Social Circle - Sign Up!</title></head>");
 			// body
-			out.println("<body>"
+			String body = "<body>"
 					+ "<div id=\"navigation\">"
 					+ "<a href=\"/SearchServlet\">Search</a>"
 					+ "<a href=\"MeetingsServlet\">Meetings</a>"
 					+ "<a href=\"AccountServlet\">Account</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
 					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
-					+ "</div>" + "<div id=\"content\">" + "</div>" + "</body>"
-					+ "</html>");
+					+ "</div>"
+					+ "<div id=\"content\">"
+					+ "<form id=\"searchForm\" action='/SearchServlet' method='post'>"
+					+ "<select name='user'>"
+					+ "<option value='' selected>Choose a User</option>";
+
+			for (User major : User.all()) {
+				if (major != null) {
+					body += "<option value='" + major.getID() + "'>"
+							+ major.getName() + "</option>";
+				}
+			}
+
+			body += "</select>";
+
+			body += "<input type=text name='query' placeholder='Type your query here'>"
+					+ "<button type=submit>Search</button>"
+					+ "</form>"
+					+ "</div>" + "</body>" + "</html>";
+			out.println(body);
 
 		} else {
 			// redirect to login screen if not logged in
