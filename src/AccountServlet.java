@@ -49,6 +49,7 @@ public class AccountServlet extends HttpServlet {
 	private final String YEARCHANGE = "YEARCHANGE";
 	private final String YEAR = "YEAR";
 	private final String RESIDENCECHANGE = "RESIDENCECHANGE";
+	private final String RESIDENCE = "RESIDENCE";
 	private final String ACCOUNTDELETE = "ACCOUNTDELETE";
 
 	/**
@@ -105,6 +106,7 @@ public class AccountServlet extends HttpServlet {
 
 				GraduatingClass currentGradYear = user.getGraduatingClass();
 				if (currentGradYear != null) {
+					// --------------------------------currentGradYear.removeStudent(user);--------------------------------------
 					currentYear = currentGradYear.getID();
 				}
 				if (!year.equals(currentYear)) {
@@ -113,50 +115,143 @@ public class AccountServlet extends HttpServlet {
 					if (graduatingClass == null) {
 						graduatingClass = new GraduatingClass(year);
 					}
+
 					graduatingClass.addStudent(user);
 					graduatingClass.save();
 				}
 
 				// check changes in majors
 			} else if (this.checkParameter(request, this.MAJORCHANGE)) {
-				String majorString = request.getParameter(this.MAJOR);
-				Major major = Major.find(majorString);
+
+				// get the major to be changed
+				String newMajor = request.getParameter(this.MAJOR);
+				Major major = Major.find(newMajor);
 				if (major == null) {
-					major = new Major(majorString);
+					major = new Major(newMajor);
 				}
+
+				// get users specific major list
 				ArrayList<Major> majorList = user.getMajors();
 				if (majorList == null) {
 					majorList = new ArrayList<Major>();
 				}
-				if (this.MAJORCHANGETYPE.equals(this.MAJORCHANGEADD)) {
-					majorList.add(major);
-				} else {
-					majorList.remove(major);
+
+				// make the necessary add or delete
+				if (!major.getID().equals(Major.VOID)) {
+					if (request.getParameter(this.MAJORCHANGETYPE).equals(
+							this.MAJORCHANGEADD)
+							&& !majorList.contains(major)) {
+						major.addStudent(user);
+					} else if (majorList.contains(major)) {
+
+						// // test code access section - auto throws a null
+						// pointer to see if code got reached
+						// String test = null;
+						// test.codePointBefore(3);
+						// // END
+						// TEST--------------------------------------------------------------------------
+
+						major.removeStudent(user);
+					}
+					major.save();
 				}
-				user.setMajors(majorList);
 
 				// check changes in clubs
 			} else if (this.checkParameter(request, this.CLUBCHANGE)) {
-				String clubString = request.getParameter(this.CLUB);
-				Club club = Club.find(clubString);
+				// get the club to be changed
+				String newClub = request.getParameter(this.CLUB);
+				Club club = Club.find(newClub);
 				if (club == null) {
-					club = new Club(clubString);
+					club = new Club(newClub);
+				}
+
+				// get users specific club list
+				ArrayList<Club> clubList = user.getClubs();
+				if (clubList == null) {
+					clubList = new ArrayList<Club>();
+				}
+
+				// make the necessary add or delete
+				if (!club.getID().equals(Club.VOID)) {
+					if (request.getParameter(this.CLUBCHANGETYPE).equals(
+							this.CLUBCHANGEADD)
+							&& !clubList.contains(club)) {
+						club.addStudent(user);
+					} else if (clubList.contains(club)) {
+						club.removeStudent(user);
+					}
+					club.save();
 				}
 
 				// check changes in sports
 			} else if (this.checkParameter(request, this.SPORTCHANGE)) {
-				String sportString = request.getParameter(this.SPORT);
-				Sport sport = Sport.find(sportString);
+				// get the sports to be changed
+				String newsport = request.getParameter(this.SPORT);
+				Sport sport = Sport.find(newsport);
 				if (sport == null) {
-					sport = new Sport(sportString);
+					sport = new Sport(newsport);
+				}
+
+				// get users specific sport list
+				ArrayList<Sport> sportList = user.getSports();
+				if (sportList == null) {
+					sportList = new ArrayList<Sport>();
+				}
+
+				// make the necessary add or delete
+				if (!sport.getID().equals(Sport.VOID)) {
+					if (request.getParameter(this.SPORTCHANGETYPE).equals(
+							this.SPORTCHANGEADD)
+							&& !sportList.contains(sport)) {
+						sport.addStudent(user);
+					} else if (sportList.contains(sport)) {
+						sport.removeStudent(user);
+					}
+					sport.save();
 				}
 
 				// check changes in users job
 			} else if (this.checkParameter(request, this.JOBCHANGE)) {
 
+				// check job to change to
+				String job = request.getParameter(this.JOB);
+
+				// check for any previous job
+				String currentJob = "NONE";
+				Job userCurrentJob = user.getJob();
+				if (userCurrentJob != null) {
+					// --------------------------------currentJob.removeStudent(user);--------------------------------------
+					currentJob = userCurrentJob.getID();
+				}
+				if (!job.equals(currentJob)) {
+					Job newJob = Job.find(job);
+					if (newJob == null) {
+						newJob = new Job(job);
+					}
+					newJob.addStudent(user);
+					newJob.save();
+				}
+
 				// check changes in users residence
 			} else if (this.checkParameter(request, this.RESIDENCECHANGE)) {
-				//
+				// check residence to change to
+				String residence = request.getParameter(this.RESIDENCE);
+
+				// check for any previous residence
+				String currentResidence = "NONE";
+				Residence userCurrentResidence = user.getResidence();
+				if (userCurrentResidence != null) {
+					// --------------------------------currentResidence.removeStudent(user);--------------------------------------
+					currentResidence = userCurrentResidence.getID();
+				}
+				if (!residence.equals(currentResidence)) {
+					Residence newResidence = Residence.find(residence);
+					if (newResidence == null) {
+						newResidence = new Residence(residence);
+					}
+					newResidence.addStudent(user);
+					newResidence.save();
+				}
 			}
 
 			// save the user and its changes
@@ -207,6 +302,26 @@ public class AccountServlet extends HttpServlet {
 				}
 			}
 
+			// get job
+			String job = "";
+			Job theJob = user.getJob();
+			if (theJob != null) {
+				job = theJob.getID();
+				if (job == null) {
+					job = "";
+				}
+			}
+
+			// get res
+			String residence = "";
+			Residence res = user.getResidence();
+			if (res != null) {
+				residence = res.getID();
+				if (residence == null) {
+					residence = "";
+				}
+			}
+
 			// PRODUCE HTML PAGE
 			PrintWriter out = response.getWriter();
 			// doc type
@@ -231,7 +346,7 @@ public class AccountServlet extends HttpServlet {
 					+ "<div id=\"content\">"
 
 					// change your name
-					+ "<div class=\"inline\"><fieldset id=\"changeName\"><legend>Change Your Name</legend>"
+					+ "<div class=\"nowrap\"><div class=\"inline\"><fieldset id=\"changeName\"><legend>Change Your Name</legend>"
 					+ "<form id=\"accountFormChangeName\" method=\"post\" action=\"AccountServlet\">"
 					+ "<input type=\"hidden\" value=\""
 					+ this.NAMECHANGE
@@ -288,12 +403,179 @@ public class AccountServlet extends HttpServlet {
 					+ "<option "
 					+ this.getProperSelector(year, "")
 					+ "value=\"\"></option>"
-					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset></div>"
+					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset>"
+
+					// job form
+					+ "<fieldset id=\"changeJob\"><legend>Graduation Job</legend>"
+					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
+					+ "<input type=\"hidden\" value=\""
+					+ this.JOBCHANGE
+					+ "\" name=\""
+					+ this.JOBCHANGE
+					+ "\" />"
+					+ "<select id=\"jobSelector\" name=\""
+					+ this.JOB
+					+ "\">"
+					+ "<option "
+					+ this.getProperSelector(job, Job.TA)
+					+ "value=\""
+					+ Job.TA
+					+ "\">"
+					+ Job.TA
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(job, Job.HOMEWORKHOTLINE)
+					+ "value=\""
+					+ Job.HOMEWORKHOTLINE
+					+ "\">"
+					+ Job.HOMEWORKHOTLINE
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(job, Job.GRADER)
+					+ "value=\""
+					+ Job.GRADER
+					+ "\">"
+					+ Job.GRADER
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(job, Job.MAILROOM)
+					+ "value=\""
+					+ Job.MAILROOM
+					+ "\">"
+					+ Job.MAILROOM
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(job, Job.LIBRARY)
+					+ "value=\""
+					+ Job.LIBRARY
+					+ "\">"
+					+ Job.LIBRARY
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(job, Job.SRC)
+					+ "value=\""
+					+ Job.SRC
+					+ "\">"
+					+ Job.SRC
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(job, "")
+					+ "value=\"\"></option>"
+					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Job\" /></form></fieldset>"
+
+					// residence form
+					+ "<fieldset id=\"changeResidence\"><legend>Graduation Residence</legend>"
+					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
+					+ "<input type=\"hidden\" value=\""
+					+ this.RESIDENCECHANGE
+					+ "\" name=\""
+					+ this.RESIDENCECHANGE
+					+ "\" />"
+					+ "<select id=\"residenceSelector\" name=\""
+					+ this.RESIDENCE
+					+ "\">"
+					+ "<option "
+					+ this.getProperSelector(residence,
+							Residence.APARTMENTSEAST)
+					+ "value=\""
+					+ Residence.APARTMENTSEAST
+					+ "\">"
+					+ Residence.APARTMENTSEAST
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence,
+							Residence.APARTMENTSWEST)
+					+ "value=\""
+					+ Residence.APARTMENTSWEST
+					+ "\">"
+					+ Residence.APARTMENTSWEST
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.BLUMBERG)
+					+ "value=\""
+					+ Residence.BLUMBERG
+					+ "\">"
+					+ Residence.BLUMBERG
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.BSB)
+					+ "value=\""
+					+ Residence.BSB
+					+ "\">"
+					+ Residence.BSB
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.DEMING)
+					+ "value=\""
+					+ Residence.DEMING
+					+ "\">"
+					+ Residence.DEMING
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.FRATHOUSE)
+					+ "value=\""
+					+ Residence.FRATHOUSE
+					+ "\">"
+					+ Residence.FRATHOUSE
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.LAKESIDE)
+					+ "value=\""
+					+ Residence.LAKESIDE
+					+ "\">"
+					+ Residence.LAKESIDE
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.MEES)
+					+ "value=\""
+					+ Residence.MEES
+					+ "\">"
+					+ Residence.MEES
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.PERCOPO)
+					+ "value=\""
+					+ Residence.PERCOPO
+					+ "\">"
+					+ Residence.PERCOPO
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.SCHARPENBERG)
+					+ "value=\""
+					+ Residence.SCHARPENBERG
+					+ "\">"
+					+ Residence.SCHARPENBERG
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.SKINNER)
+					+ "value=\""
+					+ Residence.SKINNER
+					+ "\">"
+					+ Residence.SKINNER
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.SPEED)
+					+ "value=\""
+					+ Residence.SPEED
+					+ "\">"
+					+ Residence.SPEED
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.OFFCAMPUS)
+					+ "value=\""
+					+ Residence.OFFCAMPUS
+					+ "\">"
+					+ Residence.OFFCAMPUS
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, "")
+					+ "value=\"\"></option>"
+					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Residence\" /></form></fieldset></div>"
 
 					// managing majors
-					+ "<fieldset id=\"majors\">"
-					+ "<legend>Majors</legend>"
-					+ "<fieldset class=\"inline\">"
+					+ "<div id=\"accountDropDowns\"  class=\"inline\"><fieldset id=\"majors\">"
+					+ "<legend>Majors</legend><div id=\"majorsInner\">"
+					+ "<fieldset>"
 					+ "<legend>Change Majors</legend>"
 					+ "<form method=\"post\" action=\"/AccountServlet\">"
 					+ "<input type=\"hidden\" value=\""
@@ -386,8 +668,6 @@ public class AccountServlet extends HttpServlet {
 					+ "</option>"
 					+ "<option selected=\"selected\" value=\""
 					+ Major.VOID
-					+ ""
-					+ Major.VOID
 					+ "\"></option>"
 					+ "</select>"
 					+ "<div>"
@@ -411,18 +691,18 @@ public class AccountServlet extends HttpServlet {
 					+ "</div>"
 					+ "</form>"
 					+ "</fieldset>"
-					+ "<fieldset class=\"inline\">"
+					+ "<fieldset>"
 					+ "<legend>Current Majors</legend>"
 					+ "<ul id=\"currentMajors\">"
 					+ this.getListMajors(user)
 					+ "</ul>"
-					+ "</fieldset>"
+					+ "</fieldset></div>"
 					+ "</fieldset>"
 
 					// managing clubs
 					+ "<fieldset id=\"clubs\">"
-					+ "<legend>Clubs</legend>"
-					+ "<fieldset class=\"inline\">"
+					+ "<legend>Clubs</legend><div id=\"clubsInner\">"
+					+ "<fieldset>"
 					+ "<legend>Change Clubs</legend>"
 					+ "<form method=\"post\" action=\"/AccountServlet\">"
 					+ "<input type=\"hidden\" value=\""
@@ -520,8 +800,6 @@ public class AccountServlet extends HttpServlet {
 					+ "</option>"
 					+ "<option selected=\"selected\" value=\""
 					+ Club.VOID
-					+ ""
-					+ Club.VOID
 					+ "\"></option>"
 					+ "</select>"
 					+ "<div>"
@@ -550,8 +828,130 @@ public class AccountServlet extends HttpServlet {
 					+ "<ul id=\"currentClubs\">"
 					+ this.getListClubs(user)
 					+ "</ul>"
+					+ "</fieldset></div>"
 					+ "</fieldset>"
+
+					// managing sports
+					+ "<fieldset id=\"sports\">"
+					+ "<legend>Sports</legend><div id=\"sportsInner\">"
+					+ "<fieldset>"
+					+ "<legend>Change Sports</legend>"
+					+ "<form method=\"post\" action=\"/AccountServlet\">"
+					+ "<input type=\"hidden\" value=\""
+					+ this.SPORTCHANGE
+					+ "\" name=\""
+					+ this.SPORTCHANGE
+					+ "\" />"
+					+ "<select name=\""
+					+ this.SPORT
+					+ "\">"
+					+ "<option value=\""
+					+ Sport.BADMINTON
+					+ "\">"
+					+ Sport.BADMINTON
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.BASEBALL
+					+ "\">"
+					+ Sport.BASEBALL
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.BASKETBALL
+					+ "\">"
+					+ Sport.BASKETBALL
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.CHEERLEADING
+					+ "\">"
+					+ Sport.CHEERLEADING
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.FLAGFOOTBALL
+					+ "\">"
+					+ Sport.FLAGFOOTBALL
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.HOCKEY
+					+ "\">"
+					+ Sport.HOCKEY
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.RAQUETBALL
+					+ "\">"
+					+ Sport.RAQUETBALL
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.SOCCER
+					+ "\">"
+					+ Sport.SOCCER
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.SOFTBALL
+					+ "\">"
+					+ Sport.SOFTBALL
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.TACKLEFOOTBALL
+					+ "\">"
+					+ Sport.TACKLEFOOTBALL
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.TENNIS
+					+ "\">"
+					+ Sport.TENNIS
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.TRACK
+					+ "\">"
+					+ Sport.TRACK
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.ULTIMATEFRISBEE
+					+ "\">"
+					+ Sport.ULTIMATEFRISBEE
+					+ "</option>"
+					+ "<option value=\""
+					+ Sport.VOLLEYBALL
+					+ "\">"
+					+ Sport.VOLLEYBALL
+					+ "<option value=\""
+					+ Sport.WALLEYBALL
+					+ "\">"
+					+ Sport.WALLEYBALL
+					+ "</option>"
+					+ "<option selected=\"selected\" value=\""
+					+ Sport.VOID
+					+ "\"></option>"
+					+ "</option>"
+					+ "</select>"
+					+ "<div>"
+					+ "<div class=\"adjusterAdd\">"
+					+ "<input class=\"inline\" name=\""
+					+ this.SPORTCHANGETYPE
+					+ "\" id=\"add\" type=\"radio\" checked=\"checked\" value=\""
+					+ this.SPORTCHANGEADD
+					+ "\"/>"
+					+ "<label class=\"inline\" for=\"add\">Add</label>"
+					+ "<input class=\"button\" id=\"sportSubmitButton\" type=\"submit\" value=\"Go\">"
+					+ "</div>"
+					+ "<div>"
+					+ "<input class=\"inline\" name=\""
+					+ this.SPORTCHANGETYPE
+					+ "\" id=\"drop\" type=\"radio\" value=\""
+					+ this.SPORTCHANGEDROP
+					+ "\"/>"
+					+ "<label class=\"inline\" for=\"drop\">Drop</label>"
+					+ "</div>"
+					+ "</div>"
+					+ "</form>"
 					+ "</fieldset>"
+					+ "<fieldset>"
+					+ "<legend>Current Sports</legend>"
+					+ "<ul id=\"currentSports\">"
+					+ this.getListSports(user)
+					+ "</ul>"
+					+ "</fieldset></div>"
+					+ "</fieldset></div></div>"
 
 					// delete account button form
 					+ "<form method=\"post\" method=\"/AccountServlet\">"
@@ -587,14 +987,15 @@ public class AccountServlet extends HttpServlet {
 	}
 
 	/**
-	 * returns the proper selected attribute for grad year
+	 * returns the proper selected attribute for users current state of
+	 * something
 	 * 
 	 * @param actualYear
 	 * @param currentValue
 	 * @return
 	 */
-	private String getProperSelector(String actualYear, String currentValue) {
-		if (actualYear.equals(currentValue)) {
+	private String getProperSelector(String actual, String currentValue) {
+		if (actual.equals(currentValue)) {
 			return "selected = \"selected\"";
 		}
 		return "";

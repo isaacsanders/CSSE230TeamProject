@@ -3,6 +3,21 @@ import java.util.ArrayList;
 
 
 public class Residence extends Group {
+	
+	public final static String BLUMBERG = "Blumberg";
+	public final static String MEES = "Mees";
+	public final static String SCHARPENBERG = "Scharpenberg";
+	public final static String PERCOPO = "Percopo";
+	public final static String APARTMENTSEAST = "Apartments East";
+	public final static String APARTMENTSWEST = "Apartments West";
+	public final static String DEMING = "Deming";
+	public final static String LAKESIDE = "Lakeside";
+	public final static String SPEED = "Speed";
+	public final static String OFFCAMPUS = "Off Campus";
+	public final static String FRATHOUSE = "Fraternity House";
+	public final static String BSB = "BSB";
+	public final static String SKINNER = "Skinner";
+	
 	public static Residence find(String name) {
 		Residence residence = new Residence();
 		residence.setName(name);

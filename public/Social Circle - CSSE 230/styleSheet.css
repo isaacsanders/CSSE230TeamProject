@@ -208,9 +208,9 @@ button.signupButton:hover {
 	font-weight: bold;
 	border-color: black;
 	display: block;
-	margin: 2em 2em 2em 5em;
+	margin: 2em 2em 25px 5em;
 	position: relative;
-	top: -7em;
+	top: 630px;
 }
 
 #deleteAccountButton:hover {
@@ -249,21 +249,25 @@ div.adjusterAdd {
 	top: 0.8em;
 }
 
-#majors, #clubs {
+#majors, #clubs, #sports {
 	width: 25em;
 	margin: 3em;
 	padding: 2em;
 	margin-top: 0;
 	display: inline-block;
-	position: relative;
-	top: -4.2em;
+	
 }
+
+#sportsInner, #majorsInner, #clubsInner{
+	position: relative;
+	left: -11px;
+}	
 
 .regularBlackText {
 	color: black;
 }
 
-#majorSubmitButton, #clubSubmitButton {
+#majorSubmitButton, #clubSubmitButton, #sportSubmitButton {
 	display: inline-block;
 	position: relative;
 	top: 1.5em;
@@ -272,5 +276,19 @@ div.adjusterAdd {
 
 #searchForm {
 	padding: 3em 3em 3em 5em;
+}
+
+.nowrap {
+	display: block;
+	white-space: nowrap;
+	height: 200px;
+	marign-top: 0;
+	padding-top: 0;
+
+}
+
+#accountDropDowns {
+	position: relative;
+	top: -350px;
 }
 

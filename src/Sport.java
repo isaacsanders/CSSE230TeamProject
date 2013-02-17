@@ -3,6 +3,25 @@ import java.util.ArrayList;
 
 
 public class Sport extends Group {
+	
+	public final static String TENNIS = "Tennis";
+	public final static String BASKETBALL = "Basketball";
+	public final static String SOCCER = "Soccer";
+	public final static String BASEBALL = "Baseball";
+	public final static String RAQUETBALL = "Raquetball";
+	public final static String VOLLEYBALL = "Volleyball";
+	public final static String ULTIMATEFRISBEE = "Ultimate Frisbee";
+	public final static String FLAGFOOTBALL = "Flag Football";
+	public final static String TACKLEFOOTBALL = "Tackle Football";
+	public final static String WALLEYBALL = "Walleyball";
+	public final static String CHEERLEADING = "Cheer Leading";
+	public final static String BADMINTON = "Badminton";
+	public final static String HOCKEY = "Hockey";
+	public final static String SOFTBALL = "Softball";
+	public final static String TRACK = "Track";
+	public static final String VOID = "Void";
+
+
 	public static Sport find(String name) {
 		Sport sport = new Sport();
 		sport.setName(name);

@@ -3,6 +3,14 @@ import java.util.ArrayList;
 
 
 public class Job extends Group {
+	
+	public final static String TA = "Teacher's Assistant";
+	public final static String GRADER = "Grader";
+	public final static String SRC = "SRC";
+	public final static String MAILROOM = "Mail Room";
+	public final static String LIBRARY = "Library";
+	public final static String HOMEWORKHOTLINE = "Homework Hotline";
+	
 	public static Job find(String name) {
 		Job job = new Job();
 		job.setName(name);
