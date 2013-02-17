@@ -2,8 +2,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet for managing a user's account
@@ -160,7 +163,7 @@ public class AccountServlet extends HttpServlet {
 			user.save();
 
 			// end with redirect to account page
-			doGet(request, response);
+			this.doGet(request, response);
 		}
 
 	}
