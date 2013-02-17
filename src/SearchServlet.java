@@ -271,9 +271,16 @@ public class SearchServlet extends HttpServlet {
 			bodyHtml += "</select>";
 
 			bodyHtml += "<select name='graduatingClass'>"
-					+ "<option value='' selected>Choose a Graduating Class</option>"
-					+ "<option value='2013'>2013</option>"
-					+ "</select>";
+					+ "<option value='' selected>Choose a Graduating Class</option>";
+
+			for (GraduatingClass graduatingClass : GraduatingClass.all()) {
+				if (graduatingClass != null) {
+					bodyHtml += "<option value='" + graduatingClass.getID() + "'>"
+							+ graduatingClass.getName() + "</option>";
+				}
+			}
+
+			bodyHtml += "</select>";
 
 			bodyHtml += "<input type=text name='query' placeholder='Type your query here'>"
 					+ "<button type=submit>Search</button>"
