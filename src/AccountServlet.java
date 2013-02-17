@@ -44,6 +44,7 @@ public class AccountServlet extends HttpServlet {
 	private final String CLUBCHANGEDROP = "CLUBCHANGEDROP";
 
 	private final String YEARCHANGE = "YEARCHANGE";
+	private final String YEAR = "YEAR";
 	private final String RESIDENCECHANGE = "RESIDENCECHANGE";
 	private final String ACCOUNTDELETE = "ACCOUNTDELETE";
 
@@ -71,7 +72,7 @@ public class AccountServlet extends HttpServlet {
 
 			// terminate session
 			session.invalidate();
-			
+
 			// redirect to login screen
 			String url = response.encodeRedirectURL("/Home");
 			response.sendRedirect(url);
@@ -80,29 +81,52 @@ public class AccountServlet extends HttpServlet {
 
 		// get any old parameters that are needed
 		// check each possible type request and make any necessary changes
-		else if (session != null){
+		else if (session != null) {
 
+			// check users name change
 			if (this.checkParameter(request, this.NAMECHANGE)) {
 				String firstName = request.getParameter(this.FIRSTNAME);
 				String lastName = request.getParameter(this.LASTNAME);
 				String fullName = firstName + " " + lastName;
 				user.setName(fullName);
 
+			// check users graduation year change
 			} else if (this.checkParameter(request, this.YEARCHANGE)) {
-				String year = request.getParameter(this.YEARCHANGE);
-				GraduatingClass graduatingClass = GraduatingClass.find(year);
-				if (graduatingClass == null) {
-					graduatingClass = new GraduatingClass(year);
+				String year = request.getParameter(this.YEAR);
+				String currentYear =  "NONE";
+				
+				GraduatingClass currentGradYear = user.getGraduatingClass();
+				if (currentGradYear != null){
+					currentYear = currentGradYear.getID();
 				}
-				user.setGraduatingClass(graduatingClass);
+				if (!year.equals(currentYear)) {
+					GraduatingClass graduatingClass = GraduatingClass.find(year);
+					if (graduatingClass == null) {
+						graduatingClass = new GraduatingClass(year);
+					}
+					graduatingClass.addStudent(user);
+					graduatingClass.save();
+				}
 
+			// check changes in majors
 			} else if (this.checkParameter(request, this.MAJORCHANGE)) {
 				String majorString = request.getParameter(this.MAJOR);
 				Major major = Major.find(majorString);
 				if (major == null) {
 					major = new Major(majorString);
 				}
+				ArrayList<Major> majorList = user.getMajors();
+				if (majorList == null) {
+					majorList = new ArrayList<Major>();
+				}
+				if (this.MAJORCHANGETYPE.equals(this.MAJORCHANGEADD)) {
+					majorList.add(major);
+				} else {
+					majorList.remove(major);
+				}
+				user.setMajors(majorList);
 
+				// check changes in clubs
 			} else if (this.checkParameter(request, this.CLUBCHANGE)) {
 				String clubString = request.getParameter(this.CLUB);
 				Club club = Club.find(clubString);
@@ -110,6 +134,7 @@ public class AccountServlet extends HttpServlet {
 					club = new Club(clubString);
 				}
 
+				// check changes in sports
 			} else if (this.checkParameter(request, this.SPORTCHANGE)) {
 				String sportString = request.getParameter(this.SPORT);
 				Sport sport = Sport.find(sportString);
@@ -117,10 +142,12 @@ public class AccountServlet extends HttpServlet {
 					sport = new Sport(sportString);
 				}
 
+				// check changes in users job
 			} else if (this.checkParameter(request, this.JOBCHANGE)) {
 
-			} else if (this.checkParameter(request, this.JOBCHANGE)) {
-
+				// check changes in users residence
+			} else if (this.checkParameter(request, this.RESIDENCECHANGE)) {
+				//
 			}
 
 			// save the user and its changes
@@ -128,8 +155,7 @@ public class AccountServlet extends HttpServlet {
 
 			// end with redirect to account page
 			doGet(request, response);
-		}
-		else{
+		} else {
 			String redirect = response.encodeRedirectURL("/Home");
 			response.sendRedirect(redirect);
 		}
@@ -237,7 +263,7 @@ public class AccountServlet extends HttpServlet {
 					+ "\" name=\""
 					+ this.YEARCHANGE
 					+ "\" />"
-					+ "<select id=\"yearSelector\" name=\"year\">"
+					+ "<select id=\"yearSelector\" name=\"" + this.YEAR + "\">"
 					+ "<option "
 					+ this.getProperSelector(year, "2013")
 					+ "value=\"2013\">2013</option>"
@@ -359,7 +385,7 @@ public class AccountServlet extends HttpServlet {
 					+ "<div class=\"adjusterAdd\">"
 					+ "<input class=\"inline\" name=\""
 					+ this.MAJORCHANGETYPE
-					+ "\" id=\"add\" type=\"radio\" value=\""
+					+ "\" id=\"add\" type=\"radio\" checked=\"checked\" value=\""
 					+ this.MAJORCHANGEADD
 					+ "\"/>"
 					+ "<label class=\"inline\" for=\"add\">Add</label>"
@@ -493,8 +519,8 @@ public class AccountServlet extends HttpServlet {
 					+ "<div class=\"adjusterAdd\">"
 					+ "<input class=\"inline\" name=\""
 					+ this.CLUBCHANGETYPE
-					+ "\" id=\"add\" type=\"radio\" value=\""
-					+ this.MAJORCHANGEADD
+					+ "\" id=\"add\" type=\"radio\" checked=\"checked\" value=\""
+					+ this.CLUBCHANGEADD
 					+ "\"/>"
 					+ "<label class=\"inline\" for=\"add\">Add</label>"
 					+ "<input class=\"button\" id=\"clubSubmitButton\" type=\"submit\" value=\"Go\">"
@@ -536,7 +562,6 @@ public class AccountServlet extends HttpServlet {
 
 	}
 
-	
 	/**
 	 * returns the comparison boolean for if a user edited thier paramters
 	 * 
@@ -544,14 +569,14 @@ public class AccountServlet extends HttpServlet {
 	 * @param currentValue
 	 * @return
 	 */
-	private boolean checkParameter(HttpServletRequest request, String parameter){
+	private boolean checkParameter(HttpServletRequest request, String parameter) {
 		String checkedParameter = request.getParameter(parameter);
-		if (checkedParameter != null && checkedParameter.equals(parameter)){
+		if (checkedParameter != null && checkedParameter.equals(parameter)) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * returns the proper selected attribute for grad year
 	 * 

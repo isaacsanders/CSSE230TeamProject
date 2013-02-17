@@ -181,7 +181,7 @@ public class SearchServlet extends HttpServlet {
 					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
 					+"</div>"
 					+ "<div id=\"content\">"
-					+ "<form action='/SearchServlet' method='post'>"
+					+ "<form id=\"searchForm\" action='/SearchServlet' method='post'>"
 					+ "<select name='major'>"
 					+ "<option value='' selected>Choose a Major</option>";
 

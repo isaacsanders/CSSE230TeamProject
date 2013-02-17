@@ -80,7 +80,7 @@ body {
 }
 
 .socialCircleTitle {
-	padding: 1em;
+	margin: 1em;
 	position: fixed;
 	top: 2.5em;
 	left: 3em;
@@ -88,7 +88,7 @@ body {
 }
 
 #socialCircleTitleLogin {
-	padding: 0.5em;
+	margin: 0.5em;
 	position: fixed;
 	top: 5em;
 	margin-left: 27%;
@@ -208,7 +208,9 @@ button.signupButton:hover {
 	font-weight: bold;
 	border-color: black;
 	display: block;
-	margin: 0 2em 2em 5em;
+	margin: 2em 2em 2em 5em;
+	position: relative;
+	top: -7em;
 }
 
 #deleteAccountButton:hover {
@@ -253,9 +255,6 @@ div.adjusterAdd {
 	padding: 2em;
 	margin-top: 0;
 	display: inline-block;
-}
-
-#clubs {
 	position: relative;
 	top: -4.2em;
 }
@@ -269,5 +268,9 @@ div.adjusterAdd {
 	position: relative;
 	top: 1.5em;
 	left: 3em;
+}
+
+#searchForm {
+	padding: 3em 3em 3em 5em;
 }
 
