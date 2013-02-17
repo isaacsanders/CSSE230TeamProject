@@ -90,6 +90,7 @@ public class AccountServlet extends HttpServlet {
 				// redirect to login screen
 				String url = response.encodeRedirectURL("/Home");
 				response.sendRedirect(url);
+				return;
 			}
 
 			// check users name change
