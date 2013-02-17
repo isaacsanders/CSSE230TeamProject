@@ -318,7 +318,6 @@ public class AccountServlet extends HttpServlet {
 			out.println("<body>"
 					+ "<div class=\"inline\" id=\"navigation\">"
 					+ "<a href=\"/SearchServlet\">Search</a>"
-					+ "<a href=\"FriendsServlet\">Friends</a>"
 					+ "<a href=\"MeetingsServlet\">Meetings</a>"
 					+ "<a href=\"AccountServlet\">Account</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"

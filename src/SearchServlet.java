@@ -43,7 +43,6 @@ public class SearchServlet extends HttpServlet {
 			String bodyHtml = "<body>"
 					+ "<div id=\"navigation\">"
 					+ "<a href=\"/SearchServlet\">Search</a>"
-					+ "<a href=\"FriendsServlet\">Friends</a>"
 					+ "<a href=\"MeetingsServlet\">Meetings</a>"
 					+ "<a href=\"AccountServlet\">Account</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
@@ -126,6 +125,26 @@ public class SearchServlet extends HttpServlet {
 						result.addAll(graduatingClassMembers);
 					}
 				}
+
+				String friendsOnly = request.getParameter("friends");
+				if (friendsOnly != null) {
+					TreeSet<String> friends = currentUser.getFriends();
+					if (filtered) {
+						result.retainAll(friends);
+					} else {
+						result.addAll(friends);
+					}
+				} else {
+					TreeSet<String> users = new TreeSet<String>();
+					for (User user : User.all()) {
+						users.add(user.getID());
+					}
+					if (filtered) {
+						result.retainAll(users);
+					} else {
+						result.addAll(users);
+					}
+				}
 			} else {
 				if (User.find(username).exists()) {
 					result.add(username);
@@ -159,8 +178,14 @@ public class SearchServlet extends HttpServlet {
 									+ "<button type='submit'>Add " + user.getName() + " as a friend</button>"
 									+ "</form>";
 						} else {
-							resultHtml += " is " + degreesOfSeparationBetweenCurrentAndResult
-									+ " degrees of separation from you.";
+							resultHtml += " is ";
+							if (degreesOfSeparationBetweenCurrentAndResult == 1) {
+								resultHtml += "a friend of yours!";
+							} else {
+								resultHtml += degreesOfSeparationBetweenCurrentAndResult
+										+ " degrees of separation from you.";
+							}
+
 						}
 					}
 					resultHtml += "</p>";
@@ -285,6 +310,8 @@ public class SearchServlet extends HttpServlet {
 			}
 
 			bodyHtml += "</select>";
+
+			bodyHtml += "<input type=checkbox name='friends' value='off'>Friends only?</input>";
 
 			bodyHtml += "<input type=text name='query' placeholder='Type your query here'>"
 					+ "<button type=submit>Search</button>"
