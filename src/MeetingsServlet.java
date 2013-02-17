@@ -30,11 +30,13 @@ public class MeetingsServlet extends HttpServlet {
 		if (session != null) {
 			User user = (User) session.getValue("user");
 
-			if (this.checkParameter(request, this.MEETINGADD)) {
+			String user2 = request.getParameter("user");
+			String query = request.getParameter("query");
+			if (!(user2 == "" || query == "")) {
 
 				String newMeeting = request.getParameter("query");
-				String meetingTime = request.getParameter(this.MEETINGTIME);
-				String[] times = meetingTime.split(",");
+				String otherUser = request.getParameter("user");
+				String[] times = newMeeting.split(",");
 				String month = times[0];
 				String day = times[1];
 				String startTime = times[2];
@@ -51,11 +53,12 @@ public class MeetingsServlet extends HttpServlet {
 				meetingList.add(meeting.toString());
 				user.setMeetings(meetingList);
 
-				User meet = User.find(newMeeting);
+				User meet = User.find(otherUser);
 				TreeSet<String> meetin = meet.getMeetings();
 				meetin.add(meeting.toString());
 				meet.setMeetings(meetin);
 			}
+			this.doGet(request, response);
 
 		} else {
 			// redirect to login screen if not logged in
@@ -79,6 +82,7 @@ public class MeetingsServlet extends HttpServlet {
 		// check session
 		HttpSession session = request.getSession(false);
 
+		User user = (User) session.getValue("user");
 		// check if user is already logged in, if so go to main search page, if
 		// not allow sign up
 		if (session != null) {
@@ -103,8 +107,8 @@ public class MeetingsServlet extends HttpServlet {
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
 					+ "<a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>"
 					+ "</div>"
-					+ "<div id=\"content\">"
-					+ "<form id=\"searchForm\" action='/SearchServlet' method='post'>"
+					+ "<div class=\"shift\" id=\"content\">"
+					+ "<form id=\"searchForm\" action='/MeetingsServlet' method='post'>"
 					+ "<select name='user'>"
 					+ "<option value='' selected>Choose a User</option>";
 
@@ -118,9 +122,14 @@ public class MeetingsServlet extends HttpServlet {
 			body += "</select>";
 
 			body += "<input type=text input name='query' placeholder='Month, Day, Starting time, Ending time : 4, 21, 15'>"
-					+ "<button type=submit>Search</button>"
+					+ "<button type=submit>Add Meeting</button>"
 					+ "</form>"
-					+ "</div>" + "</body>" + "</html>";
+					+ "<div><ul id=\"currentSports\">"
+					+ this.getListMeetings(user)
+					+ "</ul></div>"
+					+ "</div>"
+					+ "</body>" + "</html>";
+
 			out.println(body);
 
 		} else {
@@ -159,5 +168,14 @@ public class MeetingsServlet extends HttpServlet {
 			return "selected = \"selected\"";
 		}
 		return "";
+	}
+
+	// method that returns an html list of all of a user's meetings
+	private String getListMeetings(User user) {
+		String output = "";
+		for (String meetings : user.getMeetings()) {
+			output += "<li>" + meetings + "</li>";
+		}
+		return output;
 	}
 }
