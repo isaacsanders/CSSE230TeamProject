@@ -235,7 +235,6 @@ public class SearchServlet extends HttpServlet {
 			String bodyHtml = "<body>"
 					+ "<div id=\"navigation\">"
 					+ "<a href=\"/SearchServlet\">Search</a>"
-					+ "<a href=\"FriendsServlet\">Friends</a>"
 					+ "<a href=\"MeetingsServlet\">Meetings</a>"
 					+ "<a href=\"AccountServlet\">Account</a>"
 					+ "<a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
