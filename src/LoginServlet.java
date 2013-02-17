@@ -59,15 +59,14 @@ public class LoginServlet extends HttpServlet {
 		String ID = request.getParameter("username");
 
 		// check for real user
-		User user = new User();
-		user.setID(ID);
+		User user = User.find(ID);
 
 		if (ID == null || ID == "") {
 			ID = "";
 			answer = "Please Enter A Username";
 		}
 
-		else if (!user.exists()) {
+		else if (user == null || !user.exists()) {
 			answer = "Invalid Username";
 		}
 

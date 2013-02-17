@@ -192,11 +192,8 @@ public class User implements Persistable {
 		this.setFriends(new ArrayList<User>());
 		this.setMajors(new ArrayList<Major>());
 		this.setMeetings(new ArrayList<Meeting>());
-		this.setGraduatingClass(null);
 		this.setClubs(new ArrayList<Club>());
 		this.setSports(new ArrayList<Sport>());
-		this.setResidence(null);
-		this.setJob(null);
 		this.setInterests(new ArrayList<Interest>());
 	}
 
