@@ -43,9 +43,9 @@ public class SearchServlet extends HttpServlet {
 			String bodyHtml = "<body>"
 					+ "<div id=\"navigation\">"
 					+ "  <a href=\"/SearchServlet\">Search</a>"
-					+ "  <a href=\"friends.html\">Friends</a>"
-					+ "  <a href=\"meetings.html\">Meetings</a>"
-					+ "  <a href=\"LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
+					+ "  <a href=\"/FriendsServlet\">Friends</a>"
+					+ "  <a href=\"/MeetingsServlet\">Meetings</a>"
+					+ "  <a href=\"/LogoutServlet\"><button class=\"logoutButton\" type=\"submit\">Log Out</button></a>"
 					+"</div>"
 					+ "<div id=\"content\">"
 					+ "  <a href=\"/Home\"><img class=\"socialCircleTitle\" src=\"socialCircle.png\" width=\"\" height=\"\" alt=\"Social Circle\"/></a>";
@@ -59,39 +59,71 @@ public class SearchServlet extends HttpServlet {
 
 			if (username == "") {
 				String major = request.getParameter("major");
+				boolean filtered = false;
 
 				if (major != "") {
+					filtered = true;
 					result.addAll(Major.find(major).getMembers());
 				}
 
 				String club = request.getParameter("club");
 
 				if (club != "") {
-					result.retainAll(Club.find(club).getMembers());
+					ArrayList<User> clubMembers = Club.find(club).getMembers();
+					if (filtered) {
+						result.retainAll(clubMembers);
+					} else {
+						filtered = true;
+						result.addAll(clubMembers);
+					}
 				}
 
 				String sport = request.getParameter("sport");
 
 				if (sport != "") {
-					result.retainAll(Sport.find(sport).getMembers());
+					ArrayList<User> sportMembers = Sport.find(sport).getMembers();
+					if (filtered) {
+						result.retainAll(sportMembers);
+					} else {
+						filtered = true;
+						result.addAll(sportMembers);
+					}
 				}
 
 				String residence = request.getParameter("residence");
 
 				if (residence != "") {
-					result.retainAll(Residence.find(residence).getMembers());
+					ArrayList<User> residenceMembers = Residence.find(residence).getMembers();
+					if (filtered) {
+						result.retainAll(residenceMembers);
+					} else {
+						filtered = true;
+						result.addAll(residenceMembers);
+					}
 				}
 
 				String job = request.getParameter("job");
 
 				if (job != "") {
-					result.retainAll(Job.find(job).getMembers());
+					ArrayList<User> jobMembers = Job.find(job).getMembers();
+					if (filtered) {
+						result.retainAll(jobMembers);
+					} else {
+						filtered = true;
+						result.addAll(jobMembers);
+					}
 				}
 
 				String graduatingClass = request.getParameter("graduatingClass");
 
 				if (graduatingClass != "") {
-					result.retainAll(GraduatingClass.find(graduatingClass).getMembers());
+					ArrayList<User> graduatingClassMembers = GraduatingClass.find(graduatingClass).getMembers();
+					if (filtered) {
+						result.retainAll(graduatingClassMembers);
+					} else {
+						filtered = true;
+						result.addAll(graduatingClassMembers);
+					}
 				}
 			} else {
 				result.add(User.find(username));
@@ -239,6 +271,7 @@ public class SearchServlet extends HttpServlet {
 			bodyHtml += "</select>";
 
 			bodyHtml += "<select name='graduatingClass'>"
+					+ "<option value='' selected>Choose a Graduating Class</option>"
 					+ "<option value='2013'>2013</option>"
 					+ "</select>";
 
