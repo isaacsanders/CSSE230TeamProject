@@ -44,29 +44,13 @@ public class Major extends Group {
 	}
 
 	public boolean addStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.add(student);
-		this.setMembers(members);
-		this.save();
-		ArrayList<Major> majors = student.getMajors();
-		success = success && majors.add(this);
-		student.setMajors(majors);
-		student.save();
-		return success;
+		return this.getMembers().add(student.getID()) && this.save() &&
+				student.getMajors().add(this.getID()) && student.save();
 	}
 
 	public boolean removeStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.remove(student);
-		this.setMembers(members);
-		this.save();
-		ArrayList<Major> majors = student.getMajors();
-		success = success && majors.remove(this);
-		student.setMajors(majors);
-		student.save();
-		return success;
+		return this.getMembers().remove(student.getID()) && this.save() &&
+				student.getMajors().remove(this.getID()) && student.save();
 	}
 
 	public static ArrayList<Major> all() {

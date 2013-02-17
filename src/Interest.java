@@ -25,29 +25,13 @@ public class Interest extends Group {
 	}
 
 	public boolean addStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.add(student);
-		this.setMembers(members);
-		this.save();
-		ArrayList<Interest> interests = student.getInterests();
-		success = success && interests.add(this);
-		student.setInterests(interests);
-		student.save();
-		return success;
+		return this.getMembers().add(student.getID()) && this.save() &&
+				student.getInterests().add(this.getID()) && student.save();
 	}
 
 	public boolean removeStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.remove(student);
-		this.setMembers(members);
-		this.save();
-		ArrayList<Interest> interests = student.getInterests();
-		success = success && interests.remove(this);
-		student.setInterests(interests);
-		student.save();
-		return success;
+		return this.getMembers().remove(student) && this.save() &&
+				student.getInterests().remove(this) && student.save();
 	}
 
 	public static ArrayList<Interest> all() {

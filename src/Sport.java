@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 
 public class Sport extends Group {
-	
+
 	public final static String TENNIS = "Tennis";
 	public final static String BASKETBALL = "Basketball";
 	public final static String SOCCER = "Soccer";
@@ -44,29 +44,13 @@ public class Sport extends Group {
 	}
 
 	public boolean addStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.add(student);
-		this.setMembers(members);
-		this.save();
-		ArrayList<Sport> sports = student.getSports();
-		success = success && sports.add(this);
-		student.setSports(sports);
-		student.save();
-		return success;
+		return this.getMembers().add(student.getID()) && this.save() &&
+				student.getSports().add(this.getID()) && student.save();
 	}
 
 	public boolean removeStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.remove(student);
-		this.setMembers(members);
-		this.save();
-		ArrayList<Sport> sports = student.getSports();
-		success = success && sports.remove(this);
-		student.setSports(sports);
-		student.save();
-		return success;
+		return this.getMembers().remove(student.getID()) && this.save() &&
+				student.getSports().remove(this.getID()) && student.save();
 	}
 
 

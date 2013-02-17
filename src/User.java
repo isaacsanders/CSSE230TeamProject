@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.TreeSet;
 
 
@@ -26,20 +25,12 @@ public class User implements Persistable {
 		return new Persister(this).delete();
 	}
 
-	public ArrayList<User> getFriends() {
-		ArrayList<User> list = new ArrayList<User>();
-		for (String friendId : this.friends) {
-			list.add(User.find(friendId));
-		}
-		return list;
+	public TreeSet<String> getFriends() {
+		return this.friends;
 	}
 
-	public void setFriends(ArrayList<User> friends) {
-		ArrayList<String> list = new ArrayList<String>();
-		for (User friend : friends) {
-			list.add(friend.getID());
-		}
-		this.friends = new TreeSet<String>(list);
+	public void setFriends(TreeSet<String> friends) {
+		this.friends = friends;
 	}
 
 	@Override
@@ -59,104 +50,72 @@ public class User implements Persistable {
 		this.name = name;
 	}
 
-	public ArrayList<Major> getMajors() {
-		ArrayList<Major> list = new ArrayList<Major>();
-		for (String majorId : this.majors) {
-			list.add(Major.find(majorId));
-		}
-		return list;
+	public TreeSet<String> getMajors() {
+		return this.majors;
 	}
 
-	public void setMajors(ArrayList<Major> majors) {
-		ArrayList<String> list = new ArrayList<String>();
-		for (Major major : majors) {
-			list.add(major.getID());
-		}
-		this.majors = new TreeSet<String>(list);
+	public void setMajors(TreeSet<String> majors) {
+		this.majors = majors;
 	}
 
-	public ArrayList<Meeting> getMeetings() {
+	public TreeSet<String> getMeetings() {
 		return this.meetings;
 	}
 
-	public void setMeetings(ArrayList<Meeting> meetings) {
+	public void setMeetings(TreeSet<String> meetings) {
 		this.meetings = meetings;
 	}
 
-	public GraduatingClass getGraduatingClass() {
-		return GraduatingClass.find(this.graduatingClass);
+	public String getGraduatingClass() {
+		return this.graduatingClass;
 	}
 
-	public void setGraduatingClass(GraduatingClass graduatingClass) {
-		this.graduatingClass = graduatingClass.getID();
+	public void setGraduatingClass(String graduatingClass) {
+		this.graduatingClass = graduatingClass;
 	}
 
-	public ArrayList<Club> getClubs() {
-		ArrayList<Club> list = new ArrayList<Club>();
-		for (String clubId : this.clubs) {
-			list.add(Club.find(clubId));
-		}
-		return list;
+	public TreeSet<String> getClubs() {
+		return this.clubs;
 	}
 
-	public void setClubs(ArrayList<Club> clubs) {
-		ArrayList<String> list = new ArrayList<String>();
-		for (Club club : clubs) {
-			list.add(club.getID());
-		}
-		this.clubs = new TreeSet<String>(list);
+	public void setClubs(TreeSet<String> clubs) {
+		this.clubs = clubs;
 	}
 
-	public ArrayList<Sport> getSports() {
-		ArrayList<Sport> list = new ArrayList<Sport>();
-		for (String sportId : this.sports) {
-			list.add(Sport.find(sportId));
-		}
-		return list;
+	public TreeSet<String> getSports() {
+		return this.sports;
 	}
 
-	public void setSports(ArrayList<Sport> sports) {
-		ArrayList<String> list = new ArrayList<String>();
-		for (Sport sport : sports) {
-			list.add(sport.getID());
-		}
-		this.sports = new TreeSet<String>(list);
+	public void setSports(TreeSet<String> sports) {
+		this.sports = sports;
 	}
 
-	public Residence getResidence() {
-		return Residence.find(this.residence);
+	public String getResidence() {
+		return this.residence;
 	}
 
-	public void setResidence(Residence residence) {
-		this.residence = residence.getID();
+	public void setResidence(String residence) {
+		this.residence = residence;
 	}
 
-	public ArrayList<Interest> getInterests() {
-		ArrayList<Interest> list = new ArrayList<Interest>();
-		for (String interestId : this.interests) {
-			list.add(Interest.find(interestId));
-		}
-		return list;
+	public TreeSet<String> getInterests() {
+		return this.interests;
 	}
 
-	public void setInterests(ArrayList<Interest> interests) {
-		ArrayList<String> list = new ArrayList<String>();
-		for (Interest interest : interests) {
-			list.add(interest.getID());
-		}
-		this.interests = new TreeSet<String>(list);
+	public void setInterests(TreeSet<String> interests) {
+		this.interests = interests;
 	}
 
-	public Job getJob() {
-		return Job.find(this.job);
+	public String getJob() {
+		return this.job;
 	}
 
-	public void setJob(Job job) {
-		this.job = job.getID();
+	public void setJob(String job) {
+		this.job = job;
 	}
 
-	public ArrayList<Group> getGroups() {
-		ArrayList<Group> list = new ArrayList<Group>(this.getClubs());
+	public TreeSet<String> getGroups() {
+		TreeSet<String> list = new TreeSet<String>(this.getClubs());
 		list.addAll(this.getInterests());
 		list.addAll(this.getSports());
 		list.addAll(this.getMajors());
@@ -170,7 +129,7 @@ public class User implements Persistable {
 	private String id;
 	private String name;
 	private TreeSet<String> majors = new TreeSet<String>();
-	private ArrayList<Meeting> meetings;
+	private TreeSet<String> meetings;
 	private String graduatingClass;
 	private TreeSet<String> clubs = new TreeSet<String>();
 	private TreeSet<String> sports = new TreeSet<String>();
@@ -180,22 +139,22 @@ public class User implements Persistable {
 
 	public User(String id){
 		this.setID(id);
-		this.setFriends(new ArrayList<User>());
-		this.setMajors(new ArrayList<Major>());
-		this.setMeetings(new ArrayList<Meeting>());
-		this.setClubs(new ArrayList<Club>());
-		this.setSports(new ArrayList<Sport>());
-		this.setInterests(new ArrayList<Interest>());
+		this.setFriends(new TreeSet<String>());
+		this.setMajors(new TreeSet<String>());
+		this.setMeetings(new TreeSet<String>());
+		this.setClubs(new TreeSet<String>());
+		this.setSports(new TreeSet<String>());
+		this.setInterests(new TreeSet<String>());
 	}
 
 	public User() {
 		this.setName(null);
-		this.setFriends(new ArrayList<User>());
-		this.setMajors(new ArrayList<Major>());
-		this.setMeetings(new ArrayList<Meeting>());
-		this.setClubs(new ArrayList<Club>());
-		this.setSports(new ArrayList<Sport>());
-		this.setInterests(new ArrayList<Interest>());
+		this.setFriends(new TreeSet<String>());
+		this.setMajors(new TreeSet<String>());
+		this.setMeetings(new TreeSet<String>());
+		this.setClubs(new TreeSet<String>());
+		this.setSports(new TreeSet<String>());
+		this.setInterests(new TreeSet<String>());
 	}
 
 	public boolean exists() {
@@ -207,15 +166,14 @@ public class User implements Persistable {
 	}
 
 	public void addFriend(User friend) {
-		this.getFriends().add(friend);
+		this.getFriends().add(friend.getID());
 		this.save();
-		friend.getFriends().add(this);
+		friend.getFriends().add(this.getID());
 		friend.save();
 	}
 
 	public boolean isFriendsWith(User other) {
-		int index = this.getFriends().indexOf(other);
-		return index > -1;
+		return this.getFriends().contains(other.getID());
 	}
 
 	@Override

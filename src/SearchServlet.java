@@ -1,6 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.TreeSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -56,7 +56,7 @@ public class SearchServlet extends HttpServlet {
 					+ "</html>";
 
 			String username = request.getParameter("query");
-			ArrayList<User> result = new ArrayList<User>();
+			TreeSet<String> result = new TreeSet<String>();
 
 			if (username == "") {
 				String major = request.getParameter("major");
@@ -70,7 +70,7 @@ public class SearchServlet extends HttpServlet {
 				String club = request.getParameter("club");
 
 				if (club != "") {
-					ArrayList<User> clubMembers = Club.find(club).getMembers();
+					TreeSet<String> clubMembers = Club.find(club).getMembers();
 					if (filtered) {
 						result.retainAll(clubMembers);
 					} else {
@@ -82,7 +82,7 @@ public class SearchServlet extends HttpServlet {
 				String sport = request.getParameter("sport");
 
 				if (sport != "") {
-					ArrayList<User> sportMembers = Sport.find(sport).getMembers();
+					TreeSet<String> sportMembers = Sport.find(sport).getMembers();
 					if (filtered) {
 						result.retainAll(sportMembers);
 					} else {
@@ -94,7 +94,7 @@ public class SearchServlet extends HttpServlet {
 				String residence = request.getParameter("residence");
 
 				if (residence != "") {
-					ArrayList<User> residenceMembers = Residence.find(residence).getMembers();
+					TreeSet<String> residenceMembers = Residence.find(residence).getMembers();
 					if (filtered) {
 						result.retainAll(residenceMembers);
 					} else {
@@ -106,7 +106,7 @@ public class SearchServlet extends HttpServlet {
 				String job = request.getParameter("job");
 
 				if (job != "") {
-					ArrayList<User> jobMembers = Job.find(job).getMembers();
+					TreeSet<String> jobMembers = Job.find(job).getMembers();
 					if (filtered) {
 						result.retainAll(jobMembers);
 					} else {
@@ -118,7 +118,7 @@ public class SearchServlet extends HttpServlet {
 				String graduatingClass = request.getParameter("graduatingClass");
 
 				if (graduatingClass != "") {
-					ArrayList<User> graduatingClassMembers = GraduatingClass.find(graduatingClass).getMembers();
+					TreeSet<String> graduatingClassMembers = GraduatingClass.find(graduatingClass).getMembers();
 					if (filtered) {
 						result.retainAll(graduatingClassMembers);
 					} else {
@@ -127,7 +127,9 @@ public class SearchServlet extends HttpServlet {
 					}
 				}
 			} else {
-				result.add(User.find(username));
+				if (User.find(username).exists()) {
+					result.add(username);
+				}
 			}
 
 			String resultHtml = "<section>";
@@ -140,7 +142,8 @@ public class SearchServlet extends HttpServlet {
 					resultHtml += "<p>There are no users with the Rose-Hulman username " + username;
 				}
 			} else {
-				for (User user : result) {
+				for (String userId : result) {
+					User user = User.find(userId);
 					resultHtml += "<h2>" + user.getName() + "</h2><p>" + user.getName();
 
 					if (currentUser.equals(user)) {

@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 
 public class Residence extends Group {
-	
+
 	public final static String BLUMBERG = "Blumberg";
 	public final static String MEES = "Mees";
 	public final static String SCHARPENBERG = "Scharpenberg";
@@ -17,7 +17,7 @@ public class Residence extends Group {
 	public final static String FRATHOUSE = "Fraternity House";
 	public final static String BSB = "BSB";
 	public final static String SKINNER = "Skinner";
-	
+
 	public static Residence find(String name) {
 		Residence residence = new Residence();
 		residence.setName(name);
@@ -40,22 +40,14 @@ public class Residence extends Group {
 	}
 
 	public boolean addStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.add(student);
-		this.setMembers(members);
-		success = success && this.save();
-		student.setResidence(this);
+		boolean success = this.getMembers().add(student.getID()) && this.save();
+		student.setResidence(this.getID());
 		success = success && student.save();
 		return success;
 	}
 
 	public boolean removeStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.remove(student);
-		this.setMembers(members);
-		success = success && this.save();
+		boolean success = this.getMembers().remove(student.getID()) && this.save();
 		student.setResidence(null);
 		success = success && student.save();
 		return success;

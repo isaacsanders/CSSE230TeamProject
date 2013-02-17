@@ -48,7 +48,8 @@ public class SocialCircle {
 			while (!queue.isEmpty()) {
 				stack = queue.poll();
 				Stack<User> temp;
-				for (User friend : stack.peek().getFriends()) {
+				for (String friendId : stack.peek().getFriends()) {
+					User friend = User.find(friendId);
 					if (friend.equals(second)) {
 						return stack.size();
 					} else {

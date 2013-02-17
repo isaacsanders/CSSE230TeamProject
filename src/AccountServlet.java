@@ -1,6 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.TreeSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -104,7 +104,7 @@ public class AccountServlet extends HttpServlet {
 				String year = request.getParameter(this.YEAR);
 				String currentYear = "NONE";
 
-				GraduatingClass currentGradYear = user.getGraduatingClass();
+				GraduatingClass currentGradYear = GraduatingClass.find(user.getGraduatingClass());
 				if (currentGradYear != null) {
 					// --------------------------------currentGradYear.removeStudent(user);--------------------------------------
 					currentYear = currentGradYear.getID();
@@ -117,7 +117,6 @@ public class AccountServlet extends HttpServlet {
 					}
 
 					graduatingClass.addStudent(user);
-					graduatingClass.save();
 				}
 
 				// check changes in majors
@@ -131,18 +130,15 @@ public class AccountServlet extends HttpServlet {
 				}
 
 				// get users specific major list
-				ArrayList<Major> majorList = user.getMajors();
-				if (majorList == null) {
-					majorList = new ArrayList<Major>();
-				}
+				TreeSet<String> majorList = user.getMajors();
 
 				// make the necessary add or delete
 				if (!major.getID().equals(Major.VOID)) {
 					if (request.getParameter(this.MAJORCHANGETYPE).equals(
 							this.MAJORCHANGEADD)
-							&& !majorList.contains(major)) {
+							&& !majorList.contains(major.getID())) {
 						major.addStudent(user);
-					} else if (majorList.contains(major)) {
+					} else if (majorList.contains(major.getID())) {
 
 						// // test code access section - auto throws a null
 						// pointer to see if code got reached
@@ -153,7 +149,6 @@ public class AccountServlet extends HttpServlet {
 
 						major.removeStudent(user);
 					}
-					major.save();
 				}
 
 				// check changes in clubs
@@ -166,21 +161,17 @@ public class AccountServlet extends HttpServlet {
 				}
 
 				// get users specific club list
-				ArrayList<Club> clubList = user.getClubs();
-				if (clubList == null) {
-					clubList = new ArrayList<Club>();
-				}
+				TreeSet<String> clubList = user.getClubs();
 
 				// make the necessary add or delete
 				if (!club.getID().equals(Club.VOID)) {
 					if (request.getParameter(this.CLUBCHANGETYPE).equals(
 							this.CLUBCHANGEADD)
-							&& !clubList.contains(club)) {
+							&& !clubList.contains(club.getID())) {
 						club.addStudent(user);
-					} else if (clubList.contains(club)) {
+					} else if (clubList.contains(club.getID())) {
 						club.removeStudent(user);
 					}
-					club.save();
 				}
 
 				// check changes in sports
@@ -193,21 +184,17 @@ public class AccountServlet extends HttpServlet {
 				}
 
 				// get users specific sport list
-				ArrayList<Sport> sportList = user.getSports();
-				if (sportList == null) {
-					sportList = new ArrayList<Sport>();
-				}
+				TreeSet<String> sportList = user.getSports();
 
 				// make the necessary add or delete
 				if (!sport.getID().equals(Sport.VOID)) {
 					if (request.getParameter(this.SPORTCHANGETYPE).equals(
 							this.SPORTCHANGEADD)
-							&& !sportList.contains(sport)) {
+							&& !sportList.contains(sport.getID())) {
 						sport.addStudent(user);
-					} else if (sportList.contains(sport)) {
+					} else if (sportList.contains(sport.getID())) {
 						sport.removeStudent(user);
 					}
-					sport.save();
 				}
 
 				// check changes in users job
@@ -218,7 +205,7 @@ public class AccountServlet extends HttpServlet {
 
 				// check for any previous job
 				String currentJob = "NONE";
-				Job userCurrentJob = user.getJob();
+				Job userCurrentJob = Job.find(user.getJob());
 				if (userCurrentJob != null) {
 					// --------------------------------currentJob.removeStudent(user);--------------------------------------
 					currentJob = userCurrentJob.getID();
@@ -229,7 +216,6 @@ public class AccountServlet extends HttpServlet {
 						newJob = new Job(job);
 					}
 					newJob.addStudent(user);
-					newJob.save();
 				}
 
 				// check changes in users residence
@@ -239,7 +225,7 @@ public class AccountServlet extends HttpServlet {
 
 				// check for any previous residence
 				String currentResidence = "NONE";
-				Residence userCurrentResidence = user.getResidence();
+				Residence userCurrentResidence = Residence.find(user.getResidence());
 				if (userCurrentResidence != null) {
 					// --------------------------------currentResidence.removeStudent(user);--------------------------------------
 					currentResidence = userCurrentResidence.getID();
@@ -250,13 +236,8 @@ public class AccountServlet extends HttpServlet {
 						newResidence = new Residence(residence);
 					}
 					newResidence.addStudent(user);
-					newResidence.save();
 				}
 			}
-
-			// save the user and its changes
-			user.save();
-
 			// end with redirect to account page
 			this.doGet(request, response);
 		}
@@ -294,7 +275,7 @@ public class AccountServlet extends HttpServlet {
 
 			// get year
 			String year = "";
-			GraduatingClass grad = user.getGraduatingClass();
+			GraduatingClass grad = GraduatingClass.find(user.getGraduatingClass());
 			if (grad != null) {
 				year = grad.getID();
 				if (year == null) {
@@ -304,7 +285,7 @@ public class AccountServlet extends HttpServlet {
 
 			// get job
 			String job = "";
-			Job theJob = user.getJob();
+			Job theJob = Job.find(user.getJob());
 			if (theJob != null) {
 				job = theJob.getID();
 				if (job == null) {
@@ -314,7 +295,7 @@ public class AccountServlet extends HttpServlet {
 
 			// get res
 			String residence = "";
-			Residence res = user.getResidence();
+			Residence res = Residence.find(user.getResidence());
 			if (res != null) {
 				residence = res.getID();
 				if (residence == null) {
@@ -477,100 +458,100 @@ public class AccountServlet extends HttpServlet {
 					+ "<option "
 					+ this.getProperSelector(residence,
 							Residence.APARTMENTSEAST)
-					+ "value=\""
-					+ Residence.APARTMENTSEAST
-					+ "\">"
-					+ Residence.APARTMENTSEAST
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence,
-							Residence.APARTMENTSWEST)
-					+ "value=\""
-					+ Residence.APARTMENTSWEST
-					+ "\">"
-					+ Residence.APARTMENTSWEST
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, Residence.BLUMBERG)
-					+ "value=\""
-					+ Residence.BLUMBERG
-					+ "\">"
-					+ Residence.BLUMBERG
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, Residence.BSB)
-					+ "value=\""
-					+ Residence.BSB
-					+ "\">"
-					+ Residence.BSB
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, Residence.DEMING)
-					+ "value=\""
-					+ Residence.DEMING
-					+ "\">"
-					+ Residence.DEMING
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, Residence.FRATHOUSE)
-					+ "value=\""
-					+ Residence.FRATHOUSE
-					+ "\">"
-					+ Residence.FRATHOUSE
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, Residence.LAKESIDE)
-					+ "value=\""
-					+ Residence.LAKESIDE
-					+ "\">"
-					+ Residence.LAKESIDE
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, Residence.MEES)
-					+ "value=\""
-					+ Residence.MEES
-					+ "\">"
-					+ Residence.MEES
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, Residence.PERCOPO)
-					+ "value=\""
-					+ Residence.PERCOPO
-					+ "\">"
-					+ Residence.PERCOPO
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, Residence.SCHARPENBERG)
-					+ "value=\""
-					+ Residence.SCHARPENBERG
-					+ "\">"
-					+ Residence.SCHARPENBERG
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, Residence.SKINNER)
-					+ "value=\""
-					+ Residence.SKINNER
-					+ "\">"
-					+ Residence.SKINNER
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, Residence.SPEED)
-					+ "value=\""
-					+ Residence.SPEED
-					+ "\">"
-					+ Residence.SPEED
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, Residence.OFFCAMPUS)
-					+ "value=\""
-					+ Residence.OFFCAMPUS
-					+ "\">"
-					+ Residence.OFFCAMPUS
-					+ "</option>"
-					+ "<option "
-					+ this.getProperSelector(residence, "")
-					+ "value=\"\"></option>"
-					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Residence\" /></form></fieldset></div>"
+							+ "value=\""
+							+ Residence.APARTMENTSEAST
+							+ "\">"
+							+ Residence.APARTMENTSEAST
+							+ "</option>"
+							+ "<option "
+							+ this.getProperSelector(residence,
+									Residence.APARTMENTSWEST)
+									+ "value=\""
+									+ Residence.APARTMENTSWEST
+									+ "\">"
+									+ Residence.APARTMENTSWEST
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, Residence.BLUMBERG)
+									+ "value=\""
+									+ Residence.BLUMBERG
+									+ "\">"
+									+ Residence.BLUMBERG
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, Residence.BSB)
+									+ "value=\""
+									+ Residence.BSB
+									+ "\">"
+									+ Residence.BSB
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, Residence.DEMING)
+									+ "value=\""
+									+ Residence.DEMING
+									+ "\">"
+									+ Residence.DEMING
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, Residence.FRATHOUSE)
+									+ "value=\""
+									+ Residence.FRATHOUSE
+									+ "\">"
+									+ Residence.FRATHOUSE
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, Residence.LAKESIDE)
+									+ "value=\""
+									+ Residence.LAKESIDE
+									+ "\">"
+									+ Residence.LAKESIDE
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, Residence.MEES)
+									+ "value=\""
+									+ Residence.MEES
+									+ "\">"
+									+ Residence.MEES
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, Residence.PERCOPO)
+									+ "value=\""
+									+ Residence.PERCOPO
+									+ "\">"
+									+ Residence.PERCOPO
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, Residence.SCHARPENBERG)
+									+ "value=\""
+									+ Residence.SCHARPENBERG
+									+ "\">"
+									+ Residence.SCHARPENBERG
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, Residence.SKINNER)
+									+ "value=\""
+									+ Residence.SKINNER
+									+ "\">"
+									+ Residence.SKINNER
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, Residence.SPEED)
+									+ "value=\""
+									+ Residence.SPEED
+									+ "\">"
+									+ Residence.SPEED
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, Residence.OFFCAMPUS)
+									+ "value=\""
+									+ Residence.OFFCAMPUS
+									+ "\">"
+									+ Residence.OFFCAMPUS
+									+ "</option>"
+									+ "<option "
+									+ this.getProperSelector(residence, "")
+									+ "value=\"\"></option>"
+									+ "</select><input class=\"button\" type=\"submit\" value=\"Change Residence\" /></form></fieldset></div>"
 
 					// managing majors
 					+ "<div id=\"accountDropDowns\"  class=\"inline\"><fieldset id=\"majors\">"
@@ -1003,33 +984,27 @@ public class AccountServlet extends HttpServlet {
 
 	// method that returns an html list of all of a user's majors
 	private String getListMajors(User user) {
-		ArrayList<Major> majors = user.getMajors();
-		int numMajors = majors.size();
 		String output = "";
-		for (int i = 0; i < numMajors; i++) {
-			output += "<li>" + majors.get(i).getID() + "</li>";
+		for (String major : user.getMajors()) {
+			output += "<li>" + major + "</li>";
 		}
 		return output;
 	}
 
 	// method that returns an html list of all of a user's clubs
 	private String getListClubs(User user) {
-		ArrayList<Club> clubs = user.getClubs();
-		int numClubs = clubs.size();
 		String output = "";
-		for (int i = 0; i < numClubs; i++) {
-			output += "<li>" + clubs.get(i).getID() + "</li>";
+		for (String club : user.getClubs()) {
+			output += "<li>" + club + "</li>";
 		}
 		return output;
 	}
 
 	// method that returns an html list of all of a user's sports
 	private String getListSports(User user) {
-		ArrayList<Sport> sports = user.getSports();
-		int numSports = sports.size();
 		String output = "";
-		for (int i = 0; i < numSports; i++) {
-			output += "<li>" + sports.get(i).getID() + "</li>";
+		for (String sport : user.getSports()) {
+			output += "<li>" + sport + "</li>";
 		}
 		return output;
 	}

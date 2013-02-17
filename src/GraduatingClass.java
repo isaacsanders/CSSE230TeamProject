@@ -25,22 +25,14 @@ public class GraduatingClass extends Group {
 	}
 
 	public boolean addStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.add(student);
-		this.setMembers(members);
-		success = success && this.save();
-		student.setGraduatingClass(this);
+		boolean success = this.getMembers().add(student.getID()) && this.save();
+		student.setGraduatingClass(this.getID());
 		success = success && student.save();
 		return success;
 	}
 
 	public boolean removeStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.remove(student);
-		this.setMembers(members);
-		success = success && this.save();
+		boolean success = this.getMembers().remove(student) && this.save();
 		student.setGraduatingClass(null);
 		success = success && student.save();
 		return success;

@@ -45,29 +45,13 @@ public class Club extends Group {
 	}
 
 	public boolean addStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.add(student);
-		this.setMembers(members);
-		this.save();
-		ArrayList<Club> clubs = student.getClubs();
-		success = success && clubs.add(this);
-		student.setClubs(clubs);
-		student.save();
-		return success;
+		return this.getMembers().add(student.getID()) && this.save() &&
+				student.getClubs().add(this.getID()) && student.save();
 	}
 
 	public boolean removeStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.remove(student);
-		this.setMembers(members);
-		this.save();
-		ArrayList<Club> clubs = student.getClubs();
-		success = success && clubs.remove(this);
-		student.setClubs(clubs);
-		student.save();
-		return success;
+		return this.getMembers().remove(student.getID()) && this.save()
+				&& student.getClubs().remove(this) && student.save();
 	}
 
 	public static ArrayList<Club> all() {

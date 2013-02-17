@@ -1,6 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.TreeSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -81,7 +81,8 @@ public class FriendsServlet extends HttpServlet {
 					+ "<select name='major'>"
 					+ "<option value='' selected>Choose a Major</option>");
 
-			for (Major major : currentUser.getMajors()) {
+			for (String majorId : currentUser.getMajors()) {
+				Major major = Major.find(majorId);
 				if (major != null) {
 					out.println("<option value='" + major.getID() + "'>"
 							+ major.getName() + "</option>");
@@ -95,15 +96,16 @@ public class FriendsServlet extends HttpServlet {
 			out.println("<ul>");
 
 			String major = request.getParameter("major");
-			ArrayList<User> friends;
+			TreeSet<String> friendIds;
 			if (major == null || major.isEmpty()) {
-				friends = currentUser.getFriends();
+				friendIds = currentUser.getFriends();
 			} else {
-				friends = Major.find(major)
+				friendIds = Major.find(major)
 						.membersThatAreFriendsOf(currentUser);
 			}
 
-			for (User friend : friends) {
+			for (String friendId : friendIds) {
+				User friend = User.find(friendId);
 				out.println("<li>" + friend.getName() + "</li>");
 			}
 

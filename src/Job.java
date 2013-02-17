@@ -3,14 +3,14 @@ import java.util.ArrayList;
 
 
 public class Job extends Group {
-	
+
 	public final static String TA = "Teacher's Assistant";
 	public final static String GRADER = "Grader";
 	public final static String SRC = "SRC";
 	public final static String MAILROOM = "Mail Room";
 	public final static String LIBRARY = "Library";
 	public final static String HOMEWORKHOTLINE = "Homework Hotline";
-	
+
 	public static Job find(String name) {
 		Job job = new Job();
 		job.setName(name);
@@ -33,22 +33,14 @@ public class Job extends Group {
 	}
 
 	public boolean addStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.add(student);
-		this.setMembers(members);
-		success = success && this.save();
-		student.setJob(this);
+		boolean success = this.getMembers().add(student.getID()) && this.save();
+		student.setJob(this.getID());
 		success = success && student.save();
 		return success;
 	}
 
 	public boolean removeStudent(User student) {
-		boolean success;
-		ArrayList<User> members = this.getMembers();
-		success = members.remove(student);
-		this.setMembers(members);
-		success = success && this.save();
+		boolean success = this.getMembers().remove(student) && this.save();
 		student.setJob(null);
 		success = success && student.save();
 		return success;
