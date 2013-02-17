@@ -88,10 +88,6 @@ public class User implements Persistable {
 	}
 
 	public void setGraduatingClass(GraduatingClass graduatingClass) {
-		GraduatingClass currentGraduatingClass = this.getGraduatingClass();
-		if (currentGraduatingClass != null) {
-			currentGraduatingClass.removeStudent(this);
-		}
 		this.graduatingClass = graduatingClass.getID();
 	}
 
@@ -132,10 +128,6 @@ public class User implements Persistable {
 	}
 
 	public void setResidence(Residence residence) {
-		Residence currentResidence = this.getResidence();
-		if (currentResidence != null) {
-			currentResidence.removeStudent(this);
-		}
 		this.residence = residence.getID();
 	}
 
@@ -160,10 +152,6 @@ public class User implements Persistable {
 	}
 
 	public void setJob(Job job) {
-		Job currentJob = this.getJob();
-		if (currentJob != null) {
-			currentJob.removeStudent(this);
-		}
 		this.job = job.getID();
 	}
 
