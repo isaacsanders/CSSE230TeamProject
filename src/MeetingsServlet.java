@@ -57,6 +57,8 @@ public class MeetingsServlet extends HttpServlet {
 				TreeSet<String> meetin = meet.getMeetings();
 				meetin.add(meeting.toString());
 				meet.setMeetings(meetin);
+				meet.save();
+				user.save();
 			}
 			this.doGet(request, response);
 
