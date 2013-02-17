@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.util.TreeSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +17,53 @@ import javax.servlet.http.HttpSession;
 public class MeetingsServlet extends HttpServlet {
 
 	private final String EMPTY = "";
+	private final String MEETINGADD = "MEETINGADD";
+	private final String MEETING = "MEETING";
+	private final String MEETINGTIME = "MEETINGTIME";
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		// check session
+		HttpSession session = request.getSession(false);
+
+		// check if user is already logged in, if so go to main search page, if
+		// not allow sign up
+		if (session != null) {
+			User user = (User) session.getValue("user");
+
+			if (this.checkParameter(request, this.MEETINGADD)) {
+
+				String newMeeting = request.getParameter(this.MEETING);
+				String meetingTime = request.getParameter(this.MEETINGTIME);
+				String[] times = meetingTime.split(",");
+				String month = times[0];
+				String day = times[1];
+				String startTime = times[2];
+				String endTime = times[3];
+				Meeting meeting = new Meeting(new Dated(
+						Integer.parseInt(month), Integer.parseInt(day),
+						Integer.parseInt(startTime)), new Dated(
+						Integer.parseInt(month), Integer.parseInt(day),
+						Integer.parseInt(endTime)));
+
+				// get users specific meeting list
+				TreeSet<String> meetingList = user.getMeetings();
+
+				meetingList.add(meeting.toString());
+				user.setMeetings(meetingList);
+
+				User meet = User.find(newMeeting);
+				TreeSet<String> meetin = meet.getMeetings();
+				meetin.add(meeting.toString());
+				meet.setMeetings(meetin);
+			}
+
+		} else {
+			// redirect to login screen if not logged in
+			String redirect = response.encodeRedirectURL("/Home");
+			response.sendRedirect(redirect);
+		}
+	}
 
 	/**
 	 * takes in the user inputs from a "sign up"
@@ -69,7 +118,7 @@ public class MeetingsServlet extends HttpServlet {
 
 			body += "</select>";
 
-			body += "<input type=text name='query' placeholder='Type your query here'>"
+			body += "<input type=text name='query' placeholder='Month, Day, Starting time, Ending time : 4, 21, 15'>"
 					+ "<button type=submit>Search</button>"
 					+ "</form>"
 					+ "</div>" + "</body>" + "</html>";
@@ -81,5 +130,35 @@ public class MeetingsServlet extends HttpServlet {
 			response.sendRedirect(redirect);
 		}
 
+	}
+
+	/**
+	 * returns the comparison boolean for if a user edited thier paramters
+	 * 
+	 * @param actualYear
+	 * @param currentValue
+	 * @return
+	 */
+	private boolean checkParameter(HttpServletRequest request, String parameter) {
+		String checkedParameter = request.getParameter(parameter);
+		if (checkedParameter != null && checkedParameter.equals(parameter)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * returns the proper selected attribute for users current state of
+	 * something
+	 * 
+	 * @param actualYear
+	 * @param currentValue
+	 * @return
+	 */
+	private String getProperSelector(String actual, String currentValue) {
+		if (actual.equals(currentValue)) {
+			return "selected = \"selected\"";
+		}
+		return "";
 	}
 }

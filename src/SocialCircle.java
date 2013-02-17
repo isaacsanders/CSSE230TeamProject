@@ -63,29 +63,29 @@ public class SocialCircle {
 		return -1;
 	}
 
-	public static Meeting optimalMeetingTime(Meeting first, Meeting second) {
-		Date startTime;
-		switch (first.getStartTime().compareTo(second.getStartTime())) {
-		case FIRST_HAPPENS_BEFORE_SECOND:
-			startTime = second.getStartTime();
-			break;
-		case SECOND_HAPPENS_BEFORE_FIRST:
-			startTime = first.getStartTime();
-			break;
-		default:
-			startTime = first.getStartTime();
-		}
-		Date endTime;
-		switch (first.getEndTime().compareTo(second.getEndTime())) {
-		case FIRST_HAPPENS_BEFORE_SECOND:
-			endTime = first.getEndTime();
-			break;
-		case SECOND_HAPPENS_BEFORE_FIRST:
-			endTime = second.getEndTime();
-			break;
-		default:
-			endTime = first.getEndTime();
-		}
-		return new Meeting(startTime, endTime);
-	}
+//	public static Meeting optimalMeetingTime(Meeting first, Meeting second) {
+//		Date startTime;
+//		switch (first.getStartTime().compareTo(second.getStartTime())) {
+//		case FIRST_HAPPENS_BEFORE_SECOND:
+//			startTime = second.getStartTime();
+//			break;
+//		case SECOND_HAPPENS_BEFORE_FIRST:
+//			startTime = first.getStartTime();
+//			break;
+//		default:
+//			startTime = first.getStartTime();
+//		}
+//		Date endTime;
+//		switch (first.getEndTime().compareTo(second.getEndTime())) {
+//		case FIRST_HAPPENS_BEFORE_SECOND:
+//			endTime = first.getEndTime();
+//			break;
+//		case SECOND_HAPPENS_BEFORE_FIRST:
+//			endTime = second.getEndTime();
+//			break;
+//		default:
+//			endTime = first.getEndTime();
+//		}
+//		return new Meeting(startTime, endTime);
+//	}
 }
