@@ -14,10 +14,10 @@ public class Club extends Group {
 	public final static String PIKE = "PIKE";
 	public final static String CHIOMEGA = "CHIOMEGA";
 	public final static String ALPHAOMICRONPI = "Alpha Omicron Pi";
-	public final static String ALPHAPHIOMEGA = "ALPHAPHIOMEGA";
+	public final static String ALPHAPHIOMEGA = "Alpha Phi Omega";
 	public final static String THETAXI = "Theta Xi";
 	public final static String RISE = "RISE";
-	public final static String ROBOTICS = "ROBOTICS";
+	public final static String ROBOTICS = "Robotics";
 	public final static String ECOCAR = "Eco Car";
 	public final static String BAND = "Band";
 	public final static String INTERVARSITYCHRISTIANS = "Intervarsity Christians";

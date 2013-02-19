@@ -105,7 +105,8 @@ public class AccountServlet extends HttpServlet {
 				String year = request.getParameter(this.YEAR);
 				String currentYear = "NONE";
 
-				GraduatingClass currentGradYear = GraduatingClass.find(user.getGraduatingClass());
+				GraduatingClass currentGradYear = GraduatingClass.find(user
+						.getGraduatingClass());
 				if (currentGradYear != null) {
 					// --------------------------------currentGradYear.removeStudent(user);--------------------------------------
 					currentYear = currentGradYear.getID();
@@ -226,7 +227,8 @@ public class AccountServlet extends HttpServlet {
 
 				// check for any previous residence
 				String currentResidence = "NONE";
-				Residence userCurrentResidence = Residence.find(user.getResidence());
+				Residence userCurrentResidence = Residence.find(user
+						.getResidence());
 				if (userCurrentResidence != null) {
 					// --------------------------------currentResidence.removeStudent(user);--------------------------------------
 					currentResidence = userCurrentResidence.getID();
@@ -276,7 +278,8 @@ public class AccountServlet extends HttpServlet {
 
 			// get year
 			String year = "";
-			GraduatingClass grad = GraduatingClass.find(user.getGraduatingClass());
+			GraduatingClass grad = GraduatingClass.find(user
+					.getGraduatingClass());
 			if (grad != null) {
 				year = grad.getID();
 				if (year == null) {
@@ -326,8 +329,13 @@ public class AccountServlet extends HttpServlet {
 					+ "</div>"
 					+ "<div id=\"content\">"
 
+					// ----------------------------------------- START TOP
+					// ACCOUNT SECTION
+					// -----------------------------------------------------
+					+ "<table><tr><div id=\"topAccountSection\">"
+
 					// change your name
-					+ "<div class=\"nowrap\"><div class=\"inline\"><fieldset id=\"changeName\"><legend>Change Your Name</legend>"
+					+ "<td><fieldset class=\"OuterFieldSetTop\"><legend>Change Your Name</legend>"
 					+ "<form id=\"accountFormChangeName\" method=\"post\" action=\"AccountServlet\">"
 					+ "<input type=\"hidden\" value=\""
 					+ this.NAMECHANGE
@@ -356,10 +364,10 @@ public class AccountServlet extends HttpServlet {
 					+ "\"/>"
 					+ "<input class=\"button\" value=\"Change Name\" type=\"submit\" />"
 					+ "</form>"
-					+ "</fieldset>"
+					+ "</fieldset></td>"
 
 					// year form
-					+ "<fieldset id=\"changeYear\"><legend>Graduation Year</legend>"
+					+ "<td><fieldset class=\"OuterFieldSetTop\"><legend>Graduation Year</legend>"
 					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
 					+ "<input type=\"hidden\" value=\""
 					+ this.YEARCHANGE
@@ -384,10 +392,10 @@ public class AccountServlet extends HttpServlet {
 					+ "<option "
 					+ this.getProperSelector(year, "")
 					+ "value=\"\"></option>"
-					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset>"
+					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Grad Year\" /></form></fieldset></td>"
 
 					// job form
-					+ "<fieldset id=\"changeJob\"><legend>Graduation Job</legend>"
+					+ "<td><fieldset class=\"OuterFieldSetTop\"><legend>Graduation Job</legend>"
 					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
 					+ "<input type=\"hidden\" value=\""
 					+ this.JOBCHANGE
@@ -442,10 +450,10 @@ public class AccountServlet extends HttpServlet {
 					+ "<option "
 					+ this.getProperSelector(job, "")
 					+ "value=\"\"></option>"
-					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Job\" /></form></fieldset>"
+					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Job\" /></form></fieldset></td>"
 
 					// residence form
-					+ "<fieldset id=\"changeResidence\"><legend>Graduation Residence</legend>"
+					+ "<td><fieldset class=\"OuterFieldSetTop\"><legend>Graduation Residence</legend>"
 					+ "<form id=\"graduationFormChange\" method=\"post\" action=\"AccountServlet\">"
 					+ "<input type=\"hidden\" value=\""
 					+ this.RESIDENCECHANGE
@@ -458,105 +466,114 @@ public class AccountServlet extends HttpServlet {
 					+ "<option "
 					+ this.getProperSelector(residence,
 							Residence.APARTMENTSEAST)
-							+ "value=\""
-							+ Residence.APARTMENTSEAST
-							+ "\">"
-							+ Residence.APARTMENTSEAST
-							+ "</option>"
-							+ "<option "
-							+ this.getProperSelector(residence,
-									Residence.APARTMENTSWEST)
-									+ "value=\""
-									+ Residence.APARTMENTSWEST
-									+ "\">"
-									+ Residence.APARTMENTSWEST
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, Residence.BLUMBERG)
-									+ "value=\""
-									+ Residence.BLUMBERG
-									+ "\">"
-									+ Residence.BLUMBERG
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, Residence.BSB)
-									+ "value=\""
-									+ Residence.BSB
-									+ "\">"
-									+ Residence.BSB
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, Residence.DEMING)
-									+ "value=\""
-									+ Residence.DEMING
-									+ "\">"
-									+ Residence.DEMING
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, Residence.FRATHOUSE)
-									+ "value=\""
-									+ Residence.FRATHOUSE
-									+ "\">"
-									+ Residence.FRATHOUSE
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, Residence.LAKESIDE)
-									+ "value=\""
-									+ Residence.LAKESIDE
-									+ "\">"
-									+ Residence.LAKESIDE
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, Residence.MEES)
-									+ "value=\""
-									+ Residence.MEES
-									+ "\">"
-									+ Residence.MEES
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, Residence.PERCOPO)
-									+ "value=\""
-									+ Residence.PERCOPO
-									+ "\">"
-									+ Residence.PERCOPO
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, Residence.SCHARPENBERG)
-									+ "value=\""
-									+ Residence.SCHARPENBERG
-									+ "\">"
-									+ Residence.SCHARPENBERG
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, Residence.SKINNER)
-									+ "value=\""
-									+ Residence.SKINNER
-									+ "\">"
-									+ Residence.SKINNER
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, Residence.SPEED)
-									+ "value=\""
-									+ Residence.SPEED
-									+ "\">"
-									+ Residence.SPEED
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, Residence.OFFCAMPUS)
-									+ "value=\""
-									+ Residence.OFFCAMPUS
-									+ "\">"
-									+ Residence.OFFCAMPUS
-									+ "</option>"
-									+ "<option "
-									+ this.getProperSelector(residence, "")
-									+ "value=\"\"></option>"
-									+ "</select><input class=\"button\" type=\"submit\" value=\"Change Residence\" /></form></fieldset></div>"
+					+ "value=\""
+					+ Residence.APARTMENTSEAST
+					+ "\">"
+					+ Residence.APARTMENTSEAST
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence,
+							Residence.APARTMENTSWEST)
+					+ "value=\""
+					+ Residence.APARTMENTSWEST
+					+ "\">"
+					+ Residence.APARTMENTSWEST
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.BLUMBERG)
+					+ "value=\""
+					+ Residence.BLUMBERG
+					+ "\">"
+					+ Residence.BLUMBERG
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.BSB)
+					+ "value=\""
+					+ Residence.BSB
+					+ "\">"
+					+ Residence.BSB
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.DEMING)
+					+ "value=\""
+					+ Residence.DEMING
+					+ "\">"
+					+ Residence.DEMING
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.FRATHOUSE)
+					+ "value=\""
+					+ Residence.FRATHOUSE
+					+ "\">"
+					+ Residence.FRATHOUSE
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.LAKESIDE)
+					+ "value=\""
+					+ Residence.LAKESIDE
+					+ "\">"
+					+ Residence.LAKESIDE
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.MEES)
+					+ "value=\""
+					+ Residence.MEES
+					+ "\">"
+					+ Residence.MEES
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.PERCOPO)
+					+ "value=\""
+					+ Residence.PERCOPO
+					+ "\">"
+					+ Residence.PERCOPO
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.SCHARPENBERG)
+					+ "value=\""
+					+ Residence.SCHARPENBERG
+					+ "\">"
+					+ Residence.SCHARPENBERG
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.SKINNER)
+					+ "value=\""
+					+ Residence.SKINNER
+					+ "\">"
+					+ Residence.SKINNER
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.SPEED)
+					+ "value=\""
+					+ Residence.SPEED
+					+ "\">"
+					+ Residence.SPEED
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, Residence.OFFCAMPUS)
+					+ "value=\""
+					+ Residence.OFFCAMPUS
+					+ "\">"
+					+ Residence.OFFCAMPUS
+					+ "</option>"
+					+ "<option "
+					+ this.getProperSelector(residence, "")
+					+ "value=\"\"></option>"
+					+ "</select><input class=\"button\" type=\"submit\" value=\"Change Residence\" /></form></fieldset>"
+
+					+ "</td></div></tr></table>"
+					// ------------------------------- END TOP ACCOUNT SECTION
+					// --------------------------------------------------------------------
+
+					// ------------------------------- START BOTTOM ACCOUNT
+					// SECTION
+					// ---------------------------------------------------------------
+					+ "<table><tr><div id=\"bottomAccountSection\">"
 
 					// managing majors
-					+ "<div id=\"accountDropDowns\"  class=\"inline\"><fieldset id=\"majors\">"
-					+ "<legend>Majors</legend><div id=\"majorsInner\">"
-					+ "<fieldset>"
+					+ "<td><fieldset class=\"OuterFieldSetBottom\">"
+					+ "<legend>Majors</legend>"
+					+ "<fieldset class=\"InnerFieldSet\">"
 					+ "<legend>Change Majors</legend>"
 					+ "<form method=\"post\" action=\"/AccountServlet\">"
 					+ "<input type=\"hidden\" value=\""
@@ -651,39 +668,33 @@ public class AccountServlet extends HttpServlet {
 					+ Major.VOID
 					+ "\"></option>"
 					+ "</select>"
-					+ "<div>"
-					+ "<div class=\"adjusterAdd\">"
-					+ "<input class=\"inline\" name=\""
+					+ "<div class='radioButtonFix'><div><input class=\"inline\" name=\""
 					+ this.MAJORCHANGETYPE
 					+ "\" id=\"add\" type=\"radio\" checked=\"checked\" value=\""
 					+ this.MAJORCHANGEADD
 					+ "\"/>"
-					+ "<label class=\"inline\" for=\"add\">Add</label>"
-					+ "<input class=\"button\" id=\"majorSubmitButton\" type=\"submit\" value=\"Go\">"
-					+ "</div>"
-					+ "<div>"
-					+ "<input class=\"inline\" name=\""
+					+ "<label class=\"inline\" for=\"add\">Add</label></div>"
+					+ "<div><input class=\"inline\" name=\""
 					+ this.MAJORCHANGETYPE
 					+ "\" id=\"drop\" type=\"radio\" value=\""
 					+ this.MAJORCHANGEDROP
 					+ "\"/>"
-					+ "<label class=\"inline\" for=\"drop\">Drop</label>"
-					+ "</div>"
-					+ "</div>"
+					+ "<label class=\"inline\" for=\"drop\">Drop</label></div></div>"
+					+ "<div class='buttonFix'><input class=\"button\" id=\"majorSubmitButton\" type=\"submit\" value=\"Go\"></div>"
 					+ "</form>"
 					+ "</fieldset>"
-					+ "<fieldset>"
+					+ "<fieldset class=\"InnerFieldSet\">"
 					+ "<legend>Current Majors</legend>"
 					+ "<ul id=\"currentMajors\">"
 					+ this.getListMajors(user)
 					+ "</ul>"
-					+ "</fieldset></div>"
 					+ "</fieldset>"
+					+ "</fieldset></td>"
 
 					// managing clubs
-					+ "<fieldset id=\"clubs\">"
-					+ "<legend>Clubs</legend><div id=\"clubsInner\">"
-					+ "<fieldset>"
+					+ "<td><fieldset class=\"OuterFieldSetBottom\">"
+					+ "<legend>Clubs</legend>"
+					+ "<fieldset class=\"InnerFieldSet\">"
 					+ "<legend>Change Clubs</legend>"
 					+ "<form method=\"post\" action=\"/AccountServlet\">"
 					+ "<input type=\"hidden\" value=\""
@@ -783,39 +794,33 @@ public class AccountServlet extends HttpServlet {
 					+ Club.VOID
 					+ "\"></option>"
 					+ "</select>"
-					+ "<div>"
-					+ "<div class=\"adjusterAdd\">"
-					+ "<input class=\"inline\" name=\""
+					+ "<div class='radioButtonFix'><div><input class=\"inline\" name=\""
 					+ this.CLUBCHANGETYPE
 					+ "\" id=\"add\" type=\"radio\" checked=\"checked\" value=\""
 					+ this.CLUBCHANGEADD
 					+ "\"/>"
-					+ "<label class=\"inline\" for=\"add\">Add</label>"
-					+ "<input class=\"button\" id=\"clubSubmitButton\" type=\"submit\" value=\"Go\">"
-					+ "</div>"
-					+ "<div>"
-					+ "<input class=\"inline\" name=\""
+					+ "<label class=\"inline\" for=\"add\">Add</label></div>"
+					+ "<div><input class=\"inline\" name=\""
 					+ this.CLUBCHANGETYPE
 					+ "\" id=\"drop\" type=\"radio\" value=\""
 					+ this.CLUBCHANGEDROP
 					+ "\"/>"
-					+ "<label class=\"inline\" for=\"drop\">Drop</label>"
-					+ "</div>"
-					+ "</div>"
+					+ "<label class=\"inline\" for=\"drop\">Drop</label></div></div>"
+					+ "<div class='buttonFix'><input class=\"button\" id=\"clubSubmitButton\" type=\"submit\" value=\"Go\"></div>"
 					+ "</form>"
 					+ "</fieldset>"
-					+ "<fieldset class=\"inline\">"
+					+ "<fieldset class=\"InnerFieldSet\">"
 					+ "<legend>Current Clubs</legend>"
 					+ "<ul id=\"currentClubs\">"
 					+ this.getListClubs(user)
 					+ "</ul>"
-					+ "</fieldset></div>"
+					+ "</fieldset>"
 					+ "</fieldset>"
 
 					// managing sports
-					+ "<fieldset id=\"sports\">"
-					+ "<legend>Sports</legend><div id=\"sportsInner\">"
-					+ "<fieldset>"
+					+ "<fieldset class=\"OuterFieldSetBottom\">"
+					+ "<legend>Sports</legend>"
+					+ "<fieldset class=\"InnerFieldSet\">"
 					+ "<legend>Change Sports</legend>"
 					+ "<form method=\"post\" action=\"/AccountServlet\">"
 					+ "<input type=\"hidden\" value=\""
@@ -905,34 +910,33 @@ public class AccountServlet extends HttpServlet {
 					+ "\"></option>"
 					+ "</option>"
 					+ "</select>"
-					+ "<div>"
-					+ "<div class=\"adjusterAdd\">"
-					+ "<input class=\"inline\" name=\""
+					+ "<div class='radioButtonFix'><div><input class=\"inline\" name=\""
 					+ this.SPORTCHANGETYPE
 					+ "\" id=\"add\" type=\"radio\" checked=\"checked\" value=\""
 					+ this.SPORTCHANGEADD
 					+ "\"/>"
-					+ "<label class=\"inline\" for=\"add\">Add</label>"
-					+ "<input class=\"button\" id=\"sportSubmitButton\" type=\"submit\" value=\"Go\">"
-					+ "</div>"
-					+ "<div>"
-					+ "<input class=\"inline\" name=\""
+					+ "<label class=\"inline\" for=\"add\">Add</label></div>"
+					+ "<div><input class=\"inline\" name=\""
 					+ this.SPORTCHANGETYPE
 					+ "\" id=\"drop\" type=\"radio\" value=\""
 					+ this.SPORTCHANGEDROP
 					+ "\"/>"
-					+ "<label class=\"inline\" for=\"drop\">Drop</label>"
-					+ "</div>"
-					+ "</div>"
+					+ "<label class=\"inline\" for=\"drop\">Drop</label></div></div>"
+					+ "<div class='buttonFix'><input class=\"button\" id=\"sportSubmitButton\" type=\"submit\" value=\"Go\"></div>"
 					+ "</form>"
 					+ "</fieldset>"
-					+ "<fieldset>"
+					+ "<fieldset class=\"InnerFieldSet\">"
 					+ "<legend>Current Sports</legend>"
 					+ "<ul id=\"currentSports\">"
 					+ this.getListSports(user)
 					+ "</ul>"
-					+ "</fieldset></div>"
-					+ "</fieldset></div></div>"
+					+ "</fieldset>"
+					+ "</fieldset></td>"
+
+					+ "</div></tr></table>"
+					// ------------------------------- END BOTTOM ACCOUNT
+					// SECTION
+					// ---------------------------------------------------------------
 
 					// delete account button form
 					+ "<form method=\"post\" method=\"/AccountServlet\">"
