@@ -118,6 +118,8 @@ form label {
 	font-weight: bold;
 	font-size: 1.23em;
 	display: block;
+	margin: 0;
+	padding: 0;
 }
 
 #loginValidation {
@@ -133,23 +135,8 @@ input.button, button.button {
 	display: block;
 }
 
-fieldset {
-	width: 15em;
-	margin: 3em;
-	padding: 2em;
-	margin: 1em 4em 4em 4em;
-	display: block;
-	background-color: rgba(1, 1, 1, 0.5);
-}
-
-legend {
-	font-weight: bold;
-	color: #AA0000;
-	background-color: #191919;
-}
-
 input {
-	margin: 0 1em 1em 0;
+	margin: 0 0 1em 0;
 }
 
 #loginSection {
@@ -196,7 +183,7 @@ button.signupButton:hover {
 	font-weight: bold;
 	position: fixed;
 	left: 90%;
-	top: -0.6;
+	top: -0.75;
 	border-color: black;
 }
 
@@ -209,8 +196,6 @@ button.signupButton:hover {
 	border-color: black;
 	display: block;
 	margin: 2em 2em 25px 5em;
-	position: relative;
-	top: 630px;
 }
 
 #deleteAccountButton:hover {
@@ -244,25 +229,6 @@ button.logoutButton:hover {
 	display: inline-block;
 }
 
-div.adjusterAdd {
-	position: relative;
-	top: 0.8em;
-}
-
-#majors, #clubs, #sports {
-	width: 25em;
-	margin: 3em;
-	padding: 2em;
-	margin-top: 0;
-	display: inline-block;
-	
-}
-
-#sportsInner, #majorsInner, #clubsInner{
-	position: relative;
-	left: -11px;
-}	
-
 .regularBlackText {
 	color: black;
 }
@@ -278,17 +244,57 @@ div.adjusterAdd {
 	padding: 3em 3em 3em 5em;
 }
 
-.nowrap {
-	display: block;
-	white-space: nowrap;
-	height: 200px;
-	marign-top: 0;
-	padding-top: 0;
-
+table {
+	border: none;
 }
 
-#accountDropDowns {
+.OuterFieldSetTop {
+	height: 10em;
+	width: 12em;
+	padding: 3em;
+	margin: 2em;
+	display: inline-block;
+	background-color: rgba(1, 1, 1, 0.5);
+}
+
+.OuterFieldSetBottom {
+	width: 15em;
+	padding: 5em;
+	margin: 2em;
+	display: inline-block;
+	background-color: rgba(1, 1, 1, 0.5);
+}
+
+.InnerFieldSet {
+	width: 12em;
+	margin: 2em;
+	padding: 1em;
+	margin-left: 4em;
+	margin-right: 4em;
+	display: inline-block;
+	background-color: rgba(1, 1, 1, 0.5);
 	position: relative;
-	top: -350px;
+	left: -45px;
+}
+
+legend {
+	font-weight: bold;
+	color: #AA0000;
+	background-color: #191919;
+}
+
+#topAccountSection, #bottomAccountSection {
+	white-space: nowrap;
+}
+
+.radioButtonFix {
+	position: relative;
+	top: 1em;
+}
+
+.buttonFix {
+	position: relative;
+	top: -6.2em;
+	left: 2.2em;
 }
 
